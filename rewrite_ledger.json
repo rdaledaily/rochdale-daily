@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T12:01:35.105630Z",
+  "updated_at": "2026-11-18T12:32:48.119893Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 174,
+  "count": 175,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -806,6 +806,22 @@
       "category": "environment",
       "text_fingerprint": "030f3ab2496cb815"
     },
+    "https://www.bdonline.co.uk/news/first-images-of-plans-to-replace-rochdales-seven-sisters-towers/5145234.article": {
+      "first_attempt_at": "2026-11-18T12:32:48.119815Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bdonline.co.uk/news/first-images-of-plans-to-replace-rochdales-seven-sisters-towers/5145234.article"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T12:32:48.119815Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "First images of plans to replace Rochdale’s ‘seven sisters’ towers",
+      "source_name": "Building Design",
+      "category": "environment",
+      "text_fingerprint": "30f6020358bc72bd"
+    },
     "https://www.beinsports.com/en-mena/football/fa-cup/rochdale-vs-newport-county-2026-12-05": {
       "first_attempt_at": "2026-11-14T19:23:45.035471Z",
       "attempts": 3,
@@ -1266,8 +1282,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T12:01:35.104972Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1304,14 +1320,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T12:01:35.105268Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-18T12:30:14.658966Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It was like a bom",
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "45246234109a57c1",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798": {
       "first_attempt_at": "2026-11-09T15:38:31.713519Z",
