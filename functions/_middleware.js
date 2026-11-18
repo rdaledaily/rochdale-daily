@@ -473,10 +473,36 @@ export function stripBannedLinksText(html) {
     (whole, q, href, inner) => (isBannedLink(decodeEntities(href)) ? inner : whole));
 }
 
+// ---------------------------------------------------------------- head tags
+//
+// Tags every HTML page must carry in its <head>. Injected here, at the edge,
+// so all ~1,900 pages -- homepage, generated articles, archive, ward, trust and
+// breaking pages -- get them without touching a single generator or template.
+// Ahrefs Web Analytics is cookieless, so it needs no cookie-consent gate.
+export const HEAD_SNIPPETS = [
+  '<script src="https://analytics.ahrefs.com/analytics.js" data-key="ig/keOifB1InzE7s+tP1oQ" async></script>',
+];
+
+
 function stripBannedLinks(response) {
   if (typeof HTMLRewriter === 'undefined') return response;
+  // A page whose own <head> already carries a snippet (e.g. pasted into a
+  // template later) is not given a second copy: the script handler fires
+  // before </head>, and the snippets are written at </head>.
+  const present = new Set();
   return new HTMLRewriter()
     .on('a[href]', { element(el) { if (isBannedLink(el.getAttribute('href'))) el.removeAndKeepContent(); } })
+    .on('head script[src]', { element(el) { present.add(el.getAttribute('src')); } })
+    .on('head', {
+      element(el) {
+        el.onEndTag((end) => {
+          for (const tag of HEAD_SNIPPETS) {
+            const src = (tag.match(/\bsrc="([^"]+)"/) || [])[1];
+            if (!src || !present.has(src)) end.before(tag, { html: true });
+          }
+        });
+      },
+    })
     .transform(response);
 }
 
