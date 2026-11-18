@@ -1,12 +1,36 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 649,
-  "published_count": 649,
+  "article_count": 656,
+  "published_count": 656,
   "category_change_count": 0,
-  "image_change_count": 134,
+  "image_change_count": 138,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "rochdale-repeat-shoplifters-pilot-november-2026",
+      "title": "Rochdale MP seeks local role in pilot targeting repeat shoplifters",
+      "category": "politics",
+      "reason": "crime visual (police) does not match politics story",
+      "before": {
+        "image_url": "assets/img/cards/police.jpg",
+        "img": "assets/img/cards/police.jpg",
+        "status": "editorial-photo"
+      },
+      "after": "assets/img/cards/8c4c259f0ef7-place-generated-card.jpg"
+    },
+    {
+      "slug": "investigation-launched-into-death-of-boy-in-middleton-care",
+      "title": "Investigation launched into death of three-year-old boy at Middleton nursery",
+      "category": "crime",
+      "reason": "sensitive story image lacks explicit source/editorial provenance",
+      "before": {
+        "image_url": "assets/img/cards/police.jpg",
+        "img": "assets/img/cards/police.jpg",
+        "status": "standard-police-image"
+      },
+      "after": "assets/img/cards/police.jpg"
+    },
     {
       "slug": "plans-revealed-to-replace-rochdale-s-seven-sisters-towers",
       "title": "Plans revealed to replace Rochdale’s Seven Sisters towers",
@@ -30,6 +54,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/d167102f07c23b12-commons-photo.jpg"
+    },
+    {
+      "slug": "massive-explosion-rocks-rochdale-debris-scattered-across-bury-road",
+      "title": "Massive explosion rocks Rochdale, debris scattered across Bury Road",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/bury_road.jpg",
+        "img": "assets/img/cards/bury_road.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/dc7def7db589474d-town-photo.jpg"
     },
     {
       "slug": "winter-wood-grotto-returns-to-rochdale-cenotaph-with-new-theme",
@@ -90,6 +126,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/de7d2a1f9a7e-place-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-approves-demolition-of-seven-modernist-tower-blocks",
+      "title": "Rochdale Council approves demolition of seven modernist tower blocks",
+      "category": "environment",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-borough-active-awards-2026-celebrate-community-champions-at-middleton-a",
@@ -165,7 +213,7 @@
     },
     {
       "slug": "signalling-fault-disrupts-blackburn-and-rochdale-train-services",
-      "title": "Failsworth tram stop lifts out of service during replacement works",
+      "title": "Failsworth tram stop lifts out of service due to replacement works",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -514,14 +562,14 @@
     {
       "slug": "planning-approved-for-new-storage-world-building-in-middleton",
       "title": "Rochdale Council approves new Storage World building in Middleton",
-      "category": "news",
+      "category": "environment",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale-town-square.jpg",
         "img": "assets/img/cards/rochdale-town-square.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/f0324b05b31a-place-generated-card.jpg"
+      "after": "assets/img/cards/a145aae003e2-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-s-atom-valley-project-aims-to-create-thousands-of-jobs-and-homes",
