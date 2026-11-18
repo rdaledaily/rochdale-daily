@@ -15,6 +15,8 @@
     }
   }
 
+  DATA = DATA.filter(item => item && item.title && item.url && item.title.trim() !== 'Redirecting to Rochdale Daily');
+
   const PAGE = 60;
   let shown = PAGE;
   let activeSection = 'all';
@@ -227,6 +229,8 @@
     render(true);
   }
 
+  const initialQuery = new URLSearchParams(window.location.search).get('q');
+  if (initialQuery) input.value = initialQuery;
   buildFacets();
   input.addEventListener('input', () => render(true));
   yearSelect.addEventListener('change', () => render(true));
