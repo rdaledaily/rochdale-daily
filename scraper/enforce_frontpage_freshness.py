@@ -355,7 +355,10 @@ def main() -> None:
     fresh_utility.sort(key=latest_update, reverse=True)
     stale_pins.sort(key=latest_verified_update, reverse=True)
 
-    ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
+    # Every active editor pin leads, however old the story (editor, 18 Nov
+    # 2026): a pinned breaking update to a story first published two weeks
+    # earlier (Middleton nursery death) was otherwise placed last.
+    ordered = fresh_pins + stale_pins + fresh_substantive + recent_live + fresh_utility
     ordered = ordered[:FRONTPAGE_TARGET]
 
     # A paid-for advertisement feature is always newly published, so it sorts
