@@ -148,7 +148,7 @@
  const footerLinks = document.querySelector('.editorial-legal-note .legal-links');
  if (!footerLinks || footerLinks.querySelector('a[href^="/advertise"]')) return;
  const link = document.createElement('a');
- link.href = '/advertise?plan=section#section';
- link.textContent = 'Sponsor a section';
+ link.href = '/advertise#packages';
+ link.textContent = 'Advertise locally from £75';
  footerLinks.append(document.createTextNode(' · '), link);
 })();
