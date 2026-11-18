@@ -2446,6 +2446,35 @@ def collect_facebook_candidates() -> list[Candidate]:
 def collect_x_candidates() -> list[Candidate]:
     return official_social_records_to_candidates(collect_x_social_records())
 
+def collect_gmp_email_candidates(now: datetime | None = None, root: Path | None = None) -> list[Candidate]:
+    """GMP press releases emailed to news@, marked for immediate release,
+    that concern the borough (gmp_email.py has the editor's rule and the
+    place test; GMP covers all ten Greater Manchester boroughs)."""
+    import gmp_email
+    now = now or utc_now()
+    root = root or Path(__file__).resolve().parents[1]
+    candidates: list[Candidate] = []
+    skipped = 0
+    for release in gmp_email.find_releases(root, now):
+        combined = f"{release['title']}\n{release['text']}"
+        if not gmp_email.concerns_borough(combined):
+            skipped += 1
+            continue
+        candidates.append(Candidate(
+            source_name=gmp_email.SOURCE_NAME,
+            source_url=release['source_url'],
+            source_title=release['title'][:160],
+            source_summary=release['text'][:1000],
+            source_published_at=release['sent_at'],
+            area=source_text_area(combined, 'rochdale', gmp_email.SOURCE_NAME, release['source_url'], True) or 'rochdale',
+            category=categorise(combined),
+            source_body_excerpt=release['text'][:3500],
+            source_kind='press_release',
+        ))
+    log.info('GMP emailed press releases: %d for immediate release about the borough, %d about elsewhere skipped',
+             len(candidates), skipped)
+    return candidates
+
 def collect_environment_agency_flood_candidates() -> list[Candidate]:
     """
     Fetch active flood alerts/warnings within 25 km of central Rochdale using
@@ -4270,7 +4299,7 @@ def main() -> int:
     collector_errors: dict[str, str] = {}
     x_social_records = collect_x_social_records()
     facebook_social_records = collect_facebook_social_records()
-    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors), 'inspection_registers': safe_collect('inspection_registers', collect_register_candidates, collector_counts, collector_errors), 'primary_data': safe_collect('primary_data', collect_primary_data_candidates, collector_counts, collector_errors)}
+    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'gmp_email_releases': safe_collect('gmp_email_releases', collect_gmp_email_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors), 'inspection_registers': safe_collect('inspection_registers', collect_register_candidates, collector_counts, collector_errors), 'primary_data': safe_collect('primary_data', collect_primary_data_candidates, collector_counts, collector_errors)}
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
