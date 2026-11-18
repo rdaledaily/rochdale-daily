@@ -125,6 +125,14 @@ def latest_verified_update(article: dict[str, Any]) -> datetime:
     return first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
 
 
+def _position(article: dict[str, Any]) -> int:
+    try:
+        value = int(article.get("frontpage_position") or 0)
+    except (TypeError, ValueError):
+        return 0
+    return value if value >= 1 else 0
+
+
 def active_pin(article: dict[str, Any], now: datetime) -> bool:
     if article.get("featured") is not True:
         return False
@@ -391,6 +399,16 @@ def main() -> None:
             ordered = [article for article in ordered if _identity(article) != _identity(recent)]
             ordered.insert(min(2, len(ordered)), recent)
             ordered = ordered[:FRONTPAGE_TARGET]
+
+    # Editor-chosen slot for a pinned story (editor, 18 Nov 2026: the
+    # Middleton nursery death "should be position 2 front page").
+    # frontpage_position is 1-based and applies only while the pin is active.
+    placed = [a for a in ordered if active_pin(a, now) and _position(a)]
+    if placed:
+        placed_ids = {_identity(a) for a in placed}
+        ordered = [a for a in ordered if _identity(a) not in placed_ids]
+        for article in sorted(placed, key=_position):
+            ordered.insert(min(_position(article) - 1, len(ordered)), article)
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index

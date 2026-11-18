@@ -298,6 +298,8 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         record["kicker"] = _clean(entry.get("kicker"))[:40]
     if entry.get("featured") is True:
         record["featured"] = True
+    if entry.get("frontpage_position"):
+        record["frontpage_position"] = entry.get("frontpage_position")
     for flag in ("is_ongoing", "breaking_news", "developing", "police_matter"):
         if entry.get(flag) is True:
             record[flag] = True
