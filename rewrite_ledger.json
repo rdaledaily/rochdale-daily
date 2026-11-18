@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T15:19:58.270928Z",
+  "updated_at": "2026-11-18T15:40:29.636513Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 183,
+  "count": 185,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -647,9 +647,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T15:16:20.565994Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Transport do not appear in the source. Name only people, plac",
+      "last_attempt_at": "2026-11-18T15:40:29.635854Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of service Duration Wed 18 Nov, 1:09pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
@@ -906,6 +906,22 @@
       "source_name": "Building Design",
       "category": "environment",
       "text_fingerprint": "30f6020358bc72bd"
+    },
+    "https://www.bdonline.co.uk/news/seven-modernist-tower-blocks-in-rochdale-to-be-demolished/5145210.article": {
+      "first_attempt_at": "2026-11-18T15:40:29.635754Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bdonline.co.uk/news/seven-modernist-tower-blocks-in-rochdale-to-be-demolished/5145210.article"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T15:40:29.635754Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Seven modernist tower blocks in Rochdale to be demolished - Building Design",
+      "source_name": "Building Design",
+      "category": "environment",
+      "text_fingerprint": "cfefe5b0d1b499ba"
     },
     "https://www.beinsports.com/en-mena/football/fa-cup/rochdale-vs-newport-county-2026-12-05": {
       "first_attempt_at": "2026-11-14T19:23:45.035471Z",
@@ -1174,6 +1190,23 @@
       "category": "sport",
       "text_fingerprint": "977852a658a0e137"
     },
+    "https://www.insidehousing.co.uk/news/rochdale-boroughwide-housing-decides-to-demolish-seven-landmark-1960s-tower-blocks-99693": {
+      "first_attempt_at": "2026-11-18T15:37:55.359601Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.housingtoday.co.uk/news/seven-modernist-tower-blocks-in-rochdale-to-be-demolished/5145209.article",
+        "https://www.insidehousing.co.uk/news/rochdale-boroughwide-housing-decides-to-demolish-seven-landmark-1960s-tower-blocks-99693"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T15:37:55.359601Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This decision ref",
+      "title": "News - Rochdale Boroughwide Housing decides to demolish seven landmark 1960s tower blocks - Inside Housing",
+      "source_name": "Inside Housing",
+      "category": "community",
+      "text_fingerprint": "6b652c6e3b9236bd"
+    },
     "https://www.inyourarea.co.uk/news/how-rochdale-residents-helped-deliver-10-000-toys-to-3-000-children-as-2026-christmas-appeal-launches": {
       "first_attempt_at": "2026-11-13T09:48:19.048240Z",
       "attempts": 1,
@@ -1349,13 +1382,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T15:19:58.270114Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "9f80e7d55c61b421",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/greater-manchester-police-applies-exceptional-34926659": {
       "first_attempt_at": "2026-11-18T10:32:20.739487Z",
@@ -1432,6 +1465,7 @@
         "https://cedarnews.net/newstasks/1162032/explosion-rochdale-live-emergency-services-scrambled-massive",
         "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269",
         "https://www.dailyrecord.co.uk/news/uk-world-news/dramatic-moment-rochdale-hot-tub-37888389",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
@@ -1440,7 +1474,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T15:19:58.270431Z",
+      "last_attempt_at": "2026-11-18T15:40:29.636072Z",
       "outcome": "published",
       "reason": "",
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
@@ -2772,9 +2806,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T15:16:30.683041Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Daniel do not appear in the source. Name only people, places",
+      "last_attempt_at": "2026-11-18T15:40:29.636347Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale man murdered wife and hid her body under bed for two days before calling police over smell",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",

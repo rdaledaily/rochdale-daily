@@ -1,52 +1,25 @@
 {
-  "last_run_at": "2026-11-18T15:19:58.276326Z",
+  "last_run_at": "2026-11-18T15:40:29.640419Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 4,
-      "offered_today": 0,
-      "listed": 33,
-      "already_seen": 21,
-      "started_long_ago": 0,
-      "too_far_ahead": 11,
-      "undated": 1,
-      "in_window": 0
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 11,
-      "other_notice_types": 1,
-      "already_seen": 10,
-      "new": 0,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 6,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 6,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 12,
-      "not_decisions": 10,
-      "no_borough_place": 0,
-      "already_seen": 1,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -54,18 +27,14 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "error",
-      "error": "ConnectionError: HTTPSConnectionPool(host='www.find-tender.service.gov.uk', port=443): Max retries exceeded with url: /api/1.0/ocdsReleasePackages?updatedFrom=2026-11-18T08%3A57%3A16&updatedTo=2026-11"
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 6
     },
     "weather_warnings": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 0,
-      "not_rochdale": 0,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-18T15:14:44.327005Z",
+      "interval_hours": 6
     },
     "claimant_count": {
       "status": "not due",
@@ -85,60 +54,63 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 131,
+  "raw_candidates_before_job_filter": 135,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 131,
+  "raw_candidates": 135,
   "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 42,
-    "resolved": 34,
-    "text_recovered": 21,
+    "wrappers": 44,
+    "resolved": 36,
+    "text_recovered": 23,
     "reattributed": 0,
-    "images_found": 26
+    "images_found": 28
   },
-  "duplicates_merged": 81,
+  "duplicates_merged": 85,
   "attempted_rewrites": 5,
-  "draft_rewrites_created": 3,
+  "draft_rewrites_created": 4,
   "drafted_articles": [
     {
-      "slug": "gas-explosion-in-bamford-area-of-rochdale-causes-property-damage-but-no-injuries",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078"
+      "slug": "rochdale-council-approves-demolition-of-seven-modernist-tower-blocks",
+      "source_url": "https://www.bdonline.co.uk/news/seven-modernist-tower-blocks-in-rochdale-to-be-demolished/5145210.article"
     },
     {
-      "slug": "rochdale-residents-react-to-demolition-plans-for-seven-sisters-flats",
-      "source_url": "https://www.bbc.co.uk/news/articles/cvj6lzy6ng0xo"
+      "slug": "failsworth-tram-stop-lifts-out-of-service-during-replacement-works",
+      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-ea6c94c0d775e175cb"
     },
     {
-      "slug": "gas-explosion-rocks-bamford-rochdale-prompting-emergency-response",
+      "slug": "gas-explosion-on-bury-road-in-rochdale-prompts-emergency-response",
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831"
+    },
+    {
+      "slug": "rochdale-man-arrested-for-murder-after-wife-s-body-found-under-bed",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 651,
-  "skipped": 2,
+  "new_articles": 2,
+  "live_articles": 652,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the name(s) Transport do not appear in the source. Name only people, plac": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Daniel do not appear in the source. Name only people, places": 1
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This decision ref": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 3,
-    "queued_for_retry": 3,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 183,
+    "entries": 185,
     "by_outcome": {
-      "editorial_twin": 18,
-      "failed": 32,
-      "published": 90,
-      "rejected": 43
+      "editorial_twin": 19,
+      "failed": 33,
+      "published": 91,
+      "rejected": 42
     },
     "held_back_this_run": 32,
     "held_already_published": 18,
@@ -147,6 +119,15 @@
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cvj6lzy6ng0xo",
+      "title": "Demolition of Rochdale's Seven Sisters flats devastating, residents say",
+      "source_name": "BBC Manchester",
+      "held_because": "already covered by the editor: covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
+      "outcome": "editorial_twin",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-18T15:19:58.270336Z"
+    },
     {
       "url": "https://www.miltonkeynes.co.uk/sport/football/mk-dons/ex-mk-dons-midfielder-in-court-after-york-city-rochdale-pitch-invasion-9355596?__cf_chl_rt_tk=Gp86EDMgQJKiTycSm29X3_6mjtT02Bo9sZSI9vAmmIw-1794912919-1.0.1.1-3ooB5egYRxTWIxczyvIESPfnw8.U3N5VYZpZBnv8XfA",
       "title": "Ex-MK Dons midfielder in court after York City-Rochdale pitch invasion - Milton Keynes Citizen",
@@ -211,15 +192,6 @@
       "last_attempt_at": "2026-11-17T23:23:53.066637Z"
     },
     {
-      "url": "https://www.bbc.com/news/articles/c8lyd2l5xn6qo",
-      "title": "Rochdale's landmark Seven Sisters tower blocks to be demolished - BBC",
-      "source_name": "BBC",
-      "held_because": "already covered by the editor: covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
-      "outcome": "editorial_twin",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-17T22:59:22.585668Z"
-    },
-    {
       "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNS3drMmNwdG1HaFFQQzRyTy1VTnliaWhrN3BWTlp0c3J2NEZCUDNpbXpLQXNQWWFQbDlWdEFPM0dZdEJzenNpWlRIc21tUVFCczVITDYzSVhkNTJQNFVlRXNwMTQyMEhUdDFDVF9zMGFvYi1NMVpVajJ2cmFXV0hUVGFzMjZzcm5jM1BKbkFOQVNzd2hnZDlmdk1uTC1JbkxMLTdoMEtGMGFPdmp5MGRHUVMwbEtJb1hwdjFuLVZQN1NKd1E?oc=5",
       "title": "Manchester Evening News. . 🚨 Emergency services are responding to reports of a large explosion in Rochdale, with a number of police, fire en",
       "source_name": "Facebook",
@@ -275,20 +247,24 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Replace dash punctuation with ordinary sentence structure, while preserving exact quotations and proper names.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 183.": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 2,
+    "The source names a road, time, figure or organisation and the draft does not. Carry the specific detail through.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 169.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "writer offered no points": 3
+      "writer offered no points": 2,
+      "no box: fewer than two points survived": 1,
+      "not eligible: crime, court, police or death": 1
     },
-    "points": {}
+    "points": {
+      "dropped: no story sentence to correct it to": 2
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 112,
+    "rss_and_google_news": 116,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 7,
@@ -298,7 +274,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 2
+    "men_newsletter": 1
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -335,14 +311,6 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -424,12 +392,6 @@
   },
   "immediate_first": [
     {
-      "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
-      "source": "Manchester Evening News",
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078",
-      "kind": "live-incident"
-    },
-    {
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
       "source": "Manchester Evening News",
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
@@ -437,25 +399,26 @@
     }
   ],
   "source_counts": {
-    "Rochdale Times": 35,
-    "Roch Valley Radio": 17,
-    "Manchester Evening News": 17,
+    "Rochdale Times": 37,
+    "Manchester Evening News": 18,
+    "Roch Valley Radio": 16,
     "Bee Network live travel alerts": 7,
     "BBC Manchester": 5,
     "Housing Today": 4,
     "Nacionale": 4,
     "Rochdale Borough Council": 4,
     "Rochdale AFC": 3,
+    "Oldham Times": 3,
     "About Manchester": 3,
     "BBC": 3,
     "Roch Valley Radio Local News": 3,
     "The Bury Times": 2,
-    "Oldham Times": 2,
     "UKNIP": 2,
     "Inside Housing": 2,
     "I Love Manchester": 2,
     "Building Design": 2,
     "Greater Manchester Police": 2,
+    "Falinge Park High School": 1,
     "Your Trust Rochdale": 1,
     "Hopwood Hall College": 1,
     "The Bolton News": 1,
@@ -478,13 +441,13 @@
   },
   "published_by_category": {
     "business": 72,
-    "community": 100,
+    "community": 97,
     "crime": 45,
     "education": 30,
-    "environment": 50,
+    "environment": 51,
     "events": 39,
     "health": 18,
-    "news": 94,
+    "news": 96,
     "politics": 20,
     "sport": 57,
     "traffic": 48,
@@ -513,18 +476,18 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "environment-v3-a5bb48bfb6799d00974e",
     "hard-news-v3-701e7ae73f637a8b10a8",
     "hard-news-v3-45fe9d8bf95a26db5fd3",
     "transport-v3-ec46cddd4fc5b0d5b89a",
-    "community-v3-95cc090c99c559eef018"
+    "community-v3-5e50071eb49437923d1b",
+    "environment-v3-c735f6d72a1f62a89ca9"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
     "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-ea6c94c0d775e175cb",
-    "https://www.bbc.co.uk/news/articles/cvj6lzy6ng0xo"
+    "https://www.insidehousing.co.uk/news/rochdale-boroughwide-housing-decides-to-demolish-seven-landmark-1960s-tower-blocks-99693",
+    "https://www.bdonline.co.uk/news/seven-modernist-tower-blocks-in-rochdale-to-be-demolished/5145210.article"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -538,11 +501,13 @@
     "available_categories": [
       "community",
       "crime",
+      "environment",
       "transport"
     ],
     "selected_categories": [
       "community",
       "crime",
+      "environment",
       "transport"
     ],
     "available_wards": [],
@@ -557,18 +522,20 @@
     "selected_by_category": {
       "community": 1,
       "crime": 1,
+      "environment": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 4
     },
     "selected_by_source": {
-      "bbc manchester": 1,
       "bee network live travel alerts": 1,
+      "building design": 1,
+      "inside housing": 1,
       "roch valley radio local news": 1
     },
-    "must_cover_selected": 2
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1126,8 +1093,16 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "healthwatchrochdale.org.uk",
+    "rochdaleafc.co.uk",
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "healthwatchrochdale.org.uk": 1,
+    "visitrochdale.com": 1,
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1163,8 +1138,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-18T15:21:53.326505Z",
-  "frontpage_article_count": 23,
+  "frontpage_generated_at": "2026-11-18T15:41:47.629291Z",
+  "frontpage_article_count": 24,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1231,11 +1206,11 @@
       "business": 1,
       "community": 3,
       "health": 3,
-      "environment": 2,
+      "environment": 3,
       "news": 6
     },
     "selected_by_ward": {
-      "borough-wide": 19,
+      "borough-wide": 20,
       "Spotland and Falinge": 1,
       "Central Rochdale": 1,
       "Bamford": 1,
@@ -1247,7 +1222,7 @@
       "heywood": 2,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 19
+      "rochdale": 20
     },
     "selected_by_source": {
       "gmp press office": 2,
@@ -1258,7 +1233,7 @@
       "source": 1,
       "manchester evening news": 5,
       "find a tender": 1,
-      "building design": 1,
+      "building design": 2,
       "rochdale daily": 2,
       "your trust rochdale articles": 1,
       "inyourarea": 1,
@@ -1268,15 +1243,15 @@
       "milton keynes citizen": 1,
       "rochdale times; bbc north west; brit brief": 1
     },
-    "pool_size": 27,
-    "primary_pool_size": 27,
+    "pool_size": 28,
+    "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 23,
+    "frontpage_count": 24,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 16,
-    "fresh_under_homepage_window": 22,
-    "short_briefs_selected": 12,
+    "fresh_under_homepage_window": 23,
+    "short_briefs_selected": 13,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1286,8 +1261,8 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 2,
-  "duplicate_articles_after_postprocessing": 651,
+  "event_dates_corrected_from_ledger": 1,
+  "duplicate_articles_after_postprocessing": 652,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1298,9 +1273,12 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 3,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "rochdale-council-approves-demolition-of-seven-modernist-tower-blocks",
+    "signalling-fault-disrupts-blackburn-and-rochdale-train-services"
+  ],
+  "drafts_not_published": 2,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
