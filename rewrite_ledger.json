@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T18:17:20.224591Z",
+  "updated_at": "2026-11-18T18:39:50.128983Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 181,
+  "count": 180,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -632,8 +632,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T15:40:29.635854Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of service Duration Wed 18 Nov, 1:09pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
@@ -1831,27 +1831,6 @@
       "category": "environment",
       "text_fingerprint": "7a5c365259d1fb08"
     },
-    "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords": {
-      "first_attempt_at": "2026-11-09T11:38:20.827342Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMilwFBVV95cUxNcVRRWkRFNkdac2lJdlBZX3BVNW42aG1NbWlIN1A5WGxFVGQ0WU83aU1GdW1LUWZDaUdnUTF2dmhEYjVxTHZhLTJ4MXQxYV9fak1lY1BvbTZMZ1E2SDNOQXdSdkhhUm80NXBSQWxWY2FaSTJ2aF9SaldNd3o3T1ZiaXdyY1htMmRJMk5Ia2haNGdPX08tcDlR?oc=5",
-        "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords",
-        "https://www.rochdaletimes.co.uk/rbh-ranks-among-top-25-of-landlords-for-tenant-satisfaction"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T18:19:15.130600Z",
-      "outcome": "failed",
-      "reason": "one-time retry after briefing-absorption fix",
-      "title": "National tenant satisfaction figures rank RBH among the top 25% of landlords",
-      "source_name": "Rochdale Boroughwide Housing",
-      "category": "community",
-      "text_fingerprint": "0d9479f5ae4b8756",
-      "recovery_attempts": 0,
-      "evidence_recovery_policy": 1,
-      "briefing_absorb_recovery": 1
-    },
     "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank": {
       "first_attempt_at": "2026-11-16T14:18:54.846084Z",
       "attempts": 1,
@@ -2745,8 +2724,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T18:17:20.224398Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale man murdered wife and hid her body under bed for two days before calling police over smell",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",
