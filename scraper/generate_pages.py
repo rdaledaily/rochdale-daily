@@ -1549,6 +1549,10 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
     if (root / "guides").is_dir():
         pages.append(root / "guides" / "index.html")
         pages.extend(sorted(p for p in (root / "guides").glob("*.html") if p.name != "index.html"))
+    # Death notices (18 Nov 2026), written by generate_notices.py.
+    if (root / "notices" / "index.html").exists():
+        pages.append(root / "notices" / "index.html")
+        pages.extend(sorted(p for p in (root / "notices").glob("*.html") if p.name != "index.html"))
     # Community directory (18 Nov 2026), written by generate_groups.py.
     if (root / "groups" / "index.html").exists():
         pages.append(root / "groups" / "index.html")
@@ -1569,6 +1573,7 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         public_path = ("wards/" if relative == "wards/index.html" else "weather/" if relative == "weather/index.html"
                        else "guides/" if relative == "guides/index.html"
                        else "groups/" if relative == "groups/index.html"
+                       else "notices/" if relative == "notices/index.html"
                        else "start-here" if relative == "start-here.html" else relative)
         expected = f"{SITE_BASE_URL}/{public_path}"
         try:
@@ -1793,6 +1798,11 @@ def main() -> None:
         build_guides()
     except Exception as exc:  # never let a guide failure block the paper
         print(f'Guides skipped: {type(exc).__name__}: {exc}')
+    try:
+        from generate_notices import main as build_notices
+        build_notices()
+    except Exception as exc:  # never let notices block the paper
+        print(f'Notices skipped: {type(exc).__name__}: {exc}')
     try:
         from generate_groups import main as build_groups
         build_groups()
