@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T14:24:52.932836Z",
+  "updated_at": "2026-11-18T14:50:27.422412Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 181,
+  "count": 182,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -27,16 +27,16 @@
     },
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats",
         "https://news.google.com/rss/articles/CBMif0FVX3lxTE9WS2x2emVaVTc2cGRzdHJjZUw4dUdPMVg1NXU4Vkx3N1d4WDh1TUxmeHljOGlJZGltTk9xQ2JDVTBEelVVclF1WnBZbHcyZ3o2R1ZHeEYwMlRndFk0eGZDXzhqY3ppZXc2NTNIR3BxRHdEYUNIQ1U3LUx2MWFnOW8?oc=5"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:22:25.535086Z",
+      "last_attempt_at": "2026-11-18T14:47:47.084610Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the draft says death but the source does not. Never change a legal status",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Crown, Court do not appear in the source. Name only people, p",
       "title": "Man pleads guilty to murder of woman whose body found in Rochdale flats - About Manchester",
       "source_name": "About Manchester",
       "category": "crime",
@@ -647,13 +647,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:24:52.932083Z",
+      "last_attempt_at": "2026-11-18T14:50:27.421842Z",
       "outcome": "published",
       "reason": "",
       "title": "Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of service Duration Wed 18 Nov, 1:09pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "4050b578f126b305"
+      "text_fingerprint": "4050b578f126b305",
+      "recovery_attempts": 1
     },
     "https://uk.news.yahoo.com/stay-vigilant-warning-spate-family-130751807.html": {
       "first_attempt_at": "2026-11-09T23:42:53.832103Z",
@@ -772,9 +773,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:22:16.637260Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 5 November are neither stated nor implied by the source. Use",
+      "last_attempt_at": "2026-11-18T14:50:27.422045Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Police investigate death of boy, 3, after incident at nursery",
       "source_name": "BBC Manchester",
       "category": "news",
@@ -1323,6 +1324,22 @@
       "category": "news",
       "text_fingerprint": "49ed69aead848b30"
     },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078": {
+      "first_attempt_at": "2026-11-18T14:50:27.421716Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T14:50:27.421716Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
+      "source_name": "Manchester Evening News",
+      "category": "environment",
+      "text_fingerprint": "9f80e7d55c61b421"
+    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/greater-manchester-police-applies-exceptional-34926659": {
       "first_attempt_at": "2026-11-18T10:32:20.739487Z",
       "attempts": 1,
@@ -1365,14 +1382,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:24:52.932302Z",
+      "last_attempt_at": "2026-11-18T14:50:27.422383Z",
       "outcome": "published",
       "reason": "",
       "title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "bab448702ab99ff2",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608": {
@@ -1407,8 +1424,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T14:24:52.932583Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2737,13 +2754,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:24:52.932442Z",
+      "last_attempt_at": "2026-11-18T14:50:27.422207Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale man murdered wife and hid her body under bed for two days before calling police over smell",
-      "source_name": "Roch Valley Radio",
+      "source_name": "Roch Valley Radio Local News",
       "category": "crime",
-      "text_fingerprint": "632ebdf16b95b538"
+      "text_fingerprint": "632ebdf16b95b538",
+      "recovery_attempts": 1
     },
     "https://www.skysports.com/football/news/13610288/rochdale-0-1-york": {
       "first_attempt_at": "2026-11-15T19:05:35.765421Z",
