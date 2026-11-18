@@ -473,6 +473,40 @@ export function stripBannedLinksText(html) {
     (whole, q, href, inner) => (isBannedLink(decodeEntities(href)) ? inner : whole));
 }
 
+// ---------------------------------------------------------------- tidy links
+//
+// Cloudflare Pages serves /contact.html as a 308 redirect to /contact, and
+// /index.html to /. Generators and templates written over the months still
+// link the .html form, so every crawl follows a redirect for each such link
+// (Ahrefs Site Audit, 18 Nov 2026: contact.html, terms.html,
+// editorial-standards.html, index.html ...). Rewriting same-site links here
+// fixes all ~2,000 pages at once, old and new, without regenerating them.
+// Every _redirects source has both forms, so the tidy form never loses a
+// redirect. Query strings and #fragments are kept.
+const SITE_HOSTS = new Set(['rochdaledaily.co.uk', 'www.rochdaledaily.co.uk']);
+
+export function tidyInternalHref(href) {
+  const raw = String(href ?? '');
+  let prefix = '';
+  let rest = raw;
+  const abs = raw.match(/^(https?:)?\/\/([^\/?#]+)(.*)$/i);
+  if (abs) {
+    if (!SITE_HOSTS.has(abs[2].toLowerCase())) return raw;
+    prefix = raw.slice(0, raw.length - abs[3].length);
+    rest = abs[3] || '/';
+  } else if (!rest.startsWith('/')) {
+    return raw; // relative ("foo.html"), mailto:, tel:, #anchor - left alone
+  }
+  const m = rest.match(/^([^?#]*)(.*)$/);
+  let path = m[1];
+  const tail = m[2];
+  if (!/\.html$/i.test(path)) return raw;
+  if (/(^|\/)index\.html$/i.test(path)) path = path.replace(/index\.html$/i, '');
+  else path = path.replace(/\.html$/i, '');
+  if (!path) path = '/';
+  return prefix + path + tail;
+}
+
 // ---------------------------------------------------------------- head tags
 //
 // Tags every HTML page must carry in its <head>. Injected here, at the edge,
@@ -491,7 +525,14 @@ function stripBannedLinks(response) {
   // before </head>, and the snippets are written at </head>.
   const present = new Set();
   return new HTMLRewriter()
-    .on('a[href]', { element(el) { if (isBannedLink(el.getAttribute('href'))) el.removeAndKeepContent(); } })
+    .on('a[href]', {
+      element(el) {
+        const href = el.getAttribute('href');
+        if (isBannedLink(href)) { el.removeAndKeepContent(); return; }
+        const tidy = tidyInternalHref(href);
+        if (tidy !== href) el.setAttribute('href', tidy);
+      },
+    })
     .on('head script[src]', { element(el) { present.add(el.getAttribute('src')); } })
     .on('head', {
       element(el) {
