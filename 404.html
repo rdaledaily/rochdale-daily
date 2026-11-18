@@ -17,6 +17,10 @@
     .notfound{max-width:640px;margin:0 auto;padding:48px 20px;text-align:center}
     h1{font-family:var(--font-display);font-size:44px;letter-spacing:-.03em;margin:.2em 0}
     p{font-size:18px;color:var(--muted);line-height:1.5}
+    .story-search{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .story-search label{width:100%;font-weight:700}
+    .story-search input,.story-search button{box-sizing:border-box;max-width:100%;padding:10px;font:inherit}
+    .story-search button{background:var(--brand-navy);color:var(--on-dark);border:0;cursor:pointer}
     a.btn{display:inline-block;margin-top:18px;padding:12px 22px;background:var(--brand-navy);color:#fff;
       text-decoration:none;font-family:var(--font-ui);font-weight:700;font-size:14px;text-transform:uppercase}
   </style>
@@ -38,6 +42,11 @@
     <h1>Page not found</h1>
     <p>The page you're looking for doesn't exist or may have been removed.
        Stories are sometimes withdrawn for editorial or legal reasons.</p>
+    <form class="story-search" role="search" action="/search" method="get">
+      <label for="missing-story">Search for the story</label>
+      <input id="missing-story" type="search" name="q" placeholder="Headline or keywords" required>
+      <button type="submit">Search</button>
+    </form>
     <a class="btn" href="/">Back to the front page</a>
   </div>
   <script defer src="/assets/js/cookie-consent.js"></script>
