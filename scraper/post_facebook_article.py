@@ -507,7 +507,9 @@ def today_due(candidates: list[dict[str, Any]], posted: dict[str, Any], now: dat
     rows = sorted(candidates, key=lambda r: (parse_dt(r.get("first_published_at") or r.get("published_at")),
                                              str(r.get("slug") or "")))
     for row in rows:
-        if not today_kind(row):
+        # Breaking stories the editor sends go out at once (editor, 18 Nov
+        # 2026: "every breaking story ... need to go out immediately").
+        if not (today_kind(row) or row.get("breaking_news") is True):
             continue
         if parse_dt(row.get("first_published_at") or row.get("published_at")) < cutoff:
             continue
@@ -752,7 +754,7 @@ def main() -> int:
             "caption": caption,
         }
         if lane == TODAY_LANE:
-            record["today_kind"] = today_kind(article)
+            record["today_kind"] = today_kind(article) or "breaking"
         if not dry_run:
             stored = {k: v for k, v in record.items() if k != "caption"}
             posted[key or article_key(article)] = stored
