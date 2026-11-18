@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T22:20:47.571150Z",
+  "updated_at": "2026-11-18T22:54:21.591208Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 174,
+  "count": 173,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1082,14 +1082,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T22:20:47.570939Z",
+      "last_attempt_at": "2026-11-18T22:54:21.590983Z",
       "outcome": "published",
       "reason": "",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
       "text_fingerprint": "3199536186e801f7",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.insidehousing.co.uk/news/rochdale-boroughwide-housing-decides-to-demolish-seven-landmark-1960s-tower-blocks-99693": {
@@ -1743,22 +1743,6 @@
       "structured_official_notice_recovery": 1,
       "evidence_recovery_policy": 1,
       "briefing_absorb_recovery": 1
-    },
-    "https://www.rochdale.gov.uk/directory-record/2656/shawclough-road-roadworks-in-rochdale-from-10-november-2026": {
-      "first_attempt_at": "2026-11-10T22:13:18.456329Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/directory-record/2656/shawclough-road-roadworks-in-rochdale-from-10-november-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T22:13:18.456329Z",
-      "outcome": "editorial_twin",
-      "reason": "covered by the editor's story /articles/christmas-lights-switch-on-2026-rochdale-heywood-middleton-littleborough-norden",
-      "title": "Shawclough Road, roadworks in Rochdale from 10 November 2026",
-      "source_name": "Rochdale Borough Council",
-      "category": "traffic",
-      "text_fingerprint": "7595df5739a7bc42"
     },
     "https://www.rochdale.gov.uk/directory-record/2657/wardle-village-carol-concert-road-closure-in-wardle-on-24-december-2026": {
       "first_attempt_at": "2026-11-12T10:14:17.302545Z",
@@ -2472,13 +2456,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T20:13:14.443413Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-18T22:51:45.658145Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are thrilled t",
       "title": "Husband-and-wife pottery studio grows into thriving Rochdale town centre business",
       "source_name": "Roch Valley Radio Local News",
       "category": "business",
-      "text_fingerprint": "e2adc1095460dfe8"
+      "text_fingerprint": "e2adc1095460dfe8",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named": {
       "first_attempt_at": "2026-11-15T14:20:11.653556Z",
