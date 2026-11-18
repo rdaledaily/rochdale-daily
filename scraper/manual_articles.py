@@ -109,6 +109,19 @@ def _drop_taken_down_items(value: str, taken_down: set[str]) -> str:
     )
 
 
+# Other local news outlets (18 Nov 2026). Crediting them stays; passing them
+# search ranking does not: Ahrefs counted 116 followed links from us to
+# Rochdale Times, in a market where links are the paper's main bottleneck.
+COMPETITOR_HOSTS = ("rochdaletimes.co.uk", "manchestereveningnews.co.uk", "rochvalleyradio.com",
+                    "rochdaleobserver.co.uk", "bbc.co.uk", "bbc.com")
+
+
+def _is_competitor_url(url: str) -> bool:
+    host = re.sub(r"^https?://", "", url, flags=re.I).split("/", 1)[0].split(":", 1)[0].lower()
+    host = host[4:] if host.startswith("www.") else host
+    return any(host == h or host.endswith("." + h) for h in COMPETITOR_HOSTS)
+
+
 def _content_html(entry: dict[str, Any]) -> str:
     briefing = _briefing_html(entry)
     if briefing:
@@ -125,7 +138,8 @@ def _content_html(entry: dict[str, Any]) -> str:
         value = match.group(0)
         url = value.rstrip(".,;:!?)")
         suffix = value[len(url):]
-        return f'<a href="{url}" rel="noopener">{url}</a>{suffix}'
+        rel = "nofollow noopener" if _is_competitor_url(url) else "noopener"
+        return f'<a href="{url}" rel="{rel}">{url}</a>{suffix}'
 
     linked = [re.sub(r"https?://[^\s<>\"']+", link_urls, part) for part in paragraphs]
     blocks = [f"<p>{part}</p>" for part in linked]

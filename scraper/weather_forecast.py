@@ -46,6 +46,9 @@ import requests
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = REPO_ROOT / "weather.json"
+# The other townships' forecasts, for the /weather/ pages. Rochdale stays in
+# weather.json, which the homepage panel reads, so that panel is unchanged.
+TOWNS_PATH = REPO_ROOT / "weather_towns.json"
 
 ENDPOINT = "https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/daily"
 
@@ -55,6 +58,25 @@ LATITUDE = 53.6177
 LONGITUDE = -2.1552
 
 UK = ZoneInfo("Europe/London")
+
+# Township centres for the /weather/ pages (18 Nov 2026). "weather heywood",
+# "weather littleborough" and the rest are ~33,000 UK searches a month between
+# them (Ahrefs), and the paper had no page for any of them.
+TOWNS = {
+    "heywood": {"name": "Heywood", "latitude": 53.5925, "longitude": -2.2190},
+    "littleborough": {"name": "Littleborough", "latitude": 53.6440, "longitude": -2.0950},
+    "middleton": {"name": "Middleton", "latitude": 53.5537, "longitude": -2.2010},
+    "milnrow": {"name": "Milnrow", "latitude": 53.6097, "longitude": -2.1100},
+}
+
+# The free plan allows 360 calls a day and Rochdale already takes one call per
+# run. The four townships are refreshed only when their saved forecast is this
+# old: at most 4 x 8 = 32 calls a day, however often the lanes run. The model
+# itself only refreshes a few times a day, so nothing is lost.
+TOWN_REFRESH_HOURS = 3
+
+# m/s from the API -> mph, the unit British readers use for wind.
+MS_TO_MPH = 2.23694
 
 REQUEST_TIMEOUT = 20
 
@@ -126,11 +148,11 @@ WEATHER_ICONS = {
 }
 
 
-def fetch_payload(key: str) -> dict:
+def fetch_payload(key: str, latitude: float = LATITUDE, longitude: float = LONGITUDE) -> dict:
     """Call the API. The key goes in a header, never in the query string."""
     response = requests.get(
         ENDPOINT,
-        params={"latitude": LATITUDE, "longitude": LONGITUDE},
+        params={"latitude": latitude, "longitude": longitude},
         headers={"apikey": key, "accept": "application/json"},
         timeout=REQUEST_TIMEOUT,
     )
@@ -182,16 +204,33 @@ def parse_entry(entry: dict) -> tuple[date | None, bool, dict | None]:
 
     condition = WEATHER_CODES.get(int(code), "Not available")
 
-    return entry_date, True, {
+    record = {
         "date": entry_date.isoformat(),
         "weekday": entry_date.strftime("%a"),
         "temperature_c": round(float(temperature)),
         "condition": condition,
         "icon": WEATHER_ICONS.get(condition, "◌"),
     }
+    # Optional detail for the /weather/ pages. Each is added only when the API
+    # gave it: a missing value is left out, never estimated.
+    for source_key, out_key, convert in (
+        ("nightMinScreenTemperature", "min_temperature_c", lambda v: round(float(v))),
+        ("dayProbabilityOfPrecipitation", "rain_chance_pct", lambda v: round(float(v))),
+        ("midday10MWindSpeed", "wind_mph", lambda v: round(float(v) * MS_TO_MPH)),
+        ("midday10MWindGust", "gust_mph", lambda v: round(float(v) * MS_TO_MPH)),
+        ("maxUvIndex", "uv_index", lambda v: round(float(v))),
+    ):
+        value = entry.get(source_key)
+        if value is None:
+            continue
+        try:
+            record[out_key] = convert(value)
+        except (TypeError, ValueError):
+            continue
+    return entry_date, True, record
 
 
-def build_feed(payload: dict) -> tuple[dict, list[str]]:
+def build_feed(payload: dict, location: str = "Rochdale") -> tuple[dict, list[str]]:
     """Build the weather.json structure and a human-readable coverage report."""
     series, model_run = extract_time_series(payload)
     today = datetime.now(UK).date()
@@ -237,12 +276,68 @@ def build_feed(payload: dict) -> tuple[dict, list[str]]:
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "model_run": model_run,
         "source": "Met Office",
-        "location": "Rochdale",
+        "location": location,
         "days": days,
     }
 
     report.append(f"usable forecast days: {len(days)}")
     return feed, report
+
+
+def town_is_fresh(saved: dict | None, now: datetime) -> bool:
+    """True when a township's saved forecast is younger than the refresh age."""
+    if not isinstance(saved, dict):
+        return False
+    try:
+        generated = datetime.fromisoformat(str(saved.get("generated_at")))
+    except ValueError:
+        return False
+    if generated.tzinfo is None:
+        return False
+    return (now - generated).total_seconds() < TOWN_REFRESH_HOURS * 3600
+
+
+def refresh_towns(key: str, now: datetime | None = None, fetch=fetch_payload) -> list[str]:
+    """Refresh the townships whose saved forecast is stale. Never raises.
+
+    A township that fails keeps its previous forecast, with its own
+    generated_at, so its page can say how old it is.
+    """
+    now = now or datetime.now(timezone.utc)
+    try:
+        towns = json.loads(TOWNS_PATH.read_text(encoding="utf-8"))
+        if not isinstance(towns, dict):
+            towns = {}
+    except (OSError, ValueError):
+        towns = {}
+    report: list[str] = []
+    changed = False
+    for slug, town in TOWNS.items():
+        if town_is_fresh(towns.get(slug), now):
+            report.append(f"{town['name']}: fresh, not fetched")
+            continue
+        try:
+            payload = fetch(key, town["latitude"], town["longitude"])
+            feed, _ = build_feed(payload, location=town["name"])
+        except Exception as exc:
+            report.append(f"{town['name']}: FAILED {type(exc).__name__}: {exc} (previous forecast kept)")
+            continue
+        towns[slug] = feed
+        changed = True
+        report.append(f"{town['name']}: {len(feed['days'])} days")
+    if changed:
+        TOWNS_PATH.write_text(json.dumps(towns, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return report
+
+
+def build_pages() -> None:
+    """Rebuild the /weather/ pages from whatever forecasts are saved."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from generate_weather_pages import main as build_weather_pages
+        build_weather_pages()
+    except Exception as exc:  # never let a page failure stop the run
+        print(f"Weather pages skipped: {type(exc).__name__}: {exc}", file=sys.stderr)
 
 
 def main() -> int:
@@ -261,6 +356,8 @@ def main() -> int:
             "untouched.",
             file=sys.stderr,
         )
+        if not args.dry_run:
+            build_pages()
         return 0
 
     try:
@@ -272,6 +369,10 @@ def main() -> int:
         # its own generated_at so the page can judge its age.
         print(f"WEATHER FAILED: {type(exc).__name__}: {exc}", file=sys.stderr)
         print("weather.json left untouched.", file=sys.stderr)
+        if not args.dry_run:
+            for line in refresh_towns(key):
+                print(line)
+            build_pages()
         return 0
 
     print(f"Model run: {feed['model_run']}")
@@ -285,6 +386,9 @@ def main() -> int:
 
     OUTPUT_PATH.write_text(json.dumps(feed, indent=2) + "\n", encoding="utf-8")
     print(f"\nWrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
+    for line in refresh_towns(key):
+        print(line)
+    build_pages()
     return 0
 
 

@@ -1545,6 +1545,10 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         pages.extend(sorted((root / "wards").glob("*.html")))
     pages.extend([root / "heywood.html", root / "milnrow.html", root / "middleton.html", root / "littleborough.html",
                   root / "start-here.html", root / "whats-on.html", root / "roadworks.html", root / "rochdale-afc.html"])
+    # Township weather pages (18 Nov 2026), written by generate_weather_pages.py.
+    if (root / "weather").is_dir():
+        pages.append(root / "weather" / "index.html")
+        pages.extend(sorted(p for p in (root / "weather").glob("*.html") if p.name != "index.html"))
     # Topic hubs and the month archive are built by the normaliser.
     for folder in ("news/topics", "news/archive"):
         if (root / folder).is_dir():
@@ -1555,7 +1559,8 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         if not path.is_file():
             continue
         relative = path.relative_to(root).as_posix()
-        public_path = "wards/" if relative == "wards/index.html" else "start-here" if relative == "start-here.html" else relative
+        public_path = ("wards/" if relative == "wards/index.html" else "weather/" if relative == "weather/index.html"
+                       else "start-here" if relative == "start-here.html" else relative)
         expected = f"{SITE_BASE_URL}/{public_path}"
         try:
             content = path.read_text(encoding="utf-8", errors="ignore")[:10000]
