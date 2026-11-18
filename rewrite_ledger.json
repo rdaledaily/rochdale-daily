@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T21:25:34.470282Z",
+  "updated_at": "2026-11-18T21:43:37.877109Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 175,
+  "count": 174,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -638,23 +638,6 @@
       "category": "environment",
       "text_fingerprint": "351f65d6325d9244"
     },
-    "https://uknip.co.uk/news/uk/uk-news/trusted-dealer-in-rochdales-notorious-adam-drugs-gang-jailed-for-more-than-10-years": {
-      "first_attempt_at": "2026-11-10T21:06:43.164494Z",
-      "attempts": 1,
-      "urls": [
-        "https://uknip.co.uk/news/uk/uk-news/trusted-dealer-in-rochdales-notorious-adam-drugs-gang-jailed-for-more-than-10-years"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T21:21:01.281667Z",
-      "outcome": "editorial_twin",
-      "reason": "covered by the editor's story /articles/rochdale-adam-drug-line-haider-ali-jailed",
-      "title": "Trusted Dealer in Rochdale's Notorious 'Adam' Drugs Gang Jailed for More Than 10 Years - UK News in Pictures",
-      "source_name": "UKNIP",
-      "category": "crime",
-      "text_fingerprint": "1be118bca876bb5b",
-      "recovery_attempts": 1
-    },
     "https://www.asianimage.co.uk/news/26715108.rochdale-drug-gang-manager-jailed-10-half-years": {
       "first_attempt_at": "2026-11-11T21:47:06.391890Z",
       "attempts": 1,
@@ -1099,14 +1082,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T21:08:53.839157Z",
+      "last_attempt_at": "2026-11-18T21:41:01.928157Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: The government is",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
       "text_fingerprint": "3199536186e801f7",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.insidehousing.co.uk/news/rochdale-boroughwide-housing-decides-to-demolish-seven-landmark-1960s-tower-blocks-99693": {
       "first_attempt_at": "2026-11-18T15:37:55.359601Z",
@@ -1278,6 +1262,7 @@
       "first_attempt_at": "2026-11-18T16:48:15.003795Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNYVJfcUZQU3d4OXdpOWR1eWkzTWVKdWJxVVdpRFYwczhqVldTVkJXUjhNZTduMFVkSGU0YW03aDVCUnpMMXdPbDJyR3VxSEYyUmpSa0N5RndLdWZXUmRLbDdnRWR1T2dROE9OQVM4d2Mxc3pRM3g0d0YxT3ZiVXJ6T2JYRVJWYjlIUXFJYWtsejZRei05SW13OTJxWTh2NjBMQkFIbFAwdHFqVzZtZ2RuellmX21lY1dtd0p1N3JDekRDb2l0ZUVQd0k1VG5HRi1BRnhz?oc=5",
         "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPbnlkLU0wOVJZa2NVeWdoV3VJZm56czlrOTFWOS1MOTVIWk4yNVlMTUdKTW9FMGR0d01IWW1oWi1ScDhqY1dFdHRyQmxPQ1VKbW1XRzQ1dWhNaUFaNFFxT21yUG1LS1l6dENoVEFmNGp4aHVVcGdVTUlhWS1nQ1VLLVQwcnVKOGFMY2pXdmx3WGZfN0p0OGpaT25kRFlEX1RleUFidVRvUDJNRXdtUm5VQXV1bzYtUnFKR3dsZ09PLXZBRzR6aVp5Y00wYVo2Wnp2V18yNg?oc=5",
         "https://news.google.com/rss/articles/CBMikwFBVV95cUxOcUh4ZEczNVZrUVpDOEJvbjZDUjZFYXJrVFB6X0NScEl5M1RicHc2WnFWSkQ0TUp4cFhtSmIyVGFlLUdGTG5QY25Ud1pVaXhROFQzRUZsWjNERUhsNWszM3JOd1NBVFIyY19KWTlIeTh0Q2F2U2E3YmlZRVhrdDI4OVh2aVlIb0lWZjN3VFZ2bGxoRFk?oc=5",
         "https://news.google.com/rss/articles/CBMiswFBVV95cUxObFc4ZnVmTi1yTzB6OHF5dFdoVVcwWEVqazZZRlMzY1JhMVlnUjQzY2Zha2xQTVYwS0pUU25RTUZYMTllMkJKVzEzcWd3LVpHak91M1o5MUVWM3BXbGNtVVhnUDZCMjljRjN6a1RDYWdrdEx3bFRxbkd1a29BejlpUmJnS1FpQUFaTjhfaDRrM2ttcENRekpfV1ZWT0l0Q09KLVVCcHdzdUsySWxzQkhRNVBvQQ?oc=5",
@@ -1288,7 +1273,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T19:22:19.083297Z",
+      "last_attempt_at": "2026-11-18T21:43:37.876814Z",
       "outcome": "published",
       "reason": "",
       "title": "Boy, 3, who died at Middleton nursery named as Cosy Toes issues statement",
