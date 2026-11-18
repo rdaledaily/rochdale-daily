@@ -28,7 +28,8 @@ stage_newsroom() {
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards assets/img/og author
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json ward_postcode_evidence.json ward_street_evidence.json council_votes.json councillor_photos.json weather.json
     archive.html search.html archive-index.json rss.xml index.html checks.json
-    news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json)
+    news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json
+    weather/ weather_towns.json)
   local present=()
   for path in "${paths[@]}"; do [ -e "${path}" ] && present+=("${path}"); done
   git add -- "${present[@]}"
@@ -159,6 +160,7 @@ rebuild_from_merged_feed() {
   python scraper/councillor_photos.py
   python scraper/patch_democracy_portraits.py
   python scraper/generate_ward_pages.py
+  python scraper/generate_weather_pages.py
   PYTHONPATH=scraper python -c "import frontpage_manual_publish as mp; mp.render_main()"
   python scraper/enforce_frontpage_freshness.py
   python scraper/frontpage_source_quality.py
@@ -211,7 +213,7 @@ recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
 git show "${local_snapshot_commit}:articles.json" > "${recovery_dir}/local_articles.json"
-for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
+for optional in weather.json weather_towns.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
   if git cat-file -e "${local_snapshot_commit}:${optional}" 2>/dev/null; then
     git show "${local_snapshot_commit}:${optional}" > "${recovery_dir}/${optional}"
   fi
@@ -232,7 +234,7 @@ for attempt in 1 2; do
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
-  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
+  for optional in weather.json weather_towns.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
     if [ -f "${recovery_dir}/${optional}" ]; then
       cp "${recovery_dir}/${optional}" "${optional}"
     fi

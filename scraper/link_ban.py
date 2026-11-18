@@ -118,12 +118,59 @@ def _href_banned(match: re.Match) -> bool:
     return is_banned_url(_html.unescape(match.group(2)))
 
 
+_TAG_SPLIT_RE = re.compile(r"(<[^>]*>)")
+_BARE_URL_RE = re.compile(r"https?://[^\s<>\"']+", re.I)
+# "Label: <url>" -> "Label" once the URL is gone, so no dangling colon is left.
+_TRAILING_LABEL_RE = re.compile(r"\s*[:\-\u2013\u2014]\s*$")
+
+
+def _strip_bare_urls(text: str) -> str:
+    """Remove banned URLs printed as plain text (not inside a tag).
+
+    18 Nov 2026: a Sources line printed a Rochdale Online address as text,
+    not as a link, so strip_html let it through and Ahrefs still counted it
+    as a link from us to the casino site. Attributes are left alone: only the
+    text between tags is touched, and anchors are handled above.
+    """
+    if "://" not in text:
+        return text
+    parts = _TAG_SPLIT_RE.split(text)
+    changed = False
+    for i, part in enumerate(parts):
+        if not part or part.startswith("<") or "://" not in part:
+            continue
+        found = [m for m in _BARE_URL_RE.finditer(part) if is_banned_url(_html.unescape(m.group(0).rstrip(".,;)")))]
+        if not found:
+            continue
+        out = part
+        for m in reversed(found):
+            url = m.group(0)
+            trail = url[len(url.rstrip(".,;)")):]
+            before = _TRAILING_LABEL_RE.sub("", out[:m.start()])
+            out = before + trail + out[m.end():]
+        parts[i] = out
+        changed = True
+    return "".join(parts) if changed else text
+
+
+def banned_bare_urls(text: str) -> list[str]:
+    found = []
+    for part in _TAG_SPLIT_RE.split(text or ""):
+        if part and not part.startswith("<") and "://" in part:
+            found.extend(u.rstrip(".,;)") for u in (m.group(0) for m in _BARE_URL_RE.finditer(part))
+                         if is_banned_url(_html.unescape(u.rstrip(".,;)"))))
+    return found
+
+
 def strip_html(text: str) -> str:
     """Remove banned links. A list item that is only a banned link goes
     whole (the Sources list); any other banned anchor is unwrapped to its
-    text. Sources are renumbered so no gap shows."""
-    if not text or "href" not in text:
+    text. Sources are renumbered so no gap shows. A banned URL printed as
+    plain text is removed too."""
+    if not text:
         return text
+    if "href" not in text:
+        return _strip_bare_urls(text)
 
     def li(match: re.Match) -> str:
         item = match.group(0)
@@ -143,11 +190,12 @@ def strip_html(text: str) -> str:
 
         out = re.sub(r'<details class="article-sources">.*?</details>', renumber, out, flags=re.S)
         out = _DETAILS_EMPTY_RE.sub("", out)
-    return out
+    return _strip_bare_urls(out)
 
 
 def banned_links_in_html(text: str) -> list[str]:
-    return [_html.unescape(m.group(2)) for m in _ANCHOR_RE.finditer(text or "") if _href_banned(m)]
+    return ([_html.unescape(m.group(2)) for m in _ANCHOR_RE.finditer(text or "") if _href_banned(m)]
+            + banned_bare_urls(text))
 
 
 # ------------------------------------------------------------------ JSON
@@ -174,7 +222,7 @@ def strip_value(value: Any) -> Any:
                 continue
             kept.append(strip_value(item))
         return kept
-    if isinstance(value, str) and "<a" in value:
+    if isinstance(value, str) and ("<a" in value or "://" in value):
         return strip_html(value)
     return value
 
@@ -190,7 +238,7 @@ def banned_in_value(value: Any) -> list[str]:
     elif isinstance(value, str):
         if value.startswith(("http://", "https://")) and is_banned_url(value):
             found.append(value)
-        elif "<a" in value:
+        elif "<a" in value or "://" in value:
             found.extend(banned_links_in_html(value))
     return found
 
