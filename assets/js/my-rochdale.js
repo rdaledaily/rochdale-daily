@@ -5,6 +5,16 @@
 (() => {
 "use strict";
 const byId=id=>document.getElementById(id);
+const councillorView = globalThis.location?.search ? new URLSearchParams(globalThis.location.search).get("view") === "councillors" : false;
+const lookupLabel = councillorView ? "Find my councillors" : "Explore my area →";
+if (councillorView) {
+ const hero = document.querySelector(".hero");
+ hero.querySelector("h1").textContent = "My councillors";
+ hero.querySelector("p").textContent = "Enter your postcode to find your local councillors and see how they voted on recorded decisions.";
+ document.title = "My councillors | Rochdale Daily";
+ byId("lookup-submit").textContent = lookupLabel;
+ byId("daily-brief").before(byId("ward-councillors"));
+}
 const node=(tag,text,cls)=>{const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x;};
 const out=(id,nodes)=>{const x=byId(id);if(x)x.replaceChildren(...nodes);};
 const link=(text,href)=>{const a=node("a",text);try{const u=new URL(href,location.href);if(u.protocol!=="https:"&&u.origin!==location.origin)throw Error();a.href=u.href;if(u.origin!==location.origin){a.target="_blank";a.rel="noopener noreferrer";}}catch{a.removeAttribute("href");}return a;};
@@ -615,7 +625,9 @@ async function start(e){
   // The first result is the daily briefing. Make it visible immediately,
   // before slower news, transport and official data requests resolve.
   services(loc);
-  byId("daily-brief").scrollIntoView({behavior:"smooth",block:"start"});
+  const firstResult = byId(councillorView ? "ward-councillors" : "daily-brief");
+  firstResult.hidden = false;
+  firstResult.scrollIntoView({behavior:"smooth",block:"start"});
   if(loc.ward)void wardPolicingEvidence(loc.ward,id);
   const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
   const failed=[];
@@ -644,7 +656,7 @@ async function start(e){
      };}}));
   if(id===requestId)report("Your briefing is ready for "+(loc.ward||loc.district)+(failed.length?". Some sources are unavailable; their panels explain where to check.":". Councillors, news and GMP priorities are shown next."),failed.length?"ready":"success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails(id);}
- finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
+ finally{if(id===requestId){button.disabled=false;button.textContent=lookupLabel;}}
 }
 byId("lookup").addEventListener("submit",start);
 })();

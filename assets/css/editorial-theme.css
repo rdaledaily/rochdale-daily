@@ -1568,3 +1568,20 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
 .rd-newsletter-modal .rd-newsletter-modal__small a { color: var(--ink-soft); text-underline-offset: 3px; }
 @keyframes rd-modal-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .rd-newsletter-modal .rd-newsletter-modal__panel { animation: none; } }
+
+/* Follow links below the article newsletter form. */
+.rail-newsletter .reader-follow-links {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border-top: var(--rule-hair);
+  background: var(--surface);
+  font: 600 var(--text-sm)/1.5 var(--font-ui);
+}
+.rail-newsletter .reader-follow-links a {
+  color: var(--brand-accent-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  overflow-wrap: anywhere;
+}

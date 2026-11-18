@@ -1325,6 +1325,7 @@
       <ul class="nav-list" id="main-nav">
         <li><button class="active" type="button" data-category="all" data-reset="1">News</button></li>
         <li><a href="/my-rochdale">My Rochdale</a></li>
+        <li><a href="/my-rochdale?view=councillors">My councillors</a></li>
         <li><a href="/news-alerts">News alerts</a></li>
         <li><a href="#whats-on">What’s On</a></li>
         <li><a href="#democracy">Democracy</a></li>
@@ -3337,7 +3338,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
             <h3 class="m-section-title" id="m-ward-title">News by ward</h3>
             <a class="m-section-more" href="/wards/" style="text-decoration:none">All wards</a>
           </div>
-          <p style="margin:0 0 10px;color:var(--muted);font-size:14px">Choose your ward for local stories and how the councillors representing you have voted.</p>
+          <p style="margin:0 0 10px;color:var(--muted);font-size:14px">Choose your ward for local stories, or <a href="/my-rochdale?view=councillors">find my councillors by postcode</a>.</p>
           <div class="ward-picker">
             <label class="hidden" for="m-ward-select">Choose a ward</label>
             <select id="m-ward-select">${source.innerHTML}</select>
