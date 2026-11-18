@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-18T15:41:47.629291Z",
+  "generated_at": "2026-11-18T15:59:53.708153Z",
   "category": "transport",
   "count": 12,
   "articles": [
@@ -20,7 +20,7 @@
       "published_at": "2026-11-18T14:04:08Z",
       "first_published_at": "2026-11-18T14:04:08Z",
       "last_updated_at": "2026-11-18T14:04:08Z",
-      "scraped_at": "2026-11-18T15:41:47Z",
+      "scraped_at": "2026-11-18T15:59:53Z",
       "source_name": "GMP Press Office",
       "source_url": "https://neighbourhoodalert.co.uk/Alerts/A/527035/Op-Sceptre",
       "source_names": [
@@ -135,15 +135,13 @@
       "image_match_title": "rochdale_riverside.jpg",
       "image_match_score": -1,
       "core_fact_check": {
-        "status": "passed",
+        "status": "unchecked",
         "issues": [],
-        "reason": "",
-        "source_sha": {
-          "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer/": "c1aa5e814f39ce49",
-          "https://news.google.com/rss/articles/CBMieEFVX3lxTE4xd3htMVViSW04cVprbGwyVmZTTXVGQWxYcnBqMm9CR0sxa0FGNldMYXlYeXk4Q0tKWk1lUlluTUN1V1hVbHh3N3JuQkNmc0xURGk2UVgwQkp0UGEzb1ZfSF96RUZJbWJPVG93TmtLUTdGdm5qZXBYXw?oc=5": "c1aa5e814f39ce49"
-        },
-        "checked_at": "2026-11-18T15:20:51.681284Z",
-        "attempts": 68
+        "reason": "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer/: not captured; https://news.google.com/rss/articles/CBMieEFVX3lxTE4xd3htMVViSW04cVprbGwyVmZTTXVGQWxYcnBqMm9CR0sxa0FGNldMYXlYeXk4Q0tKWk1lUlluTUN1V1hVbHh3N3JuQkNmc0xURGk2UVgwQkp0UGEzb1ZfSF96RUZJbWJPVG93TmtLUTdGdm5qZXBYXw?oc=5: not captured",
+        "source_sha": {},
+        "source_changed_at": "2026-11-18T15:59:08.112801Z",
+        "checked_at": "2026-11-18T15:59:08.112801Z",
+        "attempts": 69
       },
       "ingested_at": "2026-11-16T19:07:59Z",
       "first_published_at": "2026-11-16T12:36:40Z",
@@ -309,7 +307,19 @@
         "failsworth-tram-stop-lift-out-of-service-during-replacement-works"
       ],
       "image_alt": "Failsworth tram stop lifts out of service during replacement works",
-      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card"
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "core_fact_check": {
+        "status": "unchecked",
+        "issues": [],
+        "reason": "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/: capture is not the story; https://www.theboltonnews.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/: capture is not the story",
+        "source_sha": {
+          "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-ea6c94c0d775e175cb": "43287ccb1d39e914",
+          "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/": "798f81a60c37213a",
+          "https://www.theboltonnews.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/": "070b068f8557dc7b"
+        },
+        "checked_at": "2026-11-18T15:59:08.112801Z",
+        "attempts": 1
+      }
     },
     {
       "id": "8c5a45347a69397bb1",
@@ -524,7 +534,7 @@
       "published_at": "2026-10-29T06:23:00Z",
       "first_published_at": "2026-10-29T06:23:00Z",
       "last_updated_at": "2026-10-29T06:23:00Z",
-      "scraped_at": "2026-11-18T15:41:47Z",
+      "scraped_at": "2026-11-18T15:59:53Z",
       "source_name": "Greater Manchester Police",
       "source_url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
       "source_names": [
@@ -683,7 +693,7 @@
       "published_at": "2026-10-23T17:51:20Z",
       "first_published_at": "2026-10-23T17:51:20Z",
       "last_updated_at": "2026-10-23T17:51:20Z",
-      "scraped_at": "2026-11-18T15:41:47Z",
+      "scraped_at": "2026-11-18T15:59:53Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/downloads/file/2902/highways-maintenance-transparency-report-part-a",
       "source_names": [
@@ -1083,7 +1093,7 @@
       "published_at": "2026-08-11T15:06:00Z",
       "first_published_at": "2026-08-11T15:06:00Z",
       "last_updated_at": "2026-08-11T15:06:00Z",
-      "scraped_at": "2026-11-18T15:41:47Z",
+      "scraped_at": "2026-11-18T15:59:53Z",
       "source_name": "National Rail",
       "source_url": "https://www.nationalrail.co.uk/engineering-works/mcv-10-aug-20260810/",
       "source_names": [
