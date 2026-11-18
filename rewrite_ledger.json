@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T19:22:19.083803Z",
+  "updated_at": "2026-11-18T19:40:28.601086Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 181,
+  "count": 180,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1165,9 +1165,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T19:19:53.205633Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch",
+      "last_attempt_at": "2026-11-18T19:40:28.600693Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
@@ -2034,24 +2034,6 @@
       "category": "environment",
       "text_fingerprint": "95ff10c1410c4469"
     },
-    "https://www.rochdale.gov.uk/news/article/695/shortlisting-announced-for-raising-rochdale-education-awards-2026": {
-      "first_attempt_at": "2026-11-10T16:37:39.225707Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/news/article/695/shortlisting-announced-for-raising-rochdale-education-awards-2026",
-        "https://www.rochdaletimes.co.uk/finalists-announced-for-raising-rochdale-education-awards-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T19:12:55.361493Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Shortlisting announced for Raising Rochdale Education Awards 2026 – Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council News",
-      "category": "education",
-      "text_fingerprint": "29f3fbdd9e027059",
-      "recovery_attempts": 1
-    },
     "https://www.rochdale.gov.uk/news/article/697/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on": {
       "first_attempt_at": "2026-11-12T09:50:53.814791Z",
       "attempts": 1,
@@ -2216,6 +2198,7 @@
       "first_attempt_at": "2026-11-18T19:22:19.083653Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMikAFBVV95cUxQWExVNTBOWWItanZfRnAzUEQwWExyenREMDBadGh2VGJubTNvT0x1Wjhwa05OYlpzR2FfRXc4MVJxYkVMX2p4QXlwQ0hsWlFpREhwandkVGRON2IyOGNBR1dqMk5tbERhbDRfSGtEMzNkZldhaUdpRzdmWXZZT2czX1pha0t4TXpQNUJVdnVrekk?oc=5",
         "https://news.google.com/rss/articles/CBMinAFBVV95cUxPSEl3YjJNWGNSOS1rSUlvdTNEMWpxSVZHXzk3ZnUwcWUzVnR4dkttMWwxVHlOQ29lUW9LRHBvN0RpQmFEQTExRmI1QjI2Z0tzaDYyZjc2c0Fvek50ZjFidTlrRG05NVZpZGNGRVdJQ0M1QjVnZUVEdzR4WFY1VThkSV90NDJOUzAtUXdaQ2ZGYndEUlJaQldxd0d2WHE?oc=5",
         "https://uknip.co.uk/news/uk/uk-news/kyle-howard-keeley-aspinall-murder-guilty-rochdale-body-under-bed",
         "https://www.bbc.co.uk/news/articles/cm930lw782z7o",
@@ -2224,13 +2207,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T19:22:19.083653Z",
+      "last_attempt_at": "2026-11-18T19:40:28.600881Z",
       "outcome": "published",
       "reason": "",
       "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "0938449913482494"
+      "text_fingerprint": "0938449913482494",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/middleton-man-charged-with-aggravated-burglaries-and-attempted-murder": {
       "first_attempt_at": "2026-11-11T14:35:02.790852Z",
