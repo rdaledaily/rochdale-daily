@@ -107,6 +107,15 @@ def paragraphs(text: str) -> str:
     return "".join(f"<p>{esc(p.strip())}</p>" for p in re.split(r"\n\s*\n", str(text)) if p.strip())
 
 
+def photo_markup(n: dict) -> str:
+    """A photo the family sent, if it is in the card library (email intake puts it there)."""
+    photo = str(n.get("photo") or "")
+    if not re.fullmatch(r"assets/img/cards/[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)", photo) or not (ROOT / photo).exists():
+        return ""
+    return (f'<figure class="nt-photo"><img src="/{esc(photo)}" alt="{esc(n["name"])}" loading="lazy" '
+            'style="max-width:320px;width:100%;height:auto"></figure>')
+
+
 def render_notice(n: dict) -> str:
     canonical = f"{SITE}/notices/{n['slug']}.html"
     kind = KINDS[n["kind"]]
@@ -118,7 +127,7 @@ def render_notice(n: dict) -> str:
         f'<span class="rd-kicker">{esc(kind)}</span>',
         f'<h1>{esc(headline(n))}</h1>',
         f'<p class="rd-meta">Published {esc(nice_date(n["published"]))} · <a href="/notices/">All notices</a></p>',
-        '<div class="nt-body">', paragraphs(n["text"]),
+        '<div class="nt-body">', photo_markup(n), paragraphs(n["text"]),
         f'<div class="nt-facts">{"".join(facts)}</div>',
         SUBMIT_NOTE, '</div>',
     ]

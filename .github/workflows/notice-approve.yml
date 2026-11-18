@@ -1,0 +1,78 @@
+name: Death notice approval
+
+# A death notice emailed to news@ becomes a GitHub issue labelled
+# "death-notice" (scraper/notice_intake.py draft, run by email-intake.yml).
+# The editor checks it with the funeral director or family, then comments:
+#   /approve funeral director     -> published at /notices/, issue closed
+#   /reject                       -> issue closed, nothing published
+# Only the repository owner, members and collaborators can approve.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: rd-notice-approve
+  cancel-in-progress: false
+
+jobs:
+  approve:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'death-notice') &&
+      github.event.issue.state == 'open' &&
+      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject')) &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Check the notice and write it
+        id: notice
+        run: python scraper/notice_intake.py approve
+
+      - name: Build the notice pages and publish
+        if: steps.notice.outputs.outcome == 'published'
+        run: |
+          PYTHONPATH=scraper python scraper/generate_notices.py
+          git config user.name "Rochdale Daily Newsdesk"
+          git config user.email "news@rochdaledaily.co.uk"
+          git add notices
+          git commit -q -m "Death notice published (issue #${{ github.event.issue.number }})" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FxqUNiQJSYMU9ZGtKJWpCC"
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 7))
+          done
+          echo "::error::could not push the notice after 5 attempts"
+          exit 1
+
+      - name: Reply on the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.notice.outputs.outcome }}
+          MESSAGE: ${{ steps.notice.outputs.message }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          case "$OUTCOME" in
+            published)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "Published: $MESSAGE (live once the site has deployed, usually within a few minutes)."
+              gh issue close "$ISSUE" --repo "$GITHUB_REPOSITORY" --reason completed ;;
+            rejected)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "$MESSAGE"
+              gh issue close "$ISSUE" --repo "$GITHUB_REPOSITORY" --reason "not planned" ;;
+            refused)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "$MESSAGE" ;;
+          esac

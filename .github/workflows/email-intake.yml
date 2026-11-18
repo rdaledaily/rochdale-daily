@@ -20,10 +20,12 @@ on:
     branches: [main]
     paths:
       - scraper/email_intake.py
+      - scraper/notice_intake.py
       - .github/workflows/email-intake.yml
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: rd-email-intake
@@ -74,6 +76,25 @@ jobs:
             sleep $((attempt * 7))
           done
           echo "::error::could not push the inbox commit after 5 attempts; raw copies stay in KV for the next run"
+          exit 1
+
+      # Death notices only (18 Nov 2026): each new one becomes a GitHub issue
+      # holding a draft. Nothing is published until the editor comments
+      # "/approve <who confirmed it>" (notice-approve.yml).
+      - name: Draft death notices for approval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scraper/notice_intake.py draft
+          git add notices/intake_ledger.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -q -m "Death notices: drafted for approval" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FxqUNiQJSYMU9ZGtKJWpCC"
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 7))
+          done
+          echo "::error::could not push the notice ledger; the next run would draft these notices again"
           exit 1
 
       - name: Acknowledge (delete raw copies now safely on main)
