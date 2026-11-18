@@ -29,7 +29,7 @@ stage_newsroom() {
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json ward_postcode_evidence.json ward_street_evidence.json council_votes.json councillor_photos.json weather.json
     archive.html search.html archive-index.json rss.xml index.html checks.json
     news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json
-    weather/ weather_towns.json)
+    weather/ weather_towns.json guides/ groups/)
   local present=()
   for path in "${paths[@]}"; do [ -e "${path}" ] && present+=("${path}"); done
   git add -- "${present[@]}"
@@ -161,6 +161,8 @@ rebuild_from_merged_feed() {
   python scraper/patch_democracy_portraits.py
   python scraper/generate_ward_pages.py
   python scraper/generate_weather_pages.py
+  PYTHONPATH=scraper python scraper/generate_guides.py
+  PYTHONPATH=scraper python scraper/generate_groups.py
   PYTHONPATH=scraper python -c "import frontpage_manual_publish as mp; mp.render_main()"
   python scraper/enforce_frontpage_freshness.py
   python scraper/frontpage_source_quality.py
