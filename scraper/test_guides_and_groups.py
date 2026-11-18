@@ -58,3 +58,36 @@ def test_bad_slug_is_reported(tmp_path):
     ]}), encoding="utf-8")
     _, groups, problems = generate_groups.load_groups(p)
     assert groups == [] and len(problems) == 2
+
+
+# --- Death notices (18 Nov 2026) ---
+import generate_notices
+
+
+def _notice(**kw):
+    n = {"slug": "jane-smith-2026-11-20", "kind": "death_notice", "name": "Jane Smith", "age": 84,
+         "town": "Heywood", "died": "2026-11-15", "published": "2026-11-20",
+         "text": "Peacefully at home.\n\nBeloved mum <script>x</script>", "verified_with": "funeral director"}
+    n.update(kw)
+    return n
+
+
+def test_notice_is_escaped_and_rendered(tmp_path):
+    (tmp_path / "jane-smith-2026-11-20.json").write_text(json.dumps(_notice()), encoding="utf-8")
+    notices, problems = generate_notices.load_notices(tmp_path)
+    assert not problems and len(notices) == 1
+    html = generate_notices.render_notice(notices[0])
+    assert "<script>x" not in html and "&lt;script&gt;" in html
+    assert "Jane Smith, 84, Heywood" in html and "15 November 2026" in html
+    assert "free, forever" in generate_notices.render_index(notices)
+
+
+def test_unverified_notice_is_never_published(tmp_path):
+    (tmp_path / "jane-smith-2026-11-20.json").write_text(json.dumps(_notice(verified_with="")), encoding="utf-8")
+    notices, problems = generate_notices.load_notices(tmp_path)
+    assert notices == [] and "verified_with" in problems[0]
+
+
+def test_empty_notices_index_renders():
+    html = generate_notices.render_index([])
+    assert "No notices have been published yet" in html and not banned_in_value(html)
