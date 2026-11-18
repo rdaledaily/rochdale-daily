@@ -56,15 +56,15 @@
 <main>
 <section class="hero" aria-labelledby="title"><div class="wrap hero-grid">
  <div><span class="eyebrow">Advertising &amp; business partnerships</span>
-  <h1 id="title">Be part of Rochdale's daily conversation.</h1>
-  <p>You might already be in the local magazines, on the radio or through people's letterboxes. Rochdale Daily adds something different to that marketing mix: the chance to be seen while people are choosing what to read about their town.</p>
-  <p>From an independent shop finding its next customer to a borough-wide brand building recognition, there's a clear place to start.</p>
-  <div class="hero-actions"><a class="btn light" href="#packages">Find your advertising package →</a><a class="btn outline" href="/advertising-media-pack.html">View the media pack</a></div>
+  <h1 id="title">Advertise with Rochdale Daily</h1>
+  <p>Put your business alongside local reporting from Rochdale, Heywood, Middleton and Littleborough. Sponsor a section from £350 a month or ask about a borough-wide corporate partnership at £1,200 a month.</p>
+  <p>For a smaller campaign, homepage banners cost £175 a month and featured directory listings cost £75 a month.</p>
+  <div class="hero-actions"><a class="btn light" href="#enquire" data-plan="section">Ask about section sponsorship →</a><a class="btn outline" href="#packages">Compare all four packages</a></div>
  </div>
- <aside class="proof" aria-label="Audience information"><span class="pill">Growing local news platform</span><div class="number">86,000</div>
-  <p><strong>Publisher-reported 30-day readership milestone</strong>, announced 13 October 2026.</p><hr>
-  <p><strong>Reporting across Rochdale borough</strong>, including Rochdale, Heywood, Middleton, Littleborough, Milnrow and surrounding neighbourhoods.</p>
-  <p class="small">The 86,000 figure is a publisher-reported milestone, not an independently audited count of unique people or verified local residents. Site visits, readers, advert displays and clicks are different measures; ask us for the latest available evidence.</p>
+ <aside class="proof" aria-label="Audience information"><span class="pill">Google Search traffic</span><div class="number">6,172</div>
+  <p><strong>Clicks from Google Search to Rochdale Daily</strong> over 28 days, 19 October to 15 November 2026.</p><hr>
+  <p>Rochdale Daily appeared 137,755 times in Google Search results during the same period.</p>
+  <p class="small">Source: Google Search Console, accessed through Ahrefs. These figures count search activity. Individual readers can click more than once. Campaign reports give available figures for your own placement.</p>
  </aside>
 </div></section>
 <section class="reach" id="audience"><div class="wrap reach-grid">
@@ -189,6 +189,8 @@
 (function(){
  'use strict';
  const form=document.getElementById('enquiryForm'),status=document.getElementById('formStatus'),button=document.getElementById('submit'),select=document.getElementById('package');
+ const requestedPlan=new URLSearchParams(window.location.search).get('plan');
+ if(Array.from(select.options).some(option=>option.value===requestedPlan))select.value=requestedPlan;
  document.querySelectorAll('a[data-plan]').forEach(function(a){a.addEventListener('click',function(){select.value=a.dataset.plan;});});
  function normaliseWebsite(value){
    const raw=String(value||'').trim();
