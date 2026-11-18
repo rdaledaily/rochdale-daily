@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-18T19:40:28.605146Z",
+  "last_run_at": "2026-11-18T20:13:14.449980Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,38 +54,37 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 133,
+  "raw_candidates_before_job_filter": 130,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 132,
+  "raw_candidates": 129,
   "candidate_clusters": 49,
   "google_news_resolution": {
-    "wrappers": 55,
-    "resolved": 33,
-    "text_recovered": 6,
+    "wrappers": 39,
+    "resolved": 28,
+    "text_recovered": 15,
     "reattributed": 0,
-    "images_found": 13
+    "images_found": 21
   },
-  "duplicates_merged": 83,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 2,
+  "duplicates_merged": 80,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "government-seeks-to-deport-rochdale-grooming-gang-leader-shabir-ahmed",
-      "source_url": "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html"
-    },
-    {
-      "slug": "kyle-howard-jailed-for-life-for-murdering-wife-keeley-aspinall",
-      "source_url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/"
+      "slug": "husband-and-wife-pottery-studio-expands-in-rochdale-town-centre",
+      "source_url": "https://www.rochvalleyradio.com/news-features/140/business/1445/husband-and-wife-pottery-studio-grows-into-thriving-rochdale-town-centre-business"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 654,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "new_articles": 1,
+  "live_articles": 655,
+  "skipped": 2,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) Sarah, Wright do not appear in the source. Name only people,": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
-    "queued_for_retry": 1,
+    "missing_from_feed": 2,
+    "queued_for_retry": 2,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -99,8 +98,8 @@
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 29,
-      "published": 92,
-      "rejected": 43
+      "published": 91,
+      "rejected": 44
     },
     "held_back_this_run": 35,
     "held_already_published": 21,
@@ -237,22 +236,21 @@
     }
   ],
   "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 164.": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "not eligible: crime, court, police or death": 2
+      "writer offered no points": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 116,
-    "website_discovery": 9,
+    "rss_and_google_news": 112,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
-    "live_service_pages": 7,
+    "live_service_pages": 6,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -263,6 +261,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -296,14 +295,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -392,17 +383,17 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 27,
-    "Manchester Evening News": 24,
+    "Rochdale Times": 30,
+    "Manchester Evening News": 19,
     "Roch Valley Radio": 15,
     "BBC Manchester": 7,
-    "Bee Network live travel alerts": 7,
+    "Bee Network live travel alerts": 6,
     "BBC": 5,
+    "I Love Manchester": 4,
     "Housing Today": 4,
     "Nacionale": 4,
     "Rochdale Borough Council": 4,
     "Rochdale AFC": 3,
-    "I Love Manchester": 3,
     "Inside Housing": 3,
     "Roch Valley Radio Local News": 3,
     "Oldham Times": 2,
@@ -421,22 +412,21 @@
     "The Mirror": 1,
     "Metro.co.uk": 1,
     "Your Trust Rochdale Articles": 1,
-    "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "news": 1
+    "business": 1,
+    "crime": 2
   },
   "published_by_category": {
     "business": 72,
-    "community": 98,
+    "community": 101,
     "crime": 45,
     "education": 30,
     "environment": 51,
     "events": 39,
     "health": 18,
-    "news": 96,
+    "news": 94,
     "politics": 21,
     "sport": 57,
     "traffic": 48,
@@ -466,10 +456,12 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-ebc98dd13d0c9ba9bb46",
+    "business-v3-a30d3e977613549ec587",
     "hard-news-v3-bd7dcdf49e91434bded5"
   ],
   "selected_candidate_urls": [
     "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html",
+    "https://www.rochvalleyradio.com/news-features/140/business/1445/husband-and-wife-pottery-studio-grows-into-thriving-rochdale-town-centre-business",
     "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/"
   ],
   "x_social_records": 0,
@@ -482,12 +474,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
-      "news"
+      "business",
+      "crime"
     ],
     "selected_categories": [
-      "crime",
-      "news"
+      "business",
+      "crime"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -499,14 +491,15 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "news": 1
+      "business": 1,
+      "crime": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 3
     },
     "selected_by_source": {
+      "roch valley radio local news": 1,
       "rochdale times": 1,
       "the independent — rochdale": 1
     },
@@ -1071,10 +1064,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "visitrochdale.com"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "visitrochdale.com": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1111,11 +1104,12 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-18T19:53:37.180348Z",
-  "frontpage_article_count": 26,
+  "frontpage_generated_at": "2026-11-18T20:14:49.148404Z",
+  "frontpage_article_count": 27,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
+      "business",
       "community",
       "crime",
       "education",
@@ -1127,6 +1121,7 @@
       "traffic"
     ],
     "selected_categories": [
+      "business",
       "community",
       "crime",
       "education",
@@ -1176,17 +1171,18 @@
       "traffic": 1,
       "education": 1,
       "events": 1,
-      "community": 6,
+      "business": 1,
+      "community": 5,
       "health": 3,
       "environment": 3,
-      "news": 5
+      "news": 6
     },
     "selected_by_ward": {
-      "borough-wide": 22,
+      "borough-wide": 23,
       "Spotland and Falinge": 1,
       "Central Rochdale": 1,
-      "North Heywood": 1,
-      "Bamford": 1
+      "Bamford": 1,
+      "North Heywood": 1
     },
     "selected_by_area": {
       "bamford": 1,
@@ -1194,7 +1190,7 @@
       "heywood": 2,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 19,
+      "rochdale": 20,
       "shawclough": 1
     },
     "selected_by_source": {
@@ -1203,40 +1199,41 @@
       "rochdale borough council": 1,
       "falinge park high school": 1,
       "grushka house": 1,
+      "source": 1,
       "healey dell heritage centre and tearooms": 1,
       "your trust rochdale articles": 1,
       "building design": 2,
       "rochdale daily": 2,
+      "manchester evening news": 6,
       "inside housing": 1,
       "find a tender": 1,
       "inyourarea": 1,
-      "manchester evening news": 6,
       "department of health and social care": 1,
       "the bury times": 1,
       "milton keynes citizen": 1,
-      "rochdale times; bbc north west; brit brief": 1,
-      "greater manchester fire and rescue service": 1
+      "greater manchester fire and rescue service": 1,
+      "rochdale times; bbc north west; brit brief": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 29,
+    "primary_pool_size": 29,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 26,
+    "frontpage_count": 27,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 14,
-    "fresh_under_homepage_window": 25,
-    "short_briefs_selected": 14,
+    "fresh_under_homepage_window": 26,
+    "short_briefs_selected": 15,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 42,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 11,
+  "events_kept_other_source": 30,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 654,
+  "event_dates_corrected_from_ledger": 1,
+  "duplicate_articles_after_postprocessing": 655,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1247,9 +1244,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 2,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "husband-and-wife-pottery-studio-expands-in-rochdale-town-centre"
+  ],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
