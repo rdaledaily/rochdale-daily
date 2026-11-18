@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T04:58:49.843511Z",
+  "updated_at": "2026-11-18T05:27:50.070954Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 163,
@@ -862,8 +862,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-17T23:49:38.701041Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Residents evacuated after 'hot tub explosion' in Rochdale",
       "source_name": "Dailymail",
       "category": "news",
@@ -1455,14 +1455,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T04:58:49.843001Z",
+      "last_attempt_at": "2026-11-18T05:27:50.070819Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale claimant count rose in October 2026",
       "source_name": "Office for National Statistics (Nomis)",
       "category": "business",
       "text_fingerprint": "0dec28b5f2916fad",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.placenorthwest.co.uk/rochdales-seven-sisters-to-be-knocked-down-as-refurb-estimates-hit-269m": {
       "first_attempt_at": "2026-11-16T23:46:40.860837Z",
