@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T16:48:15.004334Z",
+  "updated_at": "2026-11-18T17:06:40.488243Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 180,
@@ -1350,14 +1350,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T16:48:15.003653Z",
+      "last_attempt_at": "2026-11-18T17:06:40.487821Z",
       "outcome": "published",
       "reason": "",
       "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "9f80e7d55c61b421",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/greater-manchester-police-applies-exceptional-34926659": {
@@ -1440,11 +1440,12 @@
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-explosion-live-emergency-services-34926953",
-        "https://www.mirror.co.uk/news/uk-news/hot-tub-explosion-rochdale-37887848"
+        "https://www.mirror.co.uk/news/uk-news/hot-tub-explosion-rochdale-37887848",
+        "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T15:40:29.636072Z",
+      "last_attempt_at": "2026-11-18T17:06:40.487977Z",
       "outcome": "published",
       "reason": "",
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
@@ -2722,20 +2723,21 @@
       "urls": [
         "https://news.google.com/rss/articles/CBMinAFBVV95cUxPSEl3YjJNWGNSOS1rSUlvdTNEMWpxSVZHXzk3ZnUwcWUzVnR4dkttMWwxVHlOQ29lUW9LRHBvN0RpQmFEQTExRmI1QjI2Z0tzaDYyZjc2c0Fvek50ZjFidTlrRG05NVZpZGNGRVdJQ0M1QjVnZUVEdzR4WFY1VThkSV90NDJOUzAtUXdaQ2ZGYndEUlJaQldxd0d2WHE?oc=5",
         "https://uknip.co.uk/news/uk/uk-news/kyle-howard-keeley-aspinall-murder-guilty-rochdale-body-under-bed",
+        "https://www.bbc.co.uk/news/articles/cm930lw782z7o",
         "https://www.burytimes.co.uk/news/26735047.rochdale-man-admits-murdering-wife-hiding-body-bed",
         "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell",
         "https://www.theoldhamtimes.co.uk/news/26734750.rochdale-man-admits-murdering-wife-hiding-body-bed"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T16:48:15.004071Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-18T17:04:18.293544Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: A pol",
       "title": "Rochdale man murdered wife and hid her body under bed for two days before calling police over smell",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",
       "text_fingerprint": "632ebdf16b95b538",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.skysports.com/football/news/13610288/rochdale-0-1-york": {
