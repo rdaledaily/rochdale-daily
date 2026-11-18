@@ -142,3 +142,13 @@
  byline.after(nav);
 })();
 
+
+/* A commercial enquiry belongs after the story, beside the footer links. */
+(() => {
+ const footerLinks = document.querySelector('.editorial-legal-note .legal-links');
+ if (!footerLinks || footerLinks.querySelector('a[href^="/advertise"]')) return;
+ const link = document.createElement('a');
+ link.href = '/advertise?plan=section#section';
+ link.textContent = 'Sponsor a section';
+ footerLinks.append(document.createTextNode(' · '), link);
+})();
