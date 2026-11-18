@@ -1,13 +1,20 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 128,
+    "kept_cards": 129,
     "cards_library": 0,
     "cards_generated": 441,
     "incident_card": 5,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "the-healey-dell-prophecy-what-is-recorded-about-eleanor-byron-and-mother-bagden-and-what-i",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/healey-dell.jpg",
+      "matched_filename": "healey-dell.jpg",
+      "match_score": 15251
+    },
     {
       "slug": "breakfast-with-santa-at-queen-s-park-caf-heywood",
       "result": "kept-existing",
@@ -24,8 +31,8 @@
     },
     {
       "slug": "residents-evacuated-after-hot-tub-explosion-in-bamford-rochdale",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/9cab2fc2e54cd950-commons-photo.jpg",
+      "result": "police-photo",
+      "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "",
       "match_score": null
     },
