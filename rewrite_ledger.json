@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T14:50:27.422412Z",
+  "updated_at": "2026-11-18T15:19:58.270928Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 182,
+  "count": 183,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -647,14 +647,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:50:27.421842Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-18T15:16:20.565994Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Transport do not appear in the source. Name only people, plac",
       "title": "Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of service Duration Wed 18 Nov, 1:09pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "4050b578f126b305",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://uk.news.yahoo.com/stay-vigilant-warning-spate-family-130751807.html": {
       "first_attempt_at": "2026-11-09T23:42:53.832103Z",
@@ -780,6 +780,22 @@
       "source_name": "BBC Manchester",
       "category": "news",
       "text_fingerprint": "93dba3034c377d7f"
+    },
+    "https://www.bbc.co.uk/news/articles/cvj6lzy6ng0xo": {
+      "first_attempt_at": "2026-11-18T15:19:58.270336Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cvj6lzy6ng0xo"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T15:19:58.270336Z",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
+      "title": "Demolition of Rochdale's Seven Sisters flats devastating, residents say",
+      "source_name": "BBC Manchester",
+      "category": "community",
+      "text_fingerprint": "9d4efb8093be41a7"
     },
     "https://www.bbc.co.uk/news/articles/cw053j4v7mg4o": {
       "first_attempt_at": "2026-11-13T06:28:01.104188Z",
@@ -1332,13 +1348,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:50:27.421716Z",
+      "last_attempt_at": "2026-11-18T15:19:58.270114Z",
       "outcome": "published",
       "reason": "",
       "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
       "source_name": "Manchester Evening News",
       "category": "environment",
-      "text_fingerprint": "9f80e7d55c61b421"
+      "text_fingerprint": "9f80e7d55c61b421",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/greater-manchester-police-applies-exceptional-34926659": {
       "first_attempt_at": "2026-11-18T10:32:20.739487Z",
@@ -1423,14 +1440,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:24:52.932583Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-18T15:19:58.270431Z",
+      "outcome": "published",
+      "reason": "",
       "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "45246234109a57c1",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798": {
       "first_attempt_at": "2026-11-09T15:38:31.713519Z",
@@ -2754,14 +2772,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T14:50:27.422207Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-18T15:16:30.683041Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Daniel do not appear in the source. Name only people, places",
       "title": "Rochdale man murdered wife and hid her body under bed for two days before calling police over smell",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",
       "text_fingerprint": "632ebdf16b95b538",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.skysports.com/football/news/13610288/rochdale-0-1-york": {
       "first_attempt_at": "2026-11-15T19:05:35.765421Z",
