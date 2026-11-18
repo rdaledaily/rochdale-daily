@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T22:54:21.591208Z",
+  "updated_at": "2026-11-18T23:25:40.700767Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 173,
@@ -1083,8 +1083,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T22:54:21.590983Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
@@ -2449,19 +2449,19 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1445/husband-and-wife-pottery-studio-grows-into-thriving-rochdale-town-centre-business": {
       "first_attempt_at": "2026-11-17T20:52:38.181964Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOaTBFMkRTS2dlellEZlc2MUtUbHhBek9qQ1NlVS1IWXpNNGsyTEZrUnZoR1dEZmp3aTFhY0dMb3ZQZHEzUUR4N2swVTBYRlZFWmQwOEZOQTBvbnZCVnhyVGdoZWxwSE5hcUozOUhUcXR0bDZrSGhnTDNjQTZYRGpRVzRRcENJSkhhcEhBbDNJUThYVjFWT1M2MVpOM3RBNUFYTGsxcmpFSUU5Unc5cnlKblZsUEVhWEhabFJWNndIWk8tTDNtRWxVWFZhTkdlbE12cTlsaU5TMDd2TlNOUWc?oc=5",
         "https://www.rochvalleyradio.com/news-features/140/business/1445/husband-and-wife-pottery-studio-grows-into-thriving-rochdale-town-centre-business"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T22:51:45.658145Z",
+      "last_attempt_at": "2026-11-18T23:22:48.797913Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are thrilled t",
+      "reason": "quality gate: fact-note rebuild unavailable after source overlap",
       "title": "Husband-and-wife pottery studio grows into thriving Rochdale town centre business",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "business",
+      "source_name": "Roch Valley Radio",
+      "category": "news",
       "text_fingerprint": "e2adc1095460dfe8",
       "recovery_attempts": 1
     },
