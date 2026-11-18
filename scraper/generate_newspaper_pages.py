@@ -91,8 +91,13 @@ def _newsroom_rank(article, now: datetime):
 
     importance += min(6, int(article.get("source_count") or 1))
 
+    # An active editor pin (featured + frontpage_until in the future) leads
+    # outright (editor, 18 Nov 2026). With freshness first, a pinned update to
+    # an older story (the Middleton nursery death, first published 2 Nov) sat
+    # 11th behind newer, lesser stories. Stale featured flags without a live
+    # frontpage_until are not pins and still rank by freshness.
     pinned = freshness_guard.active_pin(article, now)
-    return (freshness, pinned, importance, first, latest)
+    return (pinned, freshness, importance, first, latest)
 
 
 def _keep_on_live_homepage(article, reference: datetime, cutoff: datetime) -> bool:
