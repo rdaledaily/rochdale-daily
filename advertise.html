@@ -56,15 +56,15 @@
 <main>
 <section class="hero" aria-labelledby="title"><div class="wrap hero-grid">
  <div><span class="eyebrow">Advertising &amp; business partnerships</span>
-  <h1 id="title">Be part of Rochdale's daily conversation.</h1>
-  <p>You might already be in the local magazines, on the radio or through people's letterboxes. Rochdale Daily adds something different to that marketing mix: the chance to be seen while people are choosing what to read about their town.</p>
-  <p>From an independent shop finding its next customer to a borough-wide brand building recognition, there's a clear place to start.</p>
-  <div class="hero-actions"><a class="btn light" href="#packages">Find your advertising package →</a><a class="btn outline" href="/advertising-media-pack.html">View the media pack</a></div>
+  <h1 id="title">Advertise with Rochdale Daily</h1>
+  <p>Start with a featured local listing at £75 for one month. Choose a business link, booking page or offer code so you can see what the placement brings in before deciding whether to book again.</p>
+  <p>Want a display campaign? A rotating homepage banner costs £175 for a calendar month and comes with approximate display and click figures.</p>
+  <div class="hero-actions"><a class="btn light" href="#enquire" data-plan="directory">Enquire about a £75 listing →</a><a class="btn outline" href="#packages">Compare placements and prices</a></div>
  </div>
- <aside class="proof" aria-label="Audience information"><span class="pill">Growing local news platform</span><div class="number">86,000</div>
-  <p><strong>Publisher-reported 30-day readership milestone</strong>, announced 13 October 2026.</p><hr>
-  <p><strong>Reporting across Rochdale borough</strong>, including Rochdale, Heywood, Middleton, Littleborough, Milnrow and surrounding neighbourhoods.</p>
-  <p class="small">The 86,000 figure is a publisher-reported milestone, not an independently audited count of unique people or verified local residents. Site visits, readers, advert displays and clicks are different measures; ask us for the latest available evidence.</p>
+ <aside class="proof" aria-label="Audience information"><span class="pill">Google Search traffic</span><div class="number">6,172</div>
+  <p><strong>Clicks from Google Search to Rochdale Daily</strong> over 28 days, 19 October to 15 November 2026.</p><hr>
+  <p>Rochdale Daily appeared 137,755 times in Google Search results during the same period.</p>
+  <p class="small">Source: Google Search Console, accessed through Ahrefs. These figures count search activity. Individual readers can click more than once. Campaign reports give available figures for your own placement.</p>
  </aside>
 </div></section>
 <section class="reach" id="audience"><div class="wrap reach-grid">
@@ -84,14 +84,14 @@
       <li>Prominent, clearly labelled partnership branding in agreed inventory</li>
       <li>Creative guidance and a campaign launch review</li>
       <li>Monthly results report and campaign check-in</li>
-      <li>Specific dates, placements and availability confirmed in your written proposal</li>
+      <li>Ask for recent figures for the proposed placements before agreeing a budget</li>
     </ul><a class="btn wide dark" href="#enquire" data-plan="corporate">Discuss a corporate partnership →</a><p class="fine">A bespoke advertising proposal, not payment for editorial coverage or an automatic right to specific slots.</p></article>
     <article class="package" id="section"><div class="label">Relevant audiences · Targeted presence</div><h3>Section sponsorship</h3><div class="price">£350 <span>/ month</span></div><p class="who">For businesses that naturally fit a particular area of local interest.</p><ul>
       <li>Clearly labelled sponsor presence in an agreed section or content hub</li>
       <li>Your brand, short message and link in the confirmed placement</li>
       <li>Campaign display and click reporting where supported</li>
       <li>Suitable for sport, family, homes, business or community interest</li>
-      <li>Placement preview and agreed dates before payment</li>
+      <li>Ask for recent traffic figures for your chosen section and a placement preview before booking</li>
     </ul><a class="btn wide" href="#enquire" data-plan="section">Ask about a section →</a><p class="fine">Section locations are quoted subject to availability and technical activation.</p></article>
     <article class="package" id="banner"><div class="label">A straightforward first campaign</div><h3>Homepage banners</h3><div class="price">£175 <span>/ calendar month</span></div><p class="who">For a simple, affordable display campaign with familiar local visibility.</p><ul>
       <li>Equal-probability rotation in two homepage banner locations</li>
@@ -174,7 +174,7 @@
   <form id="enquiryForm" aria-label="Advertising enquiry" novalidate>
    <div class="formgrid"><div class="field"><label for="business">Business name *</label><input id="business" name="business" maxlength="110" autocomplete="organization" required></div><div class="field"><label for="name">Your name *</label><input id="name" name="name" maxlength="100" autocomplete="name" required></div></div>
    <div class="formgrid"><div class="field"><label for="email">Work email *</label><input id="email" name="email" type="email" maxlength="160" autocomplete="email" required></div><div class="field"><label for="website">Website (optional)</label><input id="website" name="website" type="url" placeholder="https://" maxlength="300"></div></div>
-   <div class="formgrid"><div class="field"><label for="package">I'm interested in *</label><select id="package" name="package"><option value="corporate">Corporate partnership · £1,200/month</option><option value="section">Section sponsorship · £350/month</option><option value="banner">Homepage banner · £175/month</option><option value="directory">Featured local listing · £75/month</option></select></div><div class="field"><label for="area">Area you'd like to reach</label><input id="area" name="area" maxlength="110" placeholder="e.g. Rochdale, Whitworth"></div></div>
+   <div class="formgrid"><div class="field"><label for="package">I'm interested in *</label><select id="package" name="package"><option value="corporate">Corporate partnership · £1,200/month</option><option value="section">Section sponsorship · £350/month</option><option value="banner">Homepage banner · £175/month</option><option value="directory" selected>Featured local listing · £75/month</option></select></div><div class="field"><label for="area">Area you'd like to reach</label><input id="area" name="area" maxlength="110" placeholder="e.g. Rochdale, Whitworth"></div></div>
    <div class="field"><label for="goal">What are you hoping to achieve? *</label><textarea id="goal" name="goal" rows="4" maxlength="1300" required placeholder="Tell us about your audience, campaign or the other places you currently advertise."></textarea></div>
    <div class="botcheck" aria-hidden="true"><label for="company_fax">Leave blank</label><input id="company_fax" name="company_fax" tabindex="-1" autocomplete="off"></div>
    <div class="privacy"><label><input id="privacyAccepted" type="checkbox" required> I agree that Rochdale Daily may use these details to respond to my advertising enquiry. See the <a href="/privacy.html">privacy notice</a>.</label></div>
@@ -189,6 +189,8 @@
 (function(){
  'use strict';
  const form=document.getElementById('enquiryForm'),status=document.getElementById('formStatus'),button=document.getElementById('submit'),select=document.getElementById('package');
+ const requestedPlan=new URLSearchParams(window.location.search).get('plan');
+ if(Array.from(select.options).some(option=>option.value===requestedPlan))select.value=requestedPlan;
  document.querySelectorAll('a[data-plan]').forEach(function(a){a.addEventListener('click',function(){select.value=a.dataset.plan;});});
  function normaliseWebsite(value){
    const raw=String(value||'').trim();
