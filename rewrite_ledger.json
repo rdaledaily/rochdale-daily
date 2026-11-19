@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T16:26:50.803397Z",
+  "updated_at": "2026-11-19T16:45:02.776126Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 184,
+  "count": 183,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1487,8 +1487,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T16:26:50.802731Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Homes rocked by huge explosion as emergency services rush to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1568,9 +1568,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T14:37:38.144923Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-19T16:42:22.426773Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 24 May are neither stated nor implied by the source. Use only",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1714,14 +1714,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T16:26:50.803106Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-19T16:45:02.775746Z",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/hopwood-hall-depree-appeal-deadline-after-high-court-defeat",
       "title": "Hopwood DePree v Rochdale Council: The battle for Hopwood Hall rages on",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "b7e8dbb6b2fa7b1e",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/prime-minister-andy-burnham-backs-34904060": {
       "first_attempt_at": "2026-11-12T20:55:23.163094Z",
@@ -1971,22 +1971,6 @@
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
       "text_fingerprint": "92c88d3cb8c1859f"
-    },
-    "https://www.rochdale.gov.uk/directory-record/2658/cartridge-street-roadworks-in-heywood-from-11-november-2026": {
-      "first_attempt_at": "2026-11-11T16:33:04.310071Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/directory-record/2658/cartridge-street-roadworks-in-heywood-from-11-november-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T16:33:04.310071Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Cartridge Street, roadworks in Heywood from 11 November 2026",
-      "source_name": "Rochdale Borough Council",
-      "category": "traffic",
-      "text_fingerprint": "91403205a89da5d9"
     },
     "https://www.rochdale.gov.uk/directory-record/2659/manchester-old-road-prohibition-of-waiting-in-middleton-from-5-january-2027": {
       "first_attempt_at": "2026-11-13T09:48:19.047827Z",
