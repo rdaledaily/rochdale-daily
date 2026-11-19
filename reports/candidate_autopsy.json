@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-11-18T15:57:54.022037Z",
+  "examined_at": "2026-11-19T16:03:09.114816Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 154,
+  "candidates_examined": 139,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 109,
-    "would publish": 27,
-    "duplicate of published story": 18
+    "age": 118,
+    "would publish": 18,
+    "duplicate of published story": 3
   },
-  "would_publish": 27,
+  "would_publish": 18,
   "age_gate_sensitivity": {
-    "6h": 13,
-    "14h": 26,
-    "24h": 45,
-    "48h": 82,
-    "72h": 111,
-    "168h": 154
+    "6h": 9,
+    "14h": 13,
+    "24h": 21,
+    "48h": 72,
+    "72h": 108,
+    "168h": 139
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of",
-      "Greater Manchester Police: Man jailed for life for murdering woman in Rochdale - Greater Manchest"
+      "Bee Network live travel alerts: Updated: 19/11/2026 at 8:55am Live Failsworth Tram Stop - Lifts out of",
+      "InYourArea: Acclaimed £7 Winter Wood Grotto returns to Rochdale with new show - In"
     ],
     "duplicate of published story": [
-      "I Love Manchester: What a £5.6m temporary accommodation plan could mean for Rochdale",
-      "BBC Manchester: Police investigate death of boy, 3, after incident at nursery",
-      "About Manchester: Police confirm investigation into death of three year old boy at Middl"
+      "Rochdale Times: Investigation under way into death of three-year-old boy - Rochdale Ti",
+      "BBC Manchester: Rochdale man who murdered wife and hid body under bed jailed",
+      "Manchester Evening News: Boy, 3, who died at Middleton nursery named as Cosy Toes issues statem"
     ],
     "age": [
-      "Manchester Evening News: Outrage as brick launched through hospice window in 'horrific spate of",
-      "Yahoo News UK: Heartbreak as brick launched through Rochdale hospice window in 'horri",
-      "Building Design: Seven modernist tower blocks in Rochdale to be demolished - Building D"
+      "Oldham Times: Life sentence for Rochdale man who stabbed wife and hid her body under",
+      "Manchester Evening News: Nursery in Middleton forced to close following tragic death of boy, 3",
+      "Greater Manchester Police: Man jailed for life for murdering woman in Rochdale - Greater Manchest"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
