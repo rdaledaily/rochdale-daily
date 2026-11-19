@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T18:57:07.193375Z",
+  "updated_at": "2026-11-19T19:20:40.827770Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 184,
+  "count": 185,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -672,12 +672,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T09:10:07.174825Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 19/11/2026 at 8:55am Live Failsworth Tram Stop - Lifts out of service Duration Thu 19 Nov, 8:55am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "a8fc4f82c08e9122"
+      "text_fingerprint": "a8fc4f82c08e9122",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-ea6c94c0d775e175cb": {
       "first_attempt_at": "2026-11-18T14:24:52.932083Z",
@@ -1587,13 +1588,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T18:57:07.193032Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "c3c46c1dd06b47ef",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
@@ -2469,6 +2470,22 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "b23155e9033e6d39"
+    },
+    "https://www.rochdaletimes.co.uk/rochdale-afc-sets-christmas-toys-goal": {
+      "first_attempt_at": "2026-11-19T19:20:40.827611Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/rochdale-afc-sets-christmas-toys-goal"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-19T19:20:40.827611Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale AFC sets Christmas toys goal - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "sport",
+      "text_fingerprint": "8726410c823eea2c"
     },
     "https://www.rochdaletimes.co.uk/rugby-club-helps-drive-home-15000-with-epic-trek-challenges": {
       "first_attempt_at": "2026-11-19T07:34:48.594004Z",
