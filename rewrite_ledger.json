@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T07:17:14.635631Z",
+  "updated_at": "2026-11-19T07:34:48.594122Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 170,
+  "count": 172,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -679,6 +679,22 @@
       "category": "sport",
       "text_fingerprint": "9576b71175db070f"
     },
+    "https://www.bbc.co.uk/news/articles/c8752wyv155xo": {
+      "first_attempt_at": "2026-11-19T07:32:10.270587Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c8752wyv155xo"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-19T07:32:10.270587Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are doing ever",
+      "title": "Hundreds of properties hit by power cuts after cable incident",
+      "source_name": "BBC Manchester",
+      "category": "environment",
+      "text_fingerprint": "476f43f047d55a65"
+    },
     "https://www.bbc.co.uk/news/articles/c8lyd2l5xn6qo": {
       "first_attempt_at": "2026-11-16T16:12:14.158904Z",
       "attempts": 1,
@@ -1085,8 +1101,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T07:17:14.635464Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
@@ -2238,6 +2254,22 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "b23155e9033e6d39"
+    },
+    "https://www.rochdaletimes.co.uk/rugby-club-helps-drive-home-15000-with-epic-trek-challenges": {
+      "first_attempt_at": "2026-11-19T07:34:48.594004Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/rugby-club-helps-drive-home-15000-with-epic-trek-challenges"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-19T07:34:48.594004Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rugby club helps drive home £15,000 with epic trek challenges - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "sport",
+      "text_fingerprint": "a7cd1d24a2245f17"
     },
     "https://www.rochdaletimes.co.uk/rugby-club-unveils-new-gym-as-shirt-sponsor": {
       "first_attempt_at": "2026-11-18T21:25:34.470131Z",
