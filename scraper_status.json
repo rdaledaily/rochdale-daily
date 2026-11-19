@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-19T18:18:33.643150Z",
+  "last_run_at": "2026-11-19T18:38:27.501199Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 96,
+  "raw_candidates_before_job_filter": 94,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 95,
+  "raw_candidates": 93,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 36,
-    "resolved": 20,
+    "wrappers": 45,
+    "resolved": 26,
     "text_recovered": 8,
     "reattributed": 1,
     "images_found": 12
   },
-  "duplicates_merged": 57,
+  "duplicates_merged": 55,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -73,13 +73,13 @@
   "live_articles": 662,
   "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1
+    "quality gate after 4 repairs: Source fidelity: the name(s) Fortunately do not appear in the source. Name only people, pl": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 2,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -255,8 +255,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 82,
-    "website_discovery": 9,
+    "rss_and_google_news": 83,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -266,11 +266,10 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 3
+    "men_newsletter": 4
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -306,19 +305,19 @@
       "bozo": false,
       "feed_title": ""
     },
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
+      "feed_title": ""
+    },
     "Falinge Park High School": {
       "url": "https://www.falingepark.com/feed/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -367,8 +366,8 @@
     "by_status": {
       "already_covered": 7,
       "held": 1,
-      "held_for_editor": 2,
-      "not_found": 3,
+      "held_for_editor": 3,
+      "not_found": 2,
       "published": 1
     },
     "outstanding_stories": [
@@ -421,18 +420,18 @@
         "id": "38f57132fe71ce33",
         "headline": "She worried about her daughter, then came the call no mother should get",
         "received_at": "2026-11-19T08:08:32+00:00",
-        "status": "not_found",
-        "reason": "its article kyle-howard-sentenced-to-life-for-the-murder-of-keeley-aspinall-in-rochdale is no longer live; searching again",
-        "resolved_url": "",
+        "status": "held_for_editor",
+        "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
+        "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/kyle-howard-keeley-aspinall-murder-34931714",
         "resolved_title": "She worried about her daughter’s controlling relationship, then came the call no mother should get"
       }
     ]
   },
   "immediate_first": [],
   "source_counts": {
-    "Roch Valley Radio": 20,
-    "Rochdale Times": 12,
+    "Roch Valley Radio": 21,
     "Manchester Evening News": 11,
+    "Rochdale Times": 8,
     "I Love Manchester": 6,
     "BBC Manchester": 5,
     "Oldham Times": 5,
@@ -452,6 +451,7 @@
     "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
+    "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -1128,7 +1128,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T18:21:08.904632Z",
+  "frontpage_generated_at": "2026-11-19T18:39:43.067291Z",
   "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
