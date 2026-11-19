@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T09:10:07.175036Z",
+  "updated_at": "2026-11-19T09:36:23.031512Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 172,
@@ -598,12 +598,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T07:52:51.656187Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 19/11/2026 at 7:30am Live Failsworth Tram Stop - Lifts out of service Duration Thu 19 Nov, 7:30am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "3f9ee90c2a8bfbd9"
+      "text_fingerprint": "3f9ee90c2a8bfbd9",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-dc6f8f0daa0f2f3e22": {
       "first_attempt_at": "2026-11-19T09:10:07.174825Z",
