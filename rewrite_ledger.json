@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T20:33:50.835577Z",
+  "updated_at": "2026-11-19T20:51:30.827949Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 186,
+  "count": 185,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -59,23 +59,6 @@
       "category": "community",
       "text_fingerprint": "e8e01e68050ddeb6",
       "recovery_attempts": 1
-    },
-    "https://ca.sports.yahoo.com/news/newport-handed-rochdale-trip-fa-194646067.html": {
-      "first_attempt_at": "2026-11-11T20:03:59.976520Z",
-      "attempts": 1,
-      "urls": [
-        "https://ca.sports.yahoo.com/news/newport-handed-rochdale-trip-fa-194646067.html",
-        "https://sports.yahoo.com/articles/newport-handed-rochdale-trip-fa-194646067.html"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T20:29:02.144884Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Newport handed Rochdale trip in FA Cup - Yahoo",
-      "source_name": "Yahoo",
-      "category": "sport",
-      "text_fingerprint": "7852ec1fd3c09209"
     },
     "https://ilovemanchester.com/rochdale-council-temp-plan": {
       "first_attempt_at": "2026-11-18T14:24:52.932347Z",
@@ -2261,8 +2244,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T20:33:50.835386Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -2372,14 +2355,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T20:33:50.835170Z",
+      "last_attempt_at": "2026-11-19T20:51:30.827630Z",
       "outcome": "published",
       "reason": "",
       "title": "New trial will ‘get tough’ with prolific shoplifters - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "7e2d6d1423191abe",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
       "first_attempt_at": "2026-11-11T15:15:29.480989Z",
@@ -2790,11 +2773,12 @@
       "first_attempt_at": "2026-11-19T16:08:39.796406Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxOMzRQWTU4Vm9wbHNjSTFLNHVybzRBVU5Na3U3S2FTc1NiajA0Z2NHc2tYUVF4QVJmOWI1bU5pc0ZfNVFSQ0N5OUhfZkFaMHZXNi1Ta1lpclBLWHJ0MlVvUFlRVUo5bGdxLXVkRU1HbHRqb1FTZDhRVGs0Z01EdXZ1SElsVVNDbGU3OXc0aFBMclJNWk90WEw1V2xRY29CMWE4QTExS3pjbw?oc=5",
         "https://www.rochvalleyradio.com/news-features/142/community/1454/bev-craig-on-seven-sisters-demolition-announcement"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T16:08:39.796406Z",
+      "last_attempt_at": "2026-11-19T20:51:30.827856Z",
       "outcome": "published",
       "reason": "",
       "title": "Bev Craig on Seven Sisters demolition announcement",
