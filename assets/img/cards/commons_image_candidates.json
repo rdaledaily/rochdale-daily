@@ -3819,16 +3819,22 @@
     }
   },
   "__geograph_probe__": {
-    "subject": "Stockton Street",
+    "subject": "Bury Road",
     "http": 200,
-    "centre": "town littleborough",
-    "radius_km": 4.0,
+    "centre": "street OL11 5EU",
+    "radius_km": 0.8,
     "content_type": "application/xml; charset=ISO-8859-1",
-    "items_in_reply": 0,
-    "items_with_image": 0,
-    "first_titles": [],
-    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby</description>\n        <link>https://www.geograph.org.uk/</link>\n        <lastBuildDate>Thu, 19 Nov 2026 10:32:08</lastBuildDate>\n        <generator",
-    "first_item": ""
+    "items_in_reply": 14,
+    "items_with_image": 14,
+    "first_titles": [
+      "SD8813 : 413 Bury Road, Rochdale",
+      "SD8813 : The Cemetery, Bury Road",
+      "SD8812 : The Cemetery Hotel, Rochdale",
+      "SD8712 : Gateway, Bury Road, Rochdale",
+      "SD8712 : The gates to Rochdale Cemetery"
+    ],
+    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:creativeCommons=\"http://backend.userland.com/creativeCommonsRssModule\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby (14 in total)</description>\n        <link>https://www.geograph.org.uk/",
+    "first_item": "<item>\n            <title>SD8813 : 413 Bury Road, Rochdale</title>\n            <link>https://www.geograph.org.uk/photo/2524252</link>\n            <description><![CDATA[<a href=\"https://www.geograph.org.uk/photo/2524252\" title=\"SD8813 : 413 Bury Road, Rochdale by Steven Haslington\"><img alt=\"SD8813 : 413 Bury Road, Rochdale by Steven Haslington\" src=\"https://s0.geograph.org.uk/geophotos/02/52/42/2524252_37b17403_120x120.jpg\" width=\"120\" height=\"90\" /></a><br/>]]></description>\n            <dc:creator>Steven Haslington</dc:creator>\n            <pubDate>Wed, 27 Jul 2011 17:06:03</pubDate>\n            <guid>https://www.geograph.org.uk/photo/2524252</guid>\n            <creativeCommons:license>http://creativecommons.org/licenses/by-sa/2.0/</creativeCommons:license>\n        </item>"
   },
   "__town_pool__|v1|rochdale": {
     "rows": [
@@ -11202,5 +11208,36 @@
     "subject": "Stockton Street",
     "geograph_tried": 5,
     "geograph_items_in_reply": 0
+  },
+  "bury road|rochdale": {
+    "status": "matched",
+    "subject": "Bury Road",
+    "geograph_tried": 5,
+    "geograph_items_in_reply": 14,
+    "source": "geograph",
+    "image_url": "assets/img/cards/7444aa4dca5a507d-commons-photo.jpg",
+    "image_credit": "Steven Haslington / Geograph (CC BY-SA 2.0)",
+    "image_credit_url": "https://www.geograph.org.uk/photo/2524252",
+    "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "commons_title": "SD8813 : 413 Bury Road, Rochdale",
+    "page": {
+      "title": "File:SD8813 : 413 Bury Road, Rochdale",
+      "imageinfo": [
+        {
+          "mime": "image/jpeg",
+          "extmetadata": {
+            "LicenseShortName": {
+              "value": "CC BY-SA 2.0"
+            },
+            "ImageDescription": {
+              "value": "SD8813 : 413 Bury Road, Rochdale"
+            },
+            "Categories": {
+              "value": "Rochdale|Rochdale"
+            }
+          }
+        }
+      ]
+    }
   }
 }
