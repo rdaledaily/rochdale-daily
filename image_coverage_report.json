@@ -1,13 +1,20 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 132,
+    "kept_cards": 133,
     "cards_library": 0,
-    "cards_generated": 454,
+    "cards_generated": 457,
     "incident_card": 5,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "who-or-what-is-the-healey-dwarf",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/who-or-what-is-the-healey-dwarf.jpg",
+      "matched_filename": "who-or-what-is-the-healey-dwarf.jpg",
+      "match_score": 21081
+    },
     {
       "slug": "breakfast-with-santa-at-queen-s-park-caf-heywood",
       "result": "kept-existing",
@@ -26,6 +33,27 @@
       "slug": "morning-briefing-19-november-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "life-without-limits-gym-relocates-to-new-premises-in-littleborough",
+      "result": "town-photo",
+      "image_url": "assets/img/cards/034f60ae33376485-town-photo.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-house-prices-rise-by-4-1-over-the-past-year",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-restaurant-s-sunday-roast-named-among-the-best-in-the-uk",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-restaurant-s-sunday-roast-named-among-the-best-in-the-uk.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -1481,7 +1509,7 @@
     {
       "slug": "patrick-whelan-62-dies-in-roadside-work-incident-in-rochdale",
       "result": "cards-generated",
-      "image_url": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
+      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
