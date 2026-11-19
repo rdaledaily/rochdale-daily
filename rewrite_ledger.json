@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T21:40:29.971262Z",
+  "updated_at": "2026-11-19T22:01:48.002155Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 185,
+  "count": 181,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1214,9 +1214,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T21:37:32.872084Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Officials are det",
+      "last_attempt_at": "2026-11-19T22:01:48.001561Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
@@ -1489,13 +1489,13 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T20:15:31.553124Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
-      "title": "Homes rocked by huge explosion as emergency services rush to Rochdale street",
+      "last_attempt_at": "2026-11-19T22:01:48.001873Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "8e226f49c00ba539",
+      "text_fingerprint": "fd175803eb62600d",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
@@ -1572,13 +1572,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T21:40:29.971222Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "c3c46c1dd06b47ef",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
@@ -1743,22 +1743,6 @@
       "category": "health",
       "text_fingerprint": "4361ff467459a425"
     },
-    "https://www.manchestereveningnews.co.uk/news/property/greater-manchester-areas-you-can-34869674": {
-      "first_attempt_at": "2026-11-11T21:30:31.558497Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.manchestereveningnews.co.uk/news/property/greater-manchester-areas-you-can-34869674"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T21:30:31.558497Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "The Greater Manchester areas where you can buy a home for less than UK's average house price",
-      "source_name": "Manchester Evening News",
-      "category": "news",
-      "text_fingerprint": "88c86a21ced5973e"
-    },
     "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274": {
       "first_attempt_at": "2026-11-16T14:56:31.490162Z",
       "attempts": 1,
@@ -1861,22 +1845,6 @@
       "source_name": "Nacionale",
       "category": "traffic",
       "text_fingerprint": "971b6acb1c7dfad0"
-    },
-    "https://www.netweather.tv/weather-forecasts/uk/10-day/24122~Rochdale?__cf_chl_rt_tk=8DeU.tLj3CsArXRwwdiUWEhtnNYdNjSiND2.E8reYVE-1794432390-1.0.1.1-fb8H7xETczuJAMNFs6Lqsp7wLtxrXWXlo5a8b4HeTvM": {
-      "first_attempt_at": "2026-11-11T21:30:31.558458Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.netweather.tv/weather-forecasts/uk/10-day/24122~Rochdale?__cf_chl_rt_tk=8DeU.tLj3CsArXRwwdiUWEhtnNYdNjSiND2.E8reYVE-1794432390-1.0.1.1-fb8H7xETczuJAMNFs6Lqsp7wLtxrXWXlo5a8b4HeTvM"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T21:30:31.558458Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "10 Day Weather Forecast for Rochdale - Netweather",
-      "source_name": "Netweather",
-      "category": "environment",
-      "text_fingerprint": "9e59a060c13be6a7"
     },
     "https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx#claimants-october-2026": {
       "first_attempt_at": "2026-11-18T04:18:50.551299Z",
@@ -2826,23 +2794,6 @@
       "recovery_attempts": 0,
       "briefing_absorb_recovery": 1
     },
-    "https://www.rochvalleyradio.com/news-features/4/crime/1419/sixteen-men-charged-with-violent-disorder-are-on-bail-ahead-of-a-court-appearance-on-4-january-2027": {
-      "first_attempt_at": "2026-11-10T16:00:32.540890Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/4/crime/1419/sixteen-men-charged-with-violent-disorder-are-on-bail-ahead-of-a-court-appearance-on-4-january-2027"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T21:30:31.558375Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Sixteen men charged with violent disorder are on bail ahead of a court appearance on 4 January 2027",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "crime",
-      "text_fingerprint": "29a14aed5f3c1814",
-      "recovery_attempts": 2
-    },
     "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event": {
       "first_attempt_at": "2026-11-11T16:12:23.954754Z",
       "attempts": 1,
@@ -2971,22 +2922,6 @@
       "source_name": "The Gazette",
       "category": "business",
       "text_fingerprint": "d6192b6f706c8392"
-    },
-    "https://www.theoldhamtimes.co.uk/news/26717492.rochdale-takeaway-crowned-best-north-west": {
-      "first_attempt_at": "2026-11-11T21:30:31.558671Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.theoldhamtimes.co.uk/news/26717492.rochdale-takeaway-crowned-best-north-west"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T21:30:31.558671Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale takeaway crowned the best in the North West - Oldham Times",
-      "source_name": "Oldham Times",
-      "category": "environment",
-      "text_fingerprint": "c7faa6c12631abcf"
     },
     "https://www.theoldhamtimes.co.uk/news/26719221.rochdale-man-among-16-charged-violent-disorder": {
       "first_attempt_at": "2026-11-11T21:27:54.023907Z",
