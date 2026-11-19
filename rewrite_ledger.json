@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T14:55:22.472873Z",
+  "updated_at": "2026-11-19T15:21:08.274528Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 183,
+  "count": 182,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1071,15 +1071,15 @@
     },
     "https://www.falingepark.com/2026/11/19/time-to-talk-8-lunchtime-workshop": {
       "first_attempt_at": "2026-11-19T14:34:58.304612Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.falingepark.com/2026/11/19/time-to-talk-8-lunchtime-workshop"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T14:52:42.153831Z",
+      "last_attempt_at": "2026-11-19T15:17:27.053524Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Park, High, Falinge do not appear in the source. Name only pe",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Park, High do not appear in the source. Name only people, pla",
       "title": "Time To Talk 8 Lunchtime Workshop",
       "source_name": "Falinge Park High School",
       "category": "health",
@@ -1259,13 +1259,14 @@
       "first_attempt_at": "2026-11-18T10:32:20.739612Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMizAFBVV95cUxNc0FSUnVFYVMzNDV3eE1MVDhCX1ZzcU0zSnROeHR5dEdSWGtJSVZKMm5XaGNidXQzYWJaVmlHVU9Zb2J1akdoeUtoRFhqLV9nUmszVm5BcUpIbGdJUkN6S0FZcVl2MDZFRVNhMkJ4ay1EREs4dURSeElQMDR2WXI4V0ZOXzZocWl1OGxoa0dlN1VLQ1MxVkpsSU5rUlh2ZU4teDVjTXZWa09pS21wTlozR0YyRjBxZWhiaXR2MTVKQ2ZVc1ZQcDNYcmIzS3E?oc=5",
         "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T10:32:20.739612Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-19T15:17:45.563072Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 30 November are neither stated nor implied by the source. Use",
       "title": "Inside the enchanted woodland tent coming to Rochdale with warm spiced apple drinks and old magic - InYourArea",
       "source_name": "InYourArea",
       "category": "events",
@@ -2149,27 +2150,6 @@
       "source_name": "Rochdale Borough Council News",
       "category": "community",
       "text_fingerprint": "e9d9b0ab976b0e4a"
-    },
-    "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match": {
-      "first_attempt_at": "2026-11-10T22:13:18.456367Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMimgFBVV95cUxNN1JUZ2VQRXJGcnhDVkwxYXM1a3B0ZzJ4bFFCem5td1ZfTEtWb0ZDUFl2bmNpdjhLZlhydHBKNEtYVWYzX0YzVHRmdGxUSG9mbWZ5TUVvRENmNGdGd210ZXM5M0g3QVlFSk1VNkhKZWM2U2pRSHR5eG1kdDE3VmNVMEJQeUpEam1Oc1Q4LVBUZ09wZ2RKc1NEeXN3?oc=5",
-        "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match",
-        "https://www.rochvalleyradio.com/news-features/4/crime/1419/sixteen-men-charged-with-violent-disorder-are-on-bail-ahead-of-a-court-appearance-on-4-january-2027"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T14:57:17.057109Z",
-      "outcome": "failed",
-      "reason": "one-time retry after briefing-absorption fix",
-      "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "crime",
-      "text_fingerprint": "3ebd3c2bab8eefc4",
-      "recovery_attempts": 0,
-      "evidence_recovery_policy": 1,
-      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/campaigners-hit-out-at-absurd-college-bank-demolition-decision": {
       "first_attempt_at": "2026-11-17T10:12:35.358818Z",

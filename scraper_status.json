@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-19T14:55:22.476826Z",
+  "last_run_at": "2026-11-19T15:21:08.280204Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,36 +54,32 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 96,
+  "raw_candidates_before_job_filter": 100,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 95,
-  "candidate_clusters": 36,
+  "raw_candidates": 99,
+  "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 51,
+    "wrappers": 54,
     "resolved": 32,
-    "text_recovered": 10,
+    "text_recovered": 9,
     "reattributed": 1,
-    "images_found": 14
+    "images_found": 13
   },
-  "duplicates_merged": 59,
+  "duplicates_merged": 62,
   "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "st-cuthbert-s-rc-high-school-placed-in-special-measures-after-ofsted-inspection",
-      "source_url": "https://www.rochdaletimes.co.uk/urgent-improvement-needed-at-school-where-pupils-do-not-feel-safe/"
-    }
-  ],
-  "new_articles": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 661,
-  "skipped": 1,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the name(s) Park, High, Falinge do not appear in the source. Name only pe": 1
+    "quality gate after 4 repairs: Source fidelity: the name(s) Park, High do not appear in the source. Name only people, pla": 1,
+    "quality gate after 4 repairs: Source fidelity: the date(s) 30 November are neither stated nor implied by the source. Use": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
-    "queued_for_retry": 1,
+    "missing_from_feed": 0,
+    "queued_for_retry": 0,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -93,12 +89,12 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 183,
+    "entries": 182,
     "by_outcome": {
       "editorial_twin": 16,
-      "failed": 27,
-      "published": 89,
-      "rejected": 51
+      "failed": 26,
+      "published": 88,
+      "rejected": 52
     },
     "held_back_this_run": 30,
     "held_already_published": 14,
@@ -252,19 +248,15 @@
       "last_attempt_at": "2026-11-17T20:55:18.354013Z"
     }
   ],
-  "published_with_style_issues": {
-    "The sources quote a named person: use the most telling words as an exact, attributed quotation by the third to fifth par": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
     "shown": 0,
-    "outcomes": {
-      "writer offered no points": 1
-    },
+    "outcomes": {},
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 84,
+    "rss_and_google_news": 88,
     "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -327,6 +319,14 @@
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Rochdale AFC Community Trust": {
+      "url": "https://www.rochdaleafccommunity.org/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -438,8 +438,8 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Roch Valley Radio": 17,
-    "Rochdale Times": 15,
+    "Roch Valley Radio": 18,
+    "Rochdale Times": 16,
     "Manchester Evening News": 8,
     "I Love Manchester": 6,
     "BBC Manchester": 5,
@@ -452,19 +452,19 @@
     "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "The Bury Times": 2,
+    "Facebook": 2,
+    "InYourArea": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
-    "InYourArea": 1,
     "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
-    "Facebook": 1,
     "AOL.com": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "education": 1,
+    "events": 1,
     "health": 1
   },
   "published_by_category": {
@@ -504,11 +504,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "education-v3-e2029ea97239873dca45",
+    "environment-v3-bffa61c241267c77732c",
     "health-v3-f3f45b5564011c79905e"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/urgent-improvement-needed-at-school-where-pupils-do-not-feel-safe/",
+    "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic",
     "https://www.falingepark.com/2026/11/19/time-to-talk-8-lunchtime-workshop/"
   ],
   "x_social_records": 0,
@@ -521,11 +521,11 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "education",
+      "events",
       "health"
     ],
     "selected_categories": [
-      "education",
+      "events",
       "health"
     ],
     "available_wards": [],
@@ -538,7 +538,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "education": 1,
+      "events": 1,
       "health": 1
     },
     "selected_by_ward": {},
@@ -547,7 +547,7 @@
     },
     "selected_by_source": {
       "falinge park high school": 1,
-      "rochdale times": 1
+      "inyourarea": 1
     },
     "must_cover_selected": 0
   },
@@ -1105,11 +1105,15 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMinwFBVV95cUxOZDRjZXlsT0VpN0VTa1lNRzBMVU1nMWhReGlZT1FGWUQ2ZGZOaG9nSkpkSFEtZE1ZUlVtbGc5aGtCOVVtY3pzemM2THAzOFMtZ0l5dWVoU0F3WElIMFVhREx2OTNnY19RcmJUS25zSE1YRlFlQmFwYUFVeWE4d25ta3c4MXBILWs2OTNPdnpOdVUwRGhHY080ZS1mT2tqQms?oc=5"
+    "https://news.google.com/rss/articles/CBMizAFBVV95cUxNc0FSUnVFYVMzNDV3eE1MVDhCX1ZzcU0zSnROeHR5dEdSWGtJSVZKMm5XaGNidXQzYWJaVmlHVU9Zb2J1akdoeUtoRFhqLV9nUmszVm5BcUpIbGdJUkN6S0FZcVl2MDZFRVNhMkJ4ay1EREs4dURSeElQMDR2WXI4V0ZOXzZocWl1OGxoa0dlN1VLQ1MxVkpsSU5rUlh2ZU4teDVjTXZWa09pS21wTlozR0YyRjBxZWhiaXR2MTVKQ2ZVc1ZQcDNYcmIzS3E?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1145,7 +1149,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T14:57:32.560784Z",
+  "frontpage_generated_at": "2026-11-19T15:22:44.825509Z",
   "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1270,10 +1274,8 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "st-cuthbert-s-rc-high-school-placed-in-special-measures-after-ofsted-inspection"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
