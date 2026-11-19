@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-19T00:16:43.720556Z",
+  "last_run_at": "2026-11-19T00:37:08.328720Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 111,
+  "raw_candidates_before_job_filter": 118,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 111,
+  "raw_candidates": 118,
   "candidate_clusters": 48,
   "google_news_resolution": {
-    "wrappers": 48,
+    "wrappers": 38,
     "resolved": 27,
-    "text_recovered": 4,
+    "text_recovered": 14,
     "reattributed": 0,
-    "images_found": 11
+    "images_found": 20
   },
-  "duplicates_merged": 63,
+  "duplicates_merged": 70,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -86,10 +86,10 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 173,
+    "entries": 172,
     "by_outcome": {
       "editorial_twin": 16,
-      "failed": 25,
+      "failed": 24,
       "published": 88,
       "rejected": 44
     },
@@ -253,8 +253,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 95,
-    "website_discovery": 9,
+    "rss_and_google_news": 99,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
     "facebook_official": 0,
@@ -268,6 +268,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -301,14 +302,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -397,22 +390,23 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 27,
-    "Roch Valley Radio": 15,
-    "Manchester Evening News": 9,
+    "Rochdale Times": 31,
+    "Roch Valley Radio": 12,
+    "Manchester Evening News": 10,
     "BBC Manchester": 7,
     "Bee Network live travel alerts": 6,
     "BBC": 5,
-    "I Love Manchester": 4,
+    "I Love Manchester": 5,
     "Housing Today": 4,
+    "Nacionale": 4,
     "Rochdale AFC": 3,
     "Inside Housing": 3,
+    "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "Oldham Times": 2,
     "UKNIP": 2,
     "Building Design": 2,
     "About Manchester": 2,
-    "Rochdale Borough Council": 2,
     "Greater Manchester Police": 2,
     "Your Trust Rochdale": 1,
     "Hopwood Hall College": 1,
@@ -422,22 +416,21 @@
     "Yahoo": 1,
     "Sporticos": 1,
     "InYourArea": 1,
+    "The Mirror": 1,
     "Metro.co.uk": 1,
-    "Nacionale": 1,
     "Your Trust Rochdale Articles": 1,
-    "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {},
   "published_by_category": {
     "business": 71,
-    "community": 102,
+    "community": 100,
     "crime": 45,
     "education": 30,
     "environment": 51,
     "events": 40,
     "health": 18,
-    "news": 94,
+    "news": 96,
     "politics": 21,
     "sport": 57,
     "traffic": 48,
@@ -1035,10 +1028,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "visitrochdale.com"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "visitrochdale.com": 2
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1075,7 +1068,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T00:18:02.496025Z",
+  "frontpage_generated_at": "2026-11-19T00:38:48.232529Z",
   "frontpage_article_count": 22,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1187,12 +1180,12 @@
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
+  "ticket_events_collected_this_run": 11,
   "events_kept_other_source": 31,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 2,
+  "event_dates_corrected_from_ledger": 1,
   "duplicate_articles_after_postprocessing": 656,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
