@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T11:13:33.720948Z",
+  "updated_at": "2026-11-19T11:30:48.804211Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 181,
@@ -1537,12 +1537,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T11:13:33.720910Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "c3c46c1dd06b47ef"
+      "text_fingerprint": "c3c46c1dd06b47ef",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
       "first_attempt_at": "2026-11-16T13:39:31.699730Z",
@@ -2208,14 +2209,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T10:49:48.555426Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-19T11:30:48.803966Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "0938449913482494",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/middleton-man-charged-with-aggravated-burglaries-and-attempted-murder": {
       "first_attempt_at": "2026-11-11T14:35:02.790852Z",

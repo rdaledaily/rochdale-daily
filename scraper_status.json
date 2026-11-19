@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-19T11:13:33.725424Z",
+  "last_run_at": "2026-11-19T11:30:48.808371Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -61,37 +61,30 @@
   "google_news_resolution": {
     "wrappers": 38,
     "resolved": 30,
-    "text_recovered": 9,
+    "text_recovered": 10,
     "reattributed": 1,
     "images_found": 14
   },
   "duplicates_merged": 54,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 2,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "suspected-hot-tub-explosion-causes-fireball-in-rochdale-garden",
-      "source_url": "https://www.dublinlive.ie/news/world-news/watch-cctv-captures-moment-suspected-34927767"
-    },
-    {
-      "slug": "kyle-howard-sentenced-to-life-for-the-murder-of-keeley-aspinall-in-rochdale",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/kyle-howard-keeley-aspinall-murder-34931714"
+      "slug": "kyle-howard-jailed-for-life-for-murdering-wife-keeley-aspinall",
+      "source_url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 0,
   "live_articles": 663,
-  "skipped": 2,
-  "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 2,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
@@ -101,25 +94,34 @@
     "entries": 181,
     "by_outcome": {
       "editorial_twin": 16,
-      "failed": 25,
+      "failed": 26,
       "published": 93,
-      "rejected": 47
+      "rejected": 46
     },
-    "held_back_this_run": 31,
-    "held_already_published": 20,
-    "held_rejected": 11,
+    "held_back_this_run": 33,
+    "held_already_published": 21,
+    "held_rejected": 12,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
     {
-      "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
-      "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc",
+      "title": "Man jailed for life for murdering woman in Rochdale - Greater Manchester Police",
+      "source_name": "Greater Manchester Police",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch",
       "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-19T10:49:48.555426Z"
+      "attempts": 3,
+      "last_attempt_at": "2026-11-19T11:10:46.229615Z"
+    },
+    {
+      "url": "https://www.rochdale.gov.uk/events/event/1508/winter-support-and-advice-drop-in---number-one-riverside",
+      "title": "Winter Support and Advice Drop-in - Number One Riverside - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-19T11:10:35.715026Z"
     },
     {
       "url": "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html",
@@ -213,13 +215,12 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 180.": 1,
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 112.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "not eligible: crime, court, police or death": 2
+      "not eligible: crime, court, police or death": 1
     },
     "points": {}
   },
@@ -236,7 +237,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 4
+    "men_newsletter": 3
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -330,15 +331,15 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 14,
-    "covered": 10,
-    "outstanding": 4,
+    "covered": 9,
+    "outstanding": 5,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 8,
       "held": 1,
       "held_for_editor": 2,
-      "not_found": 1,
-      "published": 2
+      "not_found": 2,
+      "published": 1
     },
     "outstanding_stories": [
       {
@@ -376,17 +377,26 @@
         "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/government-under-pressure-deport-rochdale-34932209.amp",
         "resolved_title": "Government under pressure to deport Rochdale grooming gang ringleader"
+      },
+      {
+        "id": "38f57132fe71ce33",
+        "headline": "She worried about her daughter, then came the call no mother should get",
+        "received_at": "2026-11-19T08:08:32+00:00",
+        "status": "not_found",
+        "reason": "its article kyle-howard-sentenced-to-life-for-the-murder-of-keeley-aspinall-in-rochdale is no longer live; searching again",
+        "resolved_url": "",
+        "resolved_title": "She worried about her daughter’s controlling relationship, then came the call no mother should get"
       }
     ]
   },
   "immediate_first": [],
   "source_counts": {
-    "Roch Valley Radio": 14,
+    "Roch Valley Radio": 15,
     "Rochdale Times": 12,
-    "Manchester Evening News": 10,
+    "Manchester Evening News": 8,
     "BBC Manchester": 5,
     "BBC": 5,
-    "I Love Manchester": 4,
+    "I Love Manchester": 5,
     "Housing Today": 4,
     "Nacionale": 4,
     "Bee Network live travel alerts": 4,
@@ -407,25 +417,22 @@
     "Sporticos": 1,
     "The Mirror": 1,
     "Metro": 1,
-    "The Independent — Rochdale": 1,
     "Your Trust Rochdale Articles": 1,
+    "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "environment": 1,
-    "news": 1,
-    "traffic": 1
+    "crime": 1
   },
   "published_by_category": {
     "business": 72,
-    "community": 103,
-    "crime": 46,
+    "community": 101,
+    "crime": 45,
     "education": 30,
     "environment": 51,
     "events": 40,
     "health": 19,
-    "news": 97,
+    "news": 100,
     "politics": 21,
     "sport": 57,
     "traffic": 48,
@@ -454,16 +461,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-22991475358d41920f78",
-    "hard-news-v3-cd9d653ce11b111467ea",
-    "transport-v3-73cf5f6030eeb7a28a75",
-    "environment-v3-2369fa69adbb7907ffca"
+    "hard-news-v3-bd7dcdf49e91434bded5"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/kyle-howard-keeley-aspinall-murder-34931714",
-    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc",
-    "https://www.dublinlive.ie/news/world-news/watch-cctv-captures-moment-suspected-34927767",
-    "https://www.rochdale.gov.uk/events/event/1508/winter-support-and-advice-drop-in---number-one-riverside"
+    "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -475,14 +476,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
-      "environment",
-      "traffic"
+      "crime"
     ],
     "selected_categories": [
-      "crime",
-      "environment",
-      "traffic"
+      "crime"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -494,20 +491,16 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "environment": 1,
-      "traffic": 1
+      "crime": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 1
     },
     "selected_by_source": {
-      "dublin live": 1,
-      "greater manchester police": 1,
-      "rochdale borough council": 1
+      "rochdale times": 1
     },
-    "must_cover_selected": 1
+    "must_cover_selected": 0
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1065,8 +1058,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1076,7 +1073,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-11-19T10:30:31.297255Z",
+  "evergreen_fallback_attempt_at": "2026-11-19T11:30:48.971052Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 4,
   "evergreen_fallback": {
@@ -1089,7 +1086,7 @@
     "qualifying_count": 4,
     "last_topic_id": "healey-dwarf",
     "last_article_slug": "who-or-what-is-the-healey-dwarf",
-    "last_published_at": "2026-11-19T10:30:31Z"
+    "last_published_at": "2026-11-19T11:30:49Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -1102,7 +1099,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T11:14:46.598617Z",
+  "frontpage_generated_at": "2026-11-19T11:33:02.110791Z",
   "frontpage_article_count": 21,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1209,7 +1206,7 @@
     "selection_window_days": 2,
     "frontpage_count": 21,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 14,
+    "fresh_under_24h": 13,
     "fresh_under_homepage_window": 20,
     "short_briefs_selected": 14,
     "frontpage_minimum_met": true
@@ -1221,7 +1218,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 2,
+  "event_dates_corrected_from_ledger": 1,
   "duplicate_articles_after_postprocessing": 663,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1233,11 +1230,9 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "suspected-hot-tub-explosion-causes-fireball-in-rochdale-garden"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 1,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
