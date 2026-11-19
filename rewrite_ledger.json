@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T23:24:28.856224Z",
+  "updated_at": "2026-11-19T23:42:43.505440Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 192,
+  "count": 194,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -158,9 +158,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T10:49:48.554861Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-19T23:39:49.811387Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: No de",
       "title": "📸 These incredible drone pictures show the aftermath of an explosion in Rochdale. The photos show a scene of destruction at a property just ",
       "source_name": "Facebook",
       "category": "news",
@@ -319,16 +319,16 @@
     },
     "https://rochdaleafc.co.uk/prices-reduced-for-fa-cup-tie": {
       "first_attempt_at": "2026-11-19T23:00:39.812137Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMirgFBVV95cUxOdG9OajFIcDE2ekdoRWhBZ0d0d1MzV0ljb2F4VDh6ZEtOUVhOQTZTdG1BUFpSYWVoZUV0dGdEMkNITkI0bUtVd3ZBUTV4NnJRUVY2VFBvTzl4MjVhMHMxZEw3dGt4cU5ISzNwaHNPakN1N1dpNGVkZHdod2pPdGozVUNSRnpLaXYtMGNlbUpaU1hpYkU3NEluVnhBS0ZUcGFmczM2S3RydlVlSUF2Ymc?oc=5",
         "https://rochdaleafc.co.uk/prices-reduced-for-fa-cup-tie"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T23:21:42.998743Z",
+      "last_attempt_at": "2026-11-19T23:39:54.460157Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We hope that the",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We want to see as",
       "title": "Prices Reduced For FA Cup Tie - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -493,15 +493,15 @@
     },
     "https://rochdaledaily.co.uk/articles/armwrestling-champion-agi-gorzynska-grushka-house-rochdale-december-2026": {
       "first_attempt_at": "2026-11-19T23:21:30.028611Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/armwrestling-champion-agi-gorzynska-grushka-house-rochdale-december-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T23:21:30.028611Z",
+      "last_attempt_at": "2026-11-19T23:39:51.412623Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: I am looking forw",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 18 November are neither stated nor implied by the source. Use",
       "title": "World armwrestling champion Agi Gorzyńska to take on challengers at Rochdale's Grushka House - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
@@ -554,6 +554,22 @@
       "source_name": "Rochdaledaily",
       "category": "crime",
       "text_fingerprint": "03782f5ec421fb5e"
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity": {
+      "first_attempt_at": "2026-11-19T23:39:50.983095Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-19T23:39:50.983095Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are thrilled w",
+      "title": "Rochdale Masters Rugby League and Mayfield Movers raise £14,698 for charity - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "sport",
+      "text_fingerprint": "458b83a599d02817"
     },
     "https://rochdaledaily.co.uk/articles/rochdale-restaurant-s-sunday-roast-named-among-the-best-in-the-uk": {
       "first_attempt_at": "2026-11-19T23:00:39.811237Z",
@@ -1158,13 +1174,14 @@
       "urls": [
         "https://www.dailyrecord.co.uk/news/uk-world-news/dramatic-moment-rochdale-hot-tub-37888389",
         "https://www.dublinlive.ie/news/world-news/watch-cctv-captures-moment-suspected-34927767",
+        "https://www.examinerlive.co.uk/news/uk-world-news/video-shows-moment-hot-tub-34927847.amp",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608",
         "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer",
         "https://www.theoldhamtimes.co.uk/news/26739471.update-gas-explosion-reported-house-bury-road-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T11:13:33.720585Z",
+      "last_attempt_at": "2026-11-19T23:42:43.505264Z",
       "outcome": "published",
       "reason": "",
       "title": "CCTV captures moment hot tub 'explodes' in huge fireball",
@@ -1384,8 +1401,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T23:24:28.855911Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Government ‘looking at every option’ to deport Rochdale grooming gang leader",
       "source_name": "The Independent — Rochdale",
       "category": "crime",
@@ -1412,7 +1429,7 @@
     },
     "https://www.inyourarea.co.uk/news/acclaimed-7-winter-wood-grotto-returns-to-rochdale-with-new-show": {
       "first_attempt_at": "2026-11-19T22:31:44.949455Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxQY2ZTcUs3cjVWY1BtUUtsSmZIdUFxUGRpZGVtOXRleXlKWGJuTlFzVHlTU2pNcV9wUEdQNkRRT0R0NXZsOVZ0SjBvSmxYanA1M1prakR5a1FINTExMTRpQ2YwdktaYlBicTBIMGVfUnFERC1RWlRnS1M3cTY0TEpCcExLUEVsbmN1NEJpNzB6d3B5UmRJc2VPZWlPSTNIVlBk?oc=5",
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPNzhPVEhCVmsyR0tKYngzOUdVcXpvaHhZdEV4QUpzUTQ4em5HWjdpRzNtbXNfVXFSQTV3VjRNVjhlUWZOUDlDNTE2elBOazFRWHBIUWZudS1HY1dESkNCeG5aekR4ZlFvbml3blNET0RpRVZBU3BYRjZDeUZMek9sTWJXQ0JEbE5zSzhBZ040eEFFaTViSUtrRGtrRi1fc1gtTzVzcFFLZkM?oc=5",
@@ -1420,9 +1437,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T23:21:44.098424Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Arts, Heritage, Centre, Centre's do not appear in the source.",
+      "last_attempt_at": "2026-11-19T23:42:43.505033Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Acclaimed £7 Winter Wood Grotto returns to Rochdale with new show - InYourArea",
       "source_name": "InYourArea",
       "category": "events",
@@ -1793,9 +1810,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T21:40:29.971222Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-19T23:39:58.430857Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: I wished things h",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -3217,6 +3234,22 @@
       "source_name": "Total Rugby League",
       "category": "sport",
       "text_fingerprint": "cd1c35832b08c000"
+    },
+    "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141": {
+      "first_attempt_at": "2026-11-19T23:42:43.504936Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-19T23:42:43.504936Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Ignite Fire Festival",
+      "source_name": "Visit Rochdale",
+      "category": "news",
+      "text_fingerprint": "b52f4ad6aac8bc6d"
     },
     "https://www.visitrochdale.com/whats-on/middleton-christmas-lights-switch-on-p698641": {
       "first_attempt_at": "2026-11-13T23:38:01.871038Z",
