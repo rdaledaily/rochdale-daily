@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-19T07:34:48.597711Z",
+  "last_run_at": "2026-11-19T07:52:51.660499Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,37 +54,39 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 105,
+  "raw_candidates_before_job_filter": 109,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 104,
-  "candidate_clusters": 47,
+  "raw_candidates": 108,
+  "candidate_clusters": 46,
   "google_news_resolution": {
-    "wrappers": 46,
-    "resolved": 24,
+    "wrappers": 26,
+    "resolved": 16,
     "text_recovered": 5,
     "reattributed": 0,
-    "images_found": 10
+    "images_found": 9
   },
-  "duplicates_merged": 57,
+  "duplicates_merged": 62,
   "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
-      "slug": "rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity",
-      "source_url": "https://www.rochdaletimes.co.uk/rugby-club-helps-drive-home-15000-with-epic-trek-challenges/"
+      "slug": "failsworth-tram-stop-lifts-out-of-service-until-further-notice",
+      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-98f43938090b817862"
+    },
+    {
+      "slug": "power-cuts-affect-hundreds-of-properties-in-rochdale-and-surrounding-areas",
+      "source_url": "https://www.bbc.co.uk/news/articles/c8752wyv155xo"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 2,
   "live_articles": 657,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are doing ever": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -97,11 +99,11 @@
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 23,
-      "published": 87,
-      "rejected": 46
+      "published": 89,
+      "rejected": 44
     },
-    "held_back_this_run": 34,
-    "held_already_published": 19,
+    "held_back_this_run": 33,
+    "held_already_published": 18,
     "held_rejected": 15,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -244,21 +246,26 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 161 body words using only facts already present in the sources; the draft currently has 129.": 1
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
+    "The sources quote a named person: use the most telling words as an exact, attributed quotation by the third to fifth par": 1
   },
   "local_impact": {
-    "shown": 0,
+    "shown": 1,
     "outcomes": {
-      "writer offered no points": 1
+      "shown": 1,
+      "no box: fewer than two points survived": 1
     },
-    "points": {}
+    "points": {
+      "dropped: no story sentence to correct it to": 3,
+      "corrected to the story's own sentence": 2
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 90,
-    "website_discovery": 8,
+    "rss_and_google_news": 91,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
-    "live_service_pages": 6,
+    "live_service_pages": 5,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -270,6 +277,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -303,30 +311,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
-      "feed_title": ""
-    },
-    "St Cuthbert's RC High School": {
-      "url": "https://stcuthberts.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://stcuthberts.com/feed/",
-      "bozo": true,
-      "feed_title": ""
-    },
-    "Hopwood Hall College": {
-      "url": "https://www.hopwood.ac.uk/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://www.hopwood.ac.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -399,17 +383,17 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 17,
+    "Rochdale Times": 21,
     "Roch Valley Radio": 15,
     "Manchester Evening News": 11,
-    "Bee Network live travel alerts": 6,
     "BBC Manchester": 5,
     "BBC": 5,
     "I Love Manchester": 5,
+    "Bee Network live travel alerts": 5,
     "Housing Today": 4,
+    "Nacionale": 4,
     "Rochdale AFC": 3,
     "Inside Housing": 3,
-    "Nacionale": 3,
     "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "Oldham Times": 2,
@@ -418,8 +402,8 @@
     "Greater Manchester Police": 2,
     "Falinge Park High School": 1,
     "Your Trust Rochdale": 1,
+    "Hopwood Hall College": 1,
     "The Bury Times": 1,
-    "The Bolton News": 1,
     "Total Rugby League": 1,
     "Yahoo": 1,
     "Sporticos": 1,
@@ -432,14 +416,14 @@
   },
   "selected_by_category": {
     "environment": 1,
-    "sport": 1
+    "transport": 1
   },
   "published_by_category": {
     "business": 71,
     "community": 101,
     "crime": 45,
     "education": 30,
-    "environment": 51,
+    "environment": 52,
     "events": 40,
     "health": 18,
     "news": 96,
@@ -471,11 +455,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-bea4cf84cd424fc4a317",
+    "transport-v3-47c010f18c1355e498bc",
     "environment-v3-1fabb8b82efc68c2890a"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/rugby-club-helps-drive-home-15000-with-epic-trek-challenges/",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-98f43938090b817862",
     "https://www.bbc.co.uk/news/articles/c8752wyv155xo"
   ],
   "x_social_records": 0,
@@ -489,11 +473,11 @@
   "coverage": {
     "available_categories": [
       "environment",
-      "sport"
+      "transport"
     ],
     "selected_categories": [
       "environment",
-      "sport"
+      "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -506,7 +490,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "environment": 1,
-      "sport": 1
+      "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
@@ -514,7 +498,7 @@
     },
     "selected_by_source": {
       "bbc manchester": 1,
-      "rochdale times": 1
+      "bee network live travel alerts": 1
     },
     "must_cover_selected": 0
   },
@@ -1111,7 +1095,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T07:36:05.918541Z",
+  "frontpage_generated_at": "2026-11-19T07:54:19.763901Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1235,9 +1219,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
+  "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity"
+    "signalling-fault-disrupts-blackburn-and-rochdale-train-services",
+    "heywood-homes-without-power-cable-fault-snow-warning-17-november-2026"
   ],
   "drafts_not_published": 0,
   "publication_health": "ready",
