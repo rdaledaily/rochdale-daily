@@ -1,39 +1,38 @@
 {
-  "last_run_at": "2026-11-19T15:41:50.815150Z",
+  "last_run_at": "2026-11-19T16:08:39.800965Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-19T10:03:29.454923Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 33,
+      "already_seen": 20,
+      "started_long_ago": 0,
+      "too_far_ahead": 12,
+      "undated": 1,
+      "in_window": 0
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 13,
-      "other_notice_types": 3,
-      "already_seen": 10,
-      "new": 0,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-11-19T15:37:55.084870Z",
+      "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-19T10:03:29.454923Z",
-      "interval_hours": 6
-    },
-    "gmca_decisions": {
       "status": "ok",
       "offered": 0,
-      "daily_cap": 1,
+      "daily_cap": 3,
       "offered_today": 0,
-      "listed": 11,
-      "not_decisions": 9,
-      "no_borough_place": 0,
-      "already_seen": 1,
+      "listed": 6,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 6,
       "new": 0
+    },
+    "gmca_decisions": {
+      "status": "not due",
+      "last_checked": "2026-11-19T15:37:55.084870Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -41,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-19T10:03:29.454923Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 4,
+      "releases": 332,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-19T10:03:29.454923Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -68,39 +80,41 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 97,
+  "raw_candidates_before_job_filter": 96,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 96,
-  "candidate_clusters": 37,
+  "raw_candidates": 95,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 37,
+    "wrappers": 36,
     "resolved": 21,
-    "text_recovered": 9,
+    "text_recovered": 10,
     "reattributed": 1,
-    "images_found": 13
+    "images_found": 14
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 2,
+  "duplicates_merged": 56,
+  "attempted_rewrites": 3,
   "draft_rewrites_created": 2,
   "drafted_articles": [
     {
-      "slug": "massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464"
+      "slug": "bev-craig-criticises-plans-for-seven-sisters-demolition-in-rochdale",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1454/bev-craig-on-seven-sisters-demolition-announcement"
     },
     {
-      "slug": "enchanted-woodland-event-returns-to-rochdale-with-festive-performances",
-      "source_url": "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic"
+      "slug": "hopwood-depree-loses-high-court-appeal-against-rochdale-council-over-hopwood-hal",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/hopwood-depree-v-rochdale-council-34937689"
     }
   ],
-  "new_articles": 1,
-  "live_articles": 661,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "new_articles": 2,
+  "live_articles": 662,
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
+    "missing_from_feed": 1,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -109,16 +123,16 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 182,
+    "entries": 184,
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 26,
-      "published": 90,
-      "rejected": 50
+      "published": 91,
+      "rejected": 51
     },
-    "held_back_this_run": 31,
+    "held_back_this_run": 30,
     "held_already_published": 14,
-    "held_rejected": 17,
+    "held_rejected": 16,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -149,15 +163,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-19T13:10:46.265053Z"
-    },
-    {
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
-      "title": "Homes rocked by huge explosion as emergency services rush to Rochdale street",
-      "source_name": "Manchester Evening News",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-19T12:55:38.065257Z"
     },
     {
       "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
@@ -216,7 +221,7 @@
     {
       "url": "https://www.rochvalleyradio.com/news-features/142/community/1447/rochdale-s-seven-college-bank-tower-blocks-set-to-make-way-for-hundreds-of-new-homes",
       "title": "Rochdale's seven College Bank tower blocks set to make way for hundreds of new homes",
-      "source_name": "Roch Valley Radio Local News",
+      "source_name": "Roch Valley Radio",
       "held_because": "already covered by the editor: covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
       "outcome": "editorial_twin",
       "attempts": 1,
@@ -278,20 +283,21 @@
     }
   ],
   "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 149.": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
+    "The sources quote a named person: use the most telling words as an exact, attributed quotation by the third to fifth par": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "writer offered no points": 2
+      "writer offered no points": 1,
+      "not eligible: crime, court, police or death": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 81,
-    "website_discovery": 11,
+    "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -301,7 +307,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 4
+    "men_newsletter": 3
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -343,18 +349,34 @@
     },
     "Falinge Park High School": {
       "url": "https://www.falingepark.com/feed/",
+      "http_status": null,
+      "content_type": "",
+      "final_url": "",
+      "bozo": true,
+      "feed_title": ""
+    },
+    "St Cuthbert's RC High School": {
+      "url": "https://stcuthberts.com/feed/",
       "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
+      "content_type": "text/html",
+      "final_url": "https://stcuthberts.com/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
       "url": "https://www.rochdaleafccommunity.org/feed/",
+      "http_status": null,
+      "content_type": "",
+      "final_url": "",
+      "bozo": true,
+      "feed_title": ""
+    },
+    "Hopwood Hall College": {
+      "url": "https://www.hopwood.ac.uk/feed/",
       "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
+      "content_type": "text/html",
+      "final_url": "https://www.hopwood.ac.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -367,10 +389,10 @@
     },
     "Rochdale AFC": {
       "url": "https://rochdaleafc.co.uk/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://rochdaleafc.co.uk/feed/",
-      "bozo": false,
+      "http_status": null,
+      "content_type": "",
+      "final_url": "",
+      "bozo": true,
       "feed_title": ""
     }
   },
@@ -396,17 +418,26 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 14,
-    "covered": 9,
-    "outstanding": 5,
+    "covered": 8,
+    "outstanding": 6,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
       "held": 1,
       "held_for_editor": 2,
-      "not_found": 2,
-      "published": 2
+      "not_found": 3,
+      "published": 1
     },
     "outstanding_stories": [
+      {
+        "id": "a723c79277982b33",
+        "headline": "Homes rocked by huge explosion as emergency services rush to 'hot tub' blast",
+        "received_at": "2026-11-18T08:05:55+00:00",
+        "status": "not_found",
+        "reason": "its article massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond is no longer live; searching again",
+        "resolved_url": "",
+        "resolved_title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street"
+      },
       {
         "id": "50ee33497f513a91",
         "headline": "Rochdale explosion RECAP as emergency crews scrambled to 'massive' hot tub blast",
@@ -457,43 +488,42 @@
   "immediate_first": [],
   "source_counts": {
     "Roch Valley Radio": 18,
-    "Rochdale Times": 16,
-    "Manchester Evening News": 6,
+    "Rochdale Times": 15,
+    "Manchester Evening News": 8,
+    "BBC": 6,
     "I Love Manchester": 6,
     "BBC Manchester": 5,
-    "BBC": 5,
     "Oldham Times": 5,
-    "Nacionale": 4,
     "Bee Network live travel alerts": 4,
     "Inside Housing": 3,
     "Housing Today": 3,
+    "Nacionale": 3,
     "Rochdale Borough Council": 3,
-    "Roch Valley Radio Local News": 3,
     "The Bury Times": 2,
-    "InYourArea": 2,
+    "Facebook": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
+    "Roch Valley Radio Local News": 2,
+    "InYourArea": 1,
     "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
-    "Facebook": 1,
-    "AOL.com": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "events": 1,
-    "news": 1
+    "community": 1,
+    "news": 2
   },
   "published_by_category": {
     "business": 72,
-    "community": 101,
+    "community": 102,
     "crime": 45,
     "education": 31,
     "environment": 51,
     "events": 40,
     "health": 19,
-    "news": 97,
+    "news": 98,
     "politics": 21,
     "sport": 57,
     "traffic": 48,
@@ -522,12 +552,14 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-7bec3917a5559de2fd76",
-    "environment-v3-bffa61c241267c77732c"
+    "community-v3-7061d0bfb3e724ba673d",
+    "hard-news-v3-4802a4dc9eef57aaeb8b",
+    "hard-news-v3-7bec3917a5559de2fd76"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
-    "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic"
+    "https://www.rochvalleyradio.com/news-features/142/community/1454/bev-craig-on-seven-sisters-demolition-announcement",
+    "https://www.manchestereveningnews.co.uk/news/hopwood-depree-v-rochdale-council-34937689",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -539,31 +571,45 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "events"
+      "community",
+      "news"
     ],
     "selected_categories": [
-      "events"
+      "community",
+      "news"
     ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
+    "available_wards": [
+      "Hopwood Hall"
+    ],
+    "selected_wards": [
+      "Hopwood Hall"
+    ],
+    "available_areas": [
+      "middleton"
+    ],
     "selected_areas": [
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "events": 1
+      "community": 1,
+      "news": 2
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Hopwood Hall": 1
+    },
     "selected_by_area": {
-      "rochdale": 1
+      "middleton": 1,
+      "rochdale": 2
     },
     "selected_by_source": {
-      "inyourarea": 1
+      "manchester evening news": 2,
+      "roch valley radio local news": 1
     },
-    "must_cover_selected": 1
+    "must_cover_selected": 0
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1111,19 +1157,24 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMizAFBVV95cUxNc0FSUnVFYVMzNDV3eE1MVDhCX1ZzcU0zSnROeHR5dEdSWGtJSVZKMm5XaGNidXQzYWJaVmlHVU9Zb2J1akdoeUtoRFhqLV9nUmszVm5BcUpIbGdJUkN6S0FZcVl2MDZFRVNhMkJ4ay1EREs4dURSeElQMDR2WXI4V0ZOXzZocWl1OGxoa0dlN1VLQ1MxVkpsSU5rUlh2ZU4teDVjTXZWa09pS21wTlozR0YyRjBxZWhiaXR2MTVKQ2ZVc1ZQcDNYcmIzS3E?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk",
+    "rochdalelibdems.org.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 3,
+    "rochdalelibdems.org.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1159,8 +1210,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-19T15:43:21.451718Z",
-  "frontpage_article_count": 19,
+  "frontpage_generated_at": "2026-11-19T16:09:50.850051Z",
+  "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1220,13 +1271,13 @@
       "education": 2,
       "events": 1,
       "business": 1,
-      "community": 5,
+      "community": 6,
       "health": 1,
-      "news": 3,
-      "environment": 1
+      "environment": 1,
+      "news": 3
     },
     "selected_by_ward": {
-      "borough-wide": 17,
+      "borough-wide": 18,
       "Central Rochdale": 1,
       "Spotland and Falinge": 1
     },
@@ -1236,7 +1287,7 @@
       "heywood": 1,
       "littleborough": 1,
       "middleton": 2,
-      "rochdale": 17,
+      "rochdale": 16,
       "shawclough": 1
     },
     "selected_by_source": {
@@ -1245,23 +1296,24 @@
       "rochdale times": 3,
       "grushka house": 1,
       "theoldhamtimes": 1,
-      "springhill hospice communications team": 1,
+      "source": 1,
+      "building design": 1,
       "rochdale daily": 2,
       "manchester evening news": 3,
       "falinge park high school": 1,
-      "healey dell heritage centre and tearooms": 1,
-      "building design": 1,
+      "springhill hospice communications team": 1,
       "the bury times": 1,
+      "healey dell heritage centre and tearooms": 1,
       "inside housing": 1
     },
     "pool_size": 25,
     "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 19,
+    "frontpage_count": 20,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 8,
-    "fresh_under_homepage_window": 18,
+    "fresh_under_24h": 9,
+    "fresh_under_homepage_window": 19,
     "short_briefs_selected": 12,
     "frontpage_minimum_met": true
   },
@@ -1273,7 +1325,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 661,
+  "duplicate_articles_after_postprocessing": 662,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1284,11 +1336,12 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
+  "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "enchanted-woodland-event-returns-to-rochdale-with-festive-performances"
+    "bev-craig-criticises-plans-for-seven-sisters-demolition-in-rochdale",
+    "hopwood-hall-depree-appeal-deadline-after-high-court-defeat"
   ],
-  "drafts_not_published": 1,
-  "publication_health": "partial",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
