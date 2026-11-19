@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T14:37:38.144963Z",
+  "updated_at": "2026-11-19T14:55:22.472873Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 183,
@@ -1071,15 +1071,15 @@
     },
     "https://www.falingepark.com/2026/11/19/time-to-talk-8-lunchtime-workshop": {
       "first_attempt_at": "2026-11-19T14:34:58.304612Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.falingepark.com/2026/11/19/time-to-talk-8-lunchtime-workshop"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T14:34:58.304612Z",
+      "last_attempt_at": "2026-11-19T14:52:42.153831Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Park, High do not appear in the source. Name only people, pla",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Park, High, Falinge do not appear in the source. Name only pe",
       "title": "Time To Talk 8 Lunchtime Workshop",
       "source_name": "Falinge Park High School",
       "category": "health",
@@ -1567,13 +1567,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-19T14:37:38.144923Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "She worried about her daughter’s controlling relationship, then came the call no mother should get",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "c3c46c1dd06b47ef",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
       "first_attempt_at": "2026-11-16T13:39:31.699730Z",
@@ -2540,11 +2540,12 @@
       "first_attempt_at": "2026-11-19T13:47:40.995716Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMinwFBVV95cUxOZDRjZXlsT0VpN0VTa1lNRzBMVU1nMWhReGlZT1FGWUQ2ZGZOaG9nSkpkSFEtZE1ZUlVtbGc5aGtCOVVtY3pzemM2THAzOFMtZ0l5dWVoU0F3WElIMFVhREx2OTNnY19RcmJUS25zSE1YRlFlQmFwYUFVeWE4d25ta3c4MXBILWs2OTNPdnpOdVUwRGhHY080ZS1mT2tqQms?oc=5",
         "https://www.rochdaletimes.co.uk/urgent-improvement-needed-at-school-where-pupils-do-not-feel-safe"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T14:20:15.194765Z",
+      "last_attempt_at": "2026-11-19T14:55:22.472724Z",
       "outcome": "published",
       "reason": "",
       "title": "Urgent improvement needed at school where ‘pupils do not feel safe’ - Rochdale Times",
