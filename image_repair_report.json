@@ -75,16 +75,6 @@
       }
     },
     {
-      "slug": "who-is-the-sad-cavalier-said-to-haunt-middleton-s-ring-o-bells",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdale.gov.uk/heritage-conservation/non-designated-heritage-assets/5",
-      "after": "assets/img/cards/f7b78d8e9c8a6a3c-commons-photo.jpg",
-      "why": {
-        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1162332",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
       "slug": "new-transport-policing-command-rochdale-buses-trams-roads",
       "result": "no-cleared-source-image",
       "source": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
@@ -92,6 +82,24 @@
       "why": {
         "page": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries",
+      "after": "assets/img/cards/rochdale-town-hall.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/contactcentre",
+        "final_url": "https://www.rochdale.gov.uk/contactcentre",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     }
   ]
