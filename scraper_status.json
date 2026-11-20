@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T07:56:08.682151Z",
+  "last_run_at": "2026-11-20T08:13:08.017146Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,34 +54,29 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 188,
+  "raw_candidates_before_job_filter": 187,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 188,
+  "raw_candidates": 187,
   "candidate_clusters": 56,
   "google_news_resolution": {
-    "wrappers": 147,
-    "resolved": 70,
-    "text_recovered": 13,
-    "reattributed": 49,
-    "images_found": 18
+    "wrappers": 161,
+    "resolved": 82,
+    "text_recovered": 11,
+    "reattributed": 47,
+    "images_found": 16
   },
-  "duplicates_merged": 132,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "failsworth-tram-stop-lifts-out-of-service-until-further-notice",
-      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-75488cbe5a8c9537c1"
-    }
-  ],
-  "new_articles": 1,
+  "duplicates_merged": 131,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 666,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -94,12 +89,12 @@
     "entries": 195,
     "by_outcome": {
       "editorial_twin": 20,
-      "failed": 24,
-      "published": 94,
+      "failed": 25,
+      "published": 93,
       "rejected": 57
     },
-    "held_back_this_run": 37,
-    "held_already_published": 19,
+    "held_back_this_run": 38,
+    "held_already_published": 20,
     "held_rejected": 18,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -268,22 +263,16 @@
       "last_attempt_at": "2026-11-18T14:24:52.931956Z"
     }
   ],
-  "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
-    "shown": 1,
-    "outcomes": {
-      "shown": 1
-    },
-    "points": {
-      "dropped: no story sentence to correct it to": 1
-    }
+    "shown": 0,
+    "outcomes": {},
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 171,
-    "website_discovery": 12,
+    "rss_and_google_news": 175,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -297,7 +286,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -333,12 +321,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -387,12 +375,12 @@
     "source": "MEN MyRochdale newsletter",
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
-    "stories_in_window": 14,
-    "covered": 9,
+    "stories_in_window": 12,
+    "covered": 7,
     "outstanding": 5,
     "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 7,
+      "already_covered": 5,
       "held": 2,
       "held_for_editor": 2,
       "not_found": 1,
@@ -448,32 +436,32 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 73,
-    "Rochdaledaily": 49,
-    "Rochdale Times": 18,
-    "Manchester Evening News": 7,
-    "Oldham Times": 5,
+    "rochdaledaily.co.uk": 72,
+    "Rochdaledaily": 46,
+    "Rochdale Times": 14,
+    "Manchester Evening News": 10,
     "BBC Manchester": 4,
+    "Oldham Times": 4,
     "I Love Manchester": 4,
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
     "Inside Housing": 3,
     "Housing Today": 3,
     "Rochdale Borough Council": 3,
+    "Falinge Park High School": 2,
     "BBC": 2,
+    "About Manchester": 2,
+    "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
-    "Yahoo News UK": 1,
-    "UKNIP": 1,
-    "Mirror": 1,
     "Rochdale AFC": 1,
-    "About Manchester": 1,
+    "Metro": 1,
+    "UKNIP": 1,
+    "Irish Mirror": 1,
     "Visit Rochdale": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "transport": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 72,
     "community": 102,
@@ -510,12 +498,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "transport-v3-a2c96981b2874045944b"
-  ],
-  "selected_candidate_urls": [
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-75488cbe5a8c9537c1"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -525,31 +509,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "transport"
-    ],
-    "selected_categories": [
-      "transport"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "transport": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "bee network live travel alerts": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -1109,12 +1068,8 @@
     "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1150,7 +1105,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T07:57:25.058837Z",
+  "frontpage_generated_at": "2026-11-20T08:14:11.517339Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1261,10 +1216,8 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "signalling-fault-disrupts-blackburn-and-rochdale-train-services"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
