@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T09:30:19.160821Z",
+  "updated_at": "2026-11-20T09:54:24.661005Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 194,
@@ -127,13 +127,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T04:46:02.834978Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Massive explosion that 'shook houses' in Rochdale may have been caused by hottub",
       "source_name": "Metro.co.uk",
       "category": "crime",
       "text_fingerprint": "1bdfb337c498d1ac",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://mrfixitstips.co.uk/mft-10-1000-betting-challenge-rochdale-and-york-to-provide-goals-for-bet-6": {
@@ -162,8 +162,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T09:11:18.419611Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "📸 These incredible drone pictures show the aftermath of an explosion in Rochdale. The photos show a scene of destruction at a property just ",
       "source_name": "Facebook",
       "category": "news",
@@ -1218,13 +1218,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T04:46:02.834792Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Video shows moment hot tub bursts into flames in Rochdale back garden - Yorkshire Live",
       "source_name": "Yorkshire Live",
       "category": "sport",
       "text_fingerprint": "b86234fdc459cbc6",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.falingepark.com/2026/11/16/rochdale-creative-health-advocates": {
@@ -1365,13 +1365,14 @@
       "urls": [
         "https://news.google.com/rss/articles/CBMipwFBVV95cUxPSWoxSmI1SFdJOGg1UUZEeGZxRV9XakI2djlwTmNrUzB2Q2hOR2tMQ0JXNkY5RzJqeWdGcnlYMEZsWTNUMTkyRHMtM1VPTjBqYWFjNmwxVEQ2WWlwRlFCWDlDN0RQUktZdkU0UkFQUXd6QUxtbENwRVVIRVJESVhIVnBFeUF3cndIMmN3dU9DNkcwd0ZRWUxUUER5SEEwR2UwaHZRR1prZw?oc=5",
         "https://news.google.com/rss/articles/CBMivwFBVV95cUxNc19BOXR1YmlocVFRT0pVMmlrY0FnRmlCUXFOQl93RVJVcEdRc1NUcmdZZVhWb2g1LU1BNTRCSGdUdHp1NGdYeE9obHZzOE56SDF4QkpzZTNTQk9rUkctaFIwQVRpZ3o3ZXoxUjJKT0lQV2U0Q195ZlhvNDFGNVJHUkNVU2cxeDY0bG5uRHk2ZFNhRHAySkZmVDBsTTQ1RlpfMFlEbHZQelBWaTVMY2pRQ0VjOHV4OC12bTZQSFVCWdIBxAFBVV95cUxQS1NpMHo3VW5DZUpjalh2azdDQlROUk9RbktLRU53bkNuNlZIUk9ZNlRtajBBRG1KOWtiQ0g2M0FVREZrN3FkTkpudTluYkJEYTI3RnhYRTlscmpOSVBwZnZrWDUyQzMwY1Bmbm5nRm80Ml9FbWswTEFPVmF4Y2FCdHU5VGQ2elJxNUNwcFdRNXhyRTV6cEZpbHJ2YlpMUHVwTDBhVU9nR2VDRUdIc2hjZUdOMzJRNGRhd1FSeEdiVGJzLTJL?oc=5",
+        "https://news.google.com/rss/articles/CBMixAFBVV95cUxQS1NpMHo3VW5DZUpjalh2azdDQlROUk9RbktLRU53bkNuNlZIUk9ZNlRtajBBRG1KOWtiQ0g2M0FVREZrN3FkTkpudTluYkJEYTI3RnhYRTlscmpOSVBwZnZrWDUyQzMwY1Bmbm5nRm80Ml9FbWswTEFPVmF4Y2FCdHU5VGQ2elJxNUNwcFdRNXhyRTV6cEZpbHJ2YlpMUHVwTDBhVU9nR2VDRUdIc2hjZUdOMzJRNGRhd1FSeEdiVGJzLTJL0gHEAUFVX3lxTFBLU2kwejdVbkNlSmNqWHZrN0NCVE5ST1FuS0tFTnduQ242VkhST1k2VG1qMEFEbUo5a2JDSDYzQVVERms3cWROSm51OW5iQkRhMjdGeFhFOWxyak5JUHBmdmtYNTJDMzBjUGZubmdGbzQyX0VtazBMQU9WYXhjYUJ0dTlUZDZ6UnE1Q3BwV1E1eHJFNXpwRmlscnZiWkxQdXBMMGFVT2dHZUNFR0hzaGNlR04zMlE0ZGF3UVJ4R2JUYnMtMks?oc=5",
         "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T09:27:26.115234Z",
+      "last_attempt_at": "2026-11-20T09:51:43.434816Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the draft says death but the source does not. Never change a legal status",
+      "reason": "quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch",
       "title": "Man jailed for life for murdering woman in Rochdale - Greater Manchester Police",
       "source_name": "Greater Manchester Police",
       "category": "crime",
@@ -1752,8 +1753,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T04:46:02.835277Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1898,24 +1899,6 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "eb21bcb2a90f88e8"
-    },
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-search-man-who-helped-34899246": {
-      "first_attempt_at": "2026-11-12T08:33:17.727252Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-search-man-who-helped-34899246",
-        "https://www.rochdaletimes.co.uk/police-seek-key-witness-who-helped-sexual-assault-victim"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T09:21:06.422878Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Police search for man who helped woman after Rochdale 'sexual assault'",
-      "source_name": "Manchester Evening News",
-      "category": "crime",
-      "text_fingerprint": "ce0fc885a3a9cb52",
-      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspect-named-after-police-officer-34901257": {
       "first_attempt_at": "2026-11-13T10:13:56.294592Z",
@@ -2760,6 +2743,22 @@
       "text_fingerprint": "744ed84a63d46cef",
       "recovery_attempts": 1
     },
+    "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20": {
+      "first_attempt_at": "2026-11-20T09:54:24.660870Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T09:54:24.660870Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Tributes to ‘exceptional’ former student who died aged 20 - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "1858845585e5a81b"
+    },
     "https://www.rochdaletimes.co.uk/urgent-improvement-needed-at-school-where-pupils-do-not-feel-safe": {
       "first_attempt_at": "2026-11-19T13:47:40.995716Z",
       "attempts": 1,
@@ -3186,13 +3185,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T09:30:19.160631Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Firefighter update after gas explosion at Rochdale house - Oldham Times",
       "source_name": "Oldham Times",
       "category": "traffic",
       "text_fingerprint": "afc712c66a111864",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.theoldhamtimes.co.uk/news/26741845.rochdale-roast-dinner-featured-among-best-uk": {
       "first_attempt_at": "2026-11-19T10:30:30.971978Z",
