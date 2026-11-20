@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T11:27:14.665687Z",
+  "updated_at": "2026-11-20T11:48:29.727871Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 205,
+  "count": 203,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -127,9 +127,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T04:46:02.834978Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-20T11:48:29.727402Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Massive explosion that 'shook houses' in Rochdale may have been caused by hottub",
       "source_name": "Metro.co.uk",
       "category": "crime",
@@ -554,14 +554,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:27:14.665373Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-20T11:45:34.282673Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This festival wil",
       "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
       "text_fingerprint": "b712074496090c96",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://rochdaledaily.co.uk/articles/life-without-limits-gym-relocates-to-new-premises-in-littleborough": {
       "first_attempt_at": "2026-11-19T22:27:17.828112Z",
@@ -637,14 +637,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:05:07.898373Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-20T11:48:29.727222Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Borough Council establishes Integrated Commissioning Board - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
       "text_fingerprint": "2442692e97143c76",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-house-prices-rise-by-4-1-over-the-past-year": {
       "first_attempt_at": "2026-11-19T22:57:40.749288Z",
@@ -696,15 +697,15 @@
     },
     "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026": {
       "first_attempt_at": "2026-11-20T10:38:27.094831Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:23:16.067074Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date",
+      "last_attempt_at": "2026-11-20T11:48:29.727319Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale MP seeks local role in pilot targeting repeat shoplifters - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
@@ -1139,14 +1140,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:27:14.665529Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-20T11:45:39.052537Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: Howev",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
       "source_name": "BBC Manchester",
       "category": "community",
       "text_fingerprint": "333deb9400bb882a",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.bbc.co.uk/news/articles/cm8x0q1p2q8jo": {
       "first_attempt_at": "2026-11-18T14:22:16.637260Z",
@@ -1871,14 +1872,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:05:07.898596Z",
+      "last_attempt_at": "2026-11-20T11:48:29.727570Z",
       "outcome": "published",
       "reason": "",
       "title": "Bev Craig says social housing stock in Rochdale being 'run into the ground' - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "ea2e199dcd326239",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/boy-3-who-died-middleton-34931816": {
       "first_attempt_at": "2026-11-18T16:48:15.003795Z",
@@ -2418,21 +2419,21 @@
       "category": "traffic",
       "text_fingerprint": "a8870d9ef194fab8"
     },
-    "https://www.rochdale.gov.uk/events/event/1506/super-stories-with-eliza-says---castleton-library": {
-      "first_attempt_at": "2026-11-12T10:10:23.471451Z",
-      "attempts": 3,
+    "https://www.rochdale.gov.uk/directory-record/2670/schofield-street-roadworks-in-heywood-from-20-november-2026": {
+      "first_attempt_at": "2026-11-20T11:48:29.727366Z",
+      "attempts": 1,
       "urls": [
-        "https://www.rochdale.gov.uk/events/event/1506/super-stories-with-eliza-says---castleton-library"
+        "https://www.rochdale.gov.uk/directory-record/2670/schofield-street-roadworks-in-heywood-from-20-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T11:21:37.172300Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_NEWS",
-      "title": "Super Stories with Eliza Says - Castleton Library - Rochdale Borough Council",
+      "last_attempt_at": "2026-11-20T11:48:29.727366Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Schofield Street, roadworks in Heywood from 20 November 2026",
       "source_name": "Rochdale Borough Council",
-      "category": "environment",
-      "text_fingerprint": "efe0f6eee64c3e70"
+      "category": "traffic",
+      "text_fingerprint": "c2e9ccdb70a6ce00"
     },
     "https://www.rochdale.gov.uk/events/event/1507/send-art-club": {
       "first_attempt_at": "2026-11-14T19:23:33.934708Z",
@@ -3222,24 +3223,6 @@
       "recovery_attempts": 0,
       "briefing_absorb_recovery": 1
     },
-    "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event": {
-      "first_attempt_at": "2026-11-11T16:12:23.954754Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event",
-        "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-on-suspicion-of-possessing-imitation-firearm-at-rochdale-armistice-day-event"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T11:25:50.970601Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Man arrested for possessing an imitation firearm at Rochdale Armistice Day event",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "crime",
-      "text_fingerprint": "40ed1c91a0bb2d0a",
-      "recovery_attempts": 2
-    },
     "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell": {
       "first_attempt_at": "2026-11-18T14:24:52.932442Z",
       "attempts": 1,
@@ -3334,26 +3317,6 @@
       "source_name": "The Gazette",
       "category": "business",
       "text_fingerprint": "6d273837fbb17fee"
-    },
-    "https://www.theoldhamtimes.co.uk/news/26719221.rochdale-man-among-16-charged-violent-disorder": {
-      "first_attempt_at": "2026-11-11T21:27:54.023907Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match",
-        "https://www.theoldhamtimes.co.uk/news/26719221.rochdale-man-among-16-charged-violent-disorder"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T11:25:50.970216Z",
-      "outcome": "failed",
-      "reason": "one-time retry after briefing-absorption fix",
-      "title": "Rochdale man among 16 charged with violent disorder ahead of Man United match - Oldham Times",
-      "source_name": "Oldham Times",
-      "category": "crime",
-      "text_fingerprint": "d70d452d1cc50eb9",
-      "recovery_attempts": 0,
-      "evidence_recovery_policy": 1,
-      "briefing_absorb_recovery": 1
     },
     "https://www.theoldhamtimes.co.uk/news/26732904.gmp-officer-barred-assaulting-woman-pc-manchester": {
       "first_attempt_at": "2026-11-17T22:37:04.974370Z",
