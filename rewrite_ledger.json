@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T11:05:07.898906Z",
+  "updated_at": "2026-11-20T11:27:14.665687Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 205,
@@ -554,13 +554,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:05:07.898533Z",
+      "last_attempt_at": "2026-11-20T11:27:14.665373Z",
       "outcome": "published",
       "reason": "",
       "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
-      "text_fingerprint": "b712074496090c96"
+      "text_fingerprint": "b712074496090c96",
+      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/life-without-limits-gym-relocates-to-new-premises-in-littleborough": {
       "first_attempt_at": "2026-11-19T22:27:17.828112Z",
@@ -596,7 +597,7 @@
     },
     "https://rochdaledaily.co.uk/articles/plans-revealed-to-replace-rochdale-s-seven-sisters-towers": {
       "first_attempt_at": "2026-11-20T10:35:33.602642Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaledaily.co.uk/articles/plans-revealed-to-replace-rochdale-s-seven-sisters-towers",
         "https://www.bdonline.co.uk/news/first-images-of-plans-to-replace-rochdales-seven-sisters-towers/5145234.article",
@@ -604,7 +605,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:02:24.989643Z",
+      "last_attempt_at": "2026-11-20T11:23:17.237043Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited to",
       "title": "Plans revealed to replace Rochdale’s Seven Sisters towers - rochdaledaily.co.uk",
@@ -637,8 +638,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T11:05:07.898373Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale Borough Council establishes Integrated Commissioning Board - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
@@ -679,13 +680,13 @@
     },
     "https://rochdaledaily.co.uk/articles/rochdale-metrolink-patrols-sceptre-knife-crime-week-november-2026": {
       "first_attempt_at": "2026-11-20T10:35:30.550355Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaledaily.co.uk/articles/rochdale-metrolink-patrols-sceptre-knife-crime-week-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:02:16.728736Z",
+      "last_attempt_at": "2026-11-20T11:23:15.121711Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 14 November, 20 November are neither stated nor implied by th",
       "title": "Rochdale Metrolink patrols target knife crime during Sceptre week - rochdaledaily.co.uk",
@@ -695,15 +696,15 @@
     },
     "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026": {
       "first_attempt_at": "2026-11-20T10:38:27.094831Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:02:16.073634Z",
+      "last_attempt_at": "2026-11-20T11:23:16.067074Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 18 November are neither stated nor implied by the source. Use",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date",
       "title": "Rochdale MP seeks local role in pilot targeting repeat shoplifters - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
@@ -728,13 +729,13 @@
     },
     "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026": {
       "first_attempt_at": "2026-11-20T10:35:28.724572Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:02:17.091339Z",
+      "last_attempt_at": "2026-11-20T11:23:14.795718Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) North, West do not appear in the source. Name only people, pl",
       "title": "Rochdale's Springhill Hospice wins three garden awards - rochdaledaily.co.uk",
@@ -1138,9 +1139,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T11:02:06.247088Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We want to create",
+      "last_attempt_at": "2026-11-20T11:27:14.665529Z",
+      "outcome": "published",
+      "reason": "",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
       "source_name": "BBC Manchester",
       "category": "community",
