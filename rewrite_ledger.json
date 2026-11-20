@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T13:04:00.678906Z",
+  "updated_at": "2026-11-20T13:31:07.591364Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 205,
@@ -639,8 +639,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T13:04:00.678222Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale Borough Council establishes Integrated Commissioning Board - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
@@ -699,15 +699,15 @@
     },
     "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026": {
       "first_attempt_at": "2026-11-20T10:38:27.094831Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:59:25.095502Z",
+      "last_attempt_at": "2026-11-20T13:26:46.678837Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We need to work t",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We need to create",
       "title": "Rochdale MP seeks local role in pilot targeting repeat shoplifters - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
@@ -1143,14 +1143,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:31:07.928941Z",
+      "last_attempt_at": "2026-11-20T13:26:44.502456Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We want to create",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
       "source_name": "BBC Manchester",
       "category": "community",
       "text_fingerprint": "333deb9400bb882a",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/news/articles/cm8x0q1p2q8jo": {
       "first_attempt_at": "2026-11-18T14:22:16.637260Z",
@@ -1920,16 +1921,17 @@
       "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQTnBsY3RxcjAxSjMxUjhzMFYwckpUenBrZ3RuRXFDZjhHRkl1UDNPQ1NGbUJLRFUtNUxUaGFac3VaZkloQVZKNWVIakhGdzVqRElBdTVNLU9kbWI0VkM2ZkRZSl9VelMtRnpUbkxSWERjRC1BcXdzRGZxWVNoZ0tSaEEtRktLOXNRNkl1VkRJaWg3UXRIeXpsaktlRy1heTdtMVZsNmpjMi1fTFVPVzc3SFBKZ3Q2NmYyQ3ZJeWwyUVJPQ3lWemFVSlhYQ29SOExTTHVZYUZQd2cwSDYyTWdYWG1iZHd3Zw?oc=5",
+        "https://news.google.com/rss/articles/CBMie0FVX3lxTFBZeHJTVmdsMjd4MWlJWjFkQmpYakZ4Sk1iMWlPbFMxVE9NZnpkVTBzdHh2Z2t2a2Z2Qk1TQWFHWlg1Y0NNQ25kMkxhRTFLMDlFNjR0QlE0Q19LU3RnM043aE0yOERHUXlnMVpwWmZPemQwdlRWNW5neGR0RQ?oc=5",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-18T22:01:50.773763Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-20T13:31:07.590732Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Incredible drone pictures show scene of destruction after Rochdale explosion",
       "source_name": "Manchester Evening News",
-      "category": "transport",
+      "category": "news",
       "text_fingerprint": "9f80e7d55c61b421",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
@@ -2947,16 +2949,16 @@
     },
     "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20": {
       "first_attempt_at": "2026-11-20T09:54:24.660870Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMikgFBVV95cUxQZzE5Uk9vN3pOTzd1M0xuZXZQbXdrNXBxM3g4YVhhd2dXWjBWWUEzZXg4MURQYk9EeGNST2RDa2g1VzRJN3hYQlJOMFlpRXdraF9kWTdjTUprSTVuWWphZEVkQ2VhQ3BpbGZCODU0Ym9OeFZnTi1BMkxMNGp2d1FSS2g5N2k3TUw0TkJzeTFBM0lCZw?oc=5",
         "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:59:29.505984Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We received the d",
+      "last_attempt_at": "2026-11-20T13:31:07.590462Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Tributes to ‘exceptional’ former student who died aged 20 - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "education",
@@ -3121,12 +3123,13 @@
       "first_attempt_at": "2026-11-20T12:31:07.929201Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPYk9KMWRpVjNkdlRXdW1rLU9ZN3QxQV9Nc3FZY014RktCY2xzeXBXV2xZQmFrb0xqZXptYzA2VVJEX3h4aFpvbUJvWHZzUlJPc2NsLTFrTzJIZzFuMzI4bmFKX1g0SklUbkJfNmlVQVBCTnAwNnc1a2Y0N1NPNzQ4REhacld5clE5SWRGUno3a0pZWWwzeElJbjltdEszSVBmVEh4TXB1aVA?oc=5",
         "https://rochdaledaily.co.uk/articles/rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity",
         "https://www.rochvalleyradio.com/news-features/141/local-sport/1455/rochdale-masters-and-mayfield-movers-raise-almost-15-000-in-two-walks"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T13:04:00.678501Z",
+      "last_attempt_at": "2026-11-20T13:31:07.590898Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Masters and Mayfield Movers raise almost £15,000 in two walks",
@@ -3219,13 +3222,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T13:04:00.678709Z",
+      "last_attempt_at": "2026-11-20T13:31:07.591069Z",
       "outcome": "published",
       "reason": "",
       "title": "Springhill Hospice wins three awards including best hospice garden in the North West",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
-      "text_fingerprint": "c9af2345303fcc41"
+      "text_fingerprint": "c9af2345303fcc41",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1457/newhey-mum-receives-hundreds-of-birthday-cards-after-son-s-appeal": {
       "first_attempt_at": "2026-11-20T13:04:00.678424Z",
