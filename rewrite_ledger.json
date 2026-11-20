@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T09:54:24.661005Z",
+  "updated_at": "2026-11-20T10:16:49.107252Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 194,
+  "count": 202,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -81,17 +81,18 @@
       "attempts": 1,
       "urls": [
         "https://ilovemanchester.com/rochdale-council-temp-plan",
-        "https://news.google.com/rss/articles/CBMiZEFVX3lxTE96TERpWV9SbkNTSm9HVVI4cEIyYVhkTWMxVm9mTVB2MWZDYllLdnVzU25hYkdhaU0wdERNRG5Pak81ejNjSEh6YVN1Y3JfekhZWndhcHVNUEtGQlhDSFZSQWZkc28?oc=5"
+        "https://news.google.com/rss/articles/CBMiZEFVX3lxTE96TERpWV9SbkNTSm9HVVI4cEIyYVhkTWMxVm9mTVB2MWZDYllLdnVzU25hYkdhaU0wdERNRG5Pak81ejNjSEh6YVN1Y3JfekhZWndhcHVNUEtGQlhDSFZSQWZkc28?oc=5",
+        "https://rochdaledaily.co.uk/articles/rochdale-council-unveils-5-6m-plan-to-improve-temporary-accommodation-for-homele"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T14:37:38.144742Z",
+      "last_attempt_at": "2026-11-20T10:16:49.106251Z",
       "outcome": "published",
       "reason": "",
-      "title": "What a £5.6m temporary accommodation plan could mean for Rochdale",
+      "title": "What a £5.6m temporary accommodation plan could mean for Rochdale - I Love Manchester",
       "source_name": "I Love Manchester",
       "category": "health",
-      "text_fingerprint": "824a7b2f5bd19e37"
+      "text_fingerprint": "4197656e4406090f"
     },
     "https://investinrochdale.co.uk/news/post/rochdale-business-awards-2026-winners-announced-as-borough-celebrates-busin": {
       "first_attempt_at": "2026-11-16T12:00:47.214568Z",
@@ -162,13 +163,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T09:11:18.419611Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "📸 These incredible drone pictures show the aftermath of an explosion in Rochdale. The photos show a scene of destruction at a property just ",
       "source_name": "Facebook",
       "category": "news",
       "text_fingerprint": "0030fd4ba01ed35b",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNS3drMmNwdG1HaFFQQzRyTy1VTnliaWhrN3BWTlp0c3J2NEZCUDNpbXpLQXNQWWFQbDlWdEFPM0dZdEJzenNpWlRIc21tUVFCczVITDYzSVhkNTJQNFVlRXNwMTQyMEhUdDFDVF9zMGFvYi1NMVpVajJ2cmFXV0hUVGFzMjZzcm5jM1BKbkFOQVNzd2hnZDlmdk1uTC1JbkxMLTdoMEtGMGFPdmp5MGRHUVMwbEtJb1hwdjFuLVZQN1NKd1E?oc=5": {
       "first_attempt_at": "2026-11-17T20:26:29.772204Z",
@@ -325,11 +327,12 @@
       "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMirgFBVV95cUxOdG9OajFIcDE2ekdoRWhBZ0d0d1MzV0ljb2F4VDh6ZEtOUVhOQTZTdG1BUFpSYWVoZUV0dGdEMkNITkI0bUtVd3ZBUTV4NnJRUVY2VFBvTzl4MjVhMHMxZEw3dGt4cU5ISzNwaHNPakN1N1dpNGVkZHdod2pPdGozVUNSRnpLaXYtMGNlbUpaU1hpYkU3NEluVnhBS0ZUcGFmczM2S3RydlVlSUF2Ymc?oc=5",
-        "https://rochdaleafc.co.uk/prices-reduced-for-fa-cup-tie"
+        "https://rochdaleafc.co.uk/prices-reduced-for-fa-cup-tie",
+        "https://rochdaledaily.co.uk/articles/rochdale-afc-reduces-ticket-prices-for-fa-cup-tie-against-newport-county"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T00:06:29.749111Z",
+      "last_attempt_at": "2026-11-20T10:16:49.107014Z",
       "outcome": "published",
       "reason": "",
       "title": "Prices Reduced For FA Cup Tie - Rochdale AFC",
@@ -460,6 +463,22 @@
       "category": "sport",
       "text_fingerprint": "787035349c32a579"
     },
+    "https://rochdaleafc.co.uk/were-fighting-every-single-day-watson": {
+      "first_attempt_at": "2026-11-20T10:13:28.348505Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/were-fighting-every-single-day-watson"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:13:28.348505Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 2, 1 do not appear in the source. Use only figures the sour",
+      "title": "Tough To Take - Watson - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "a1dce45449a41540"
+    },
     "https://rochdaleafc.co.uk/youth-team-beaten-at-home": {
       "first_attempt_at": "2026-11-17T22:34:23.220360Z",
       "attempts": 3,
@@ -510,6 +529,39 @@
       "category": "environment",
       "text_fingerprint": "747eb3d254f475ee"
     },
+    "https://rochdaledaily.co.uk/articles/falinge-park-high-school-celebrates-artsmark-week-with-students": {
+      "first_attempt_at": "2026-11-20T10:13:38.961917Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/falinge-park-high-school-celebrates-artsmark-week-with-students"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:13:38.961917Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This initiative h",
+      "title": "Falinge Park High School celebrates Artsmark Week with students - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "environment",
+      "text_fingerprint": "cf08df0ce2e30f3d"
+    },
+    "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area": {
+      "first_attempt_at": "2026-11-20T10:13:50.803700Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
+        "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:13:50.803700Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited to",
+      "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "news",
+      "text_fingerprint": "b712074496090c96"
+    },
     "https://rochdaledaily.co.uk/articles/life-without-limits-gym-relocates-to-new-premises-in-littleborough": {
       "first_attempt_at": "2026-11-19T22:27:17.828112Z",
       "attempts": 3,
@@ -526,6 +578,22 @@
       "category": "news",
       "text_fingerprint": "fc7db58528040090"
     },
+    "https://rochdaledaily.co.uk/articles/person-dies-on-tracks-at-todmorden-station-disrupting-services-to-rochdale": {
+      "first_attempt_at": "2026-11-20T10:13:49.014373Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/person-dies-on-tracks-at-todmorden-station-disrupting-services-to-rochdale"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:13:49.014373Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 19 November are neither stated nor implied by the source. Use",
+      "title": "Person dies on tracks at Todmorden station, disrupting services to Rochdale - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "environment",
+      "text_fingerprint": "f89a92393df03e3c"
+    },
     "https://rochdaledaily.co.uk/articles/rochdale-afc-launches-christmas-toy-appeal-for-local-families-in-need": {
       "first_attempt_at": "2026-11-19T22:27:22.337640Z",
       "attempts": 3,
@@ -541,6 +609,22 @@
       "source_name": "Rochdaledaily",
       "category": "community",
       "text_fingerprint": "1d529c5d49deda4d"
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board": {
+      "first_attempt_at": "2026-11-20T10:16:49.107220Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:16:49.107220Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale Borough Council establishes Integrated Commissioning Board - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "news",
+      "text_fingerprint": "2442692e97143c76"
     },
     "https://rochdaledaily.co.uk/articles/rochdale-house-prices-rise-by-4-1-over-the-past-year": {
       "first_attempt_at": "2026-11-19T22:57:40.749288Z",
@@ -851,6 +935,31 @@
       "recovery_attempts": 0,
       "evidence_recovery_policy": 1
     },
+    "https://themanc.com/news/rochdale-man-jailed-for-life-after-murdering-wife-and-hiding-her-body-under-the-bed-for-two-days": {
+      "first_attempt_at": "2026-11-20T10:13:39.621210Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-man-jailed-for-life-for-murdering-wife-and-hiding-her-body",
+        "https://themanc.com/news/rochdale-man-jailed-for-life-after-murdering-wife-and-hiding-her-body-under-the-bed-for-two-days",
+        "https://themanc.com/news/rochdale-man-jailed-for-life-after-murdering-wife-and-hiding-her-body-under-the-bed-for-two-days/amp",
+        "https://www.bbc.co.uk/news/articles/cm930lw782z7o",
+        "https://www.bbc.com/news/articles/cm930lw782z7o",
+        "https://www.burytimes.co.uk/news/26741516.rochdale-man-handed-life-sentence-murdering-wife",
+        "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc",
+        "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
+        "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell",
+        "https://www.theoldhamtimes.co.uk/news/26741516.rochdale-man-handed-life-sentence-murdering-wife"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:13:39.621210Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 46 do not appear in the source. Use only figures the source",
+      "title": "Rochdale man jailed for life after murdering wife and hiding her body under the bed for two days - The Manc",
+      "source_name": "The Manc",
+      "category": "crime",
+      "text_fingerprint": "fe81ba6071da890b"
+    },
     "https://uk.sports.yahoo.com/news/pictures-york-city-supporters-rochdale-120000827.html": {
       "first_attempt_at": "2026-11-18T16:20:13.327417Z",
       "attempts": 1,
@@ -883,25 +992,21 @@
       "category": "environment",
       "text_fingerprint": "351f65d6325d9244"
     },
-    "https://www.asianimage.co.uk/news/26715108.rochdale-drug-gang-manager-jailed-10-half-years": {
-      "first_attempt_at": "2026-11-11T21:47:06.391890Z",
+    "https://uknip.co.uk/news/uk/uk-news/todmorden-station-death-rochdale-hebden-bridge-trains-reopen": {
+      "first_attempt_at": "2026-11-20T10:16:49.106101Z",
       "attempts": 1,
       "urls": [
-        "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOSjg2aTVJamdIdFFjNUVOYmIxXzlJNkQxMHVnbkNxZ2dZVDlIQl9fNm5teTJWYjhwV2RZOUpwMDgtYTdJekxkcnRHRjJyWHlvazFmUUtXNEFvUVVZbDQ0Q2JKR0l1Wlhld1JJblByaXJ5cG9jRG1QZU02b3NEa0ppbnoydjI1NXBDSlRxYUZRYndWM3pHODk1X0UtM1EzX1FFWGpIWGk4c0x1Z1o5aGhmaUYwa0gwYmFILUQySXRoVEhOd00tWlFnQ3NqcWVqM1BPekptQXo0VmVaZ3lNMmxXUmNmanljUQ?oc=5",
-        "https://www.asianimage.co.uk/news/26715108.rochdale-drug-gang-manager-jailed-10-half-years"
+        "https://uknip.co.uk/news/uk/uk-news/todmorden-station-death-rochdale-hebden-bridge-trains-reopen"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T09:50:53.815059Z",
-      "outcome": "failed",
-      "reason": "one-time retry after briefing-absorption fix",
-      "title": "Drug dealer caught with £1,000 cash rose through ranks to run Rochdale ‘Adam’ line - Asian Image",
-      "source_name": "Asian Image",
-      "category": "crime",
-      "text_fingerprint": "8e087e204cdc3975",
-      "recovery_attempts": 0,
-      "evidence_recovery_policy": 1,
-      "briefing_absorb_recovery": 1
+      "last_attempt_at": "2026-11-20T10:16:49.106101Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Todmorden station death: Rochdale rail lines reopen - UKNIP",
+      "source_name": "UKNIP",
+      "category": "traffic",
+      "text_fingerprint": "31e46391cc7bd0ac"
     },
     "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o": {
       "first_attempt_at": "2026-11-17T16:05:46.359697Z",
@@ -1209,6 +1314,22 @@
       "category": "traffic",
       "text_fingerprint": "62b0c9007cda383b"
     },
+    "https://www.ephotozine.com/photo/the-rochdale-canal-at-todmorden-74133148": {
+      "first_attempt_at": "2026-11-20T10:16:49.106208Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.ephotozine.com/photo/the-rochdale-canal-at-todmorden-74133148"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:16:49.106208Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "The Rochdale Canal at Todmorden by cookyphil - ePHOTOzine",
+      "source_name": "ePHOTOzine",
+      "category": "environment",
+      "text_fingerprint": "2743ccf11ae4db67"
+    },
     "https://www.examinerlive.co.uk/news/uk-world-news/video-shows-moment-hot-tub-34927847.amp": {
       "first_attempt_at": "2026-11-19T22:31:44.949274Z",
       "attempts": 1,
@@ -1457,11 +1578,13 @@
       "urls": [
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxQY2ZTcUs3cjVWY1BtUUtsSmZIdUFxUGRpZGVtOXRleXlKWGJuTlFzVHlTU2pNcV9wUEdQNkRRT0R0NXZsOVZ0SjBvSmxYanA1M1prakR5a1FINTExMTRpQ2YwdktaYlBicTBIMGVfUnFERC1RWlRnS1M3cTY0TEpCcExLUEVsbmN1NEJpNzB6d3B5UmRJc2VPZWlPSTNIVlBk?oc=5",
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPNzhPVEhCVmsyR0tKYngzOUdVcXpvaHhZdEV4QUpzUTQ4em5HWjdpRzNtbXNfVXFSQTV3VjRNVjhlUWZOUDlDNTE2elBOazFRWHBIUWZudS1HY1dESkNCeG5aekR4ZlFvbml3blNET0RpRVZBU3BYRjZDeUZMek9sTWJXQ0JEbE5zSzhBZ040eEFFaTViSUtrRGtrRi1fc1gtTzVzcFFLZkM?oc=5",
+        "https://rochdaledaily.co.uk/articles/winter-wood-grotto-returns-to-rochdale-cenotaph-with-new-theme",
+        "https://rochdaledaily.co.uk/articles/winter-wood-grotto-returns-to-rochdale-with-new-show-themed-the-wild?__cf_chl_rt_tk=oHprEYU6CuSdbRKLsvGxaxymIs4Ww5gTHV1b.r8hFQE-1795169506-1.0.1.1-ySIWG6QNwmeVudtQdbZlYCvjbzhut.44.SdLPPSvihw",
         "https://www.inyourarea.co.uk/news/acclaimed-7-winter-wood-grotto-returns-to-rochdale-with-new-show"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T23:42:43.505033Z",
+      "last_attempt_at": "2026-11-20T10:16:49.106652Z",
       "outcome": "published",
       "reason": "",
       "title": "Acclaimed £7 Winter Wood Grotto returns to Rochdale with new show - InYourArea",
@@ -1653,6 +1776,23 @@
       "category": "news",
       "text_fingerprint": "49ed69aead848b30"
     },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309": {
+      "first_attempt_at": "2026-11-20T10:16:49.106805Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309.amp"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T10:16:49.106805Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Bev Craig says social housing stock in Rochdale being 'run into the ground' - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "ea2e199dcd326239"
+    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/boy-3-who-died-middleton-34931816": {
       "first_attempt_at": "2026-11-18T16:48:15.003795Z",
       "attempts": 1,
@@ -1752,13 +1892,13 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T04:46:02.835277Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-20T10:16:49.106400Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "bab448702ab99ff2",
+      "text_fingerprint": "fd175803eb62600d",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
