@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 134,
+    "kept_cards": 135,
     "cards_library": 0,
-    "cards_generated": 459,
+    "cards_generated": 460,
     "incident_card": 5,
     "skipped": 0
   },
@@ -158,6 +158,20 @@
     {
       "slug": "morning-briefing-18-november-2026",
       "result": "kept-existing",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "massive-explosion-rocks-rochdale-debris-scattered-across-bury-road",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/bury_road.jpg",
+      "matched_filename": "bury_road.jpg",
+      "match_score": 15249
+    },
+    {
+      "slug": "hot-tub-explosion-shakes-homes-in-rochdale-s-camberley-drive",
+      "result": "police-photo",
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "",
       "match_score": null
@@ -1530,7 +1544,7 @@
     {
       "slug": "patrick-whelan-62-dies-in-roadside-work-incident-in-rochdale",
       "result": "cards-generated",
-      "image_url": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
+      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
