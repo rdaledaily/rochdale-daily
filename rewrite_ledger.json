@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T03:20:31.228864Z",
+  "updated_at": "2026-11-20T03:38:17.412806Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 194,
+  "count": 193,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -2137,22 +2137,6 @@
       "category": "community",
       "text_fingerprint": "79850616aad653f2"
     },
-    "https://www.rochdale.gov.uk/directory-record/2638/trafalgar-street-roadworks-in-rochdale-on-26-november-2026": {
-      "first_attempt_at": "2026-11-12T03:12:09.050215Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/directory-record/2638/trafalgar-street-roadworks-in-rochdale-on-26-november-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T03:12:09.050215Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Trafalgar Street, roadworks in Rochdale on 26 November 2026",
-      "source_name": "Rochdale Borough Council",
-      "category": "traffic",
-      "text_fingerprint": "ddcfb410a97d9436"
-    },
     "https://www.rochdale.gov.uk/directory-record/2657/wardle-village-carol-concert-road-closure-in-wardle-on-24-december-2026": {
       "first_attempt_at": "2026-11-12T10:14:17.302545Z",
       "attempts": 1,
@@ -3247,8 +3231,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T03:20:31.228751Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Ignite Fire Festival",
       "source_name": "Visit Rochdale",
       "category": "news",
