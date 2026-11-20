@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-20T05:08:43.226696Z",
+  "last_run_at": "2026-11-20T05:26:58.518837Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-19T23:20:38.155933Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 33,
+      "already_seen": 20,
+      "started_long_ago": 0,
+      "too_far_ahead": 12,
+      "undated": 1,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-19T23:20:38.155933Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 11,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 11,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-19T23:20:38.155933Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 3,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-19T23:20:38.155933Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -54,18 +80,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 176,
+  "raw_candidates_before_job_filter": 183,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 176,
+  "raw_candidates": 183,
   "candidate_clusters": 57,
   "google_news_resolution": {
-    "wrappers": 154,
-    "resolved": 80,
-    "text_recovered": 10,
+    "wrappers": 142,
+    "resolved": 70,
+    "text_recovered": 11,
     "reattributed": 43,
-    "images_found": 14
+    "images_found": 16
   },
-  "duplicates_merged": 119,
+  "duplicates_merged": 126,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -289,8 +315,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 165,
-    "website_discovery": 6,
+    "rss_and_google_news": 167,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -304,6 +330,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -337,14 +364,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": null,
-      "content_type": "",
-      "final_url": "",
-      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -462,9 +481,9 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 73,
+    "rochdaledaily.co.uk": 71,
     "Rochdaledaily": 42,
-    "Rochdale Times": 12,
+    "Rochdale Times": 18,
     "Manchester Evening News": 7,
     "BBC Manchester": 4,
     "Oldham Times": 4,
@@ -472,16 +491,16 @@
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
     "I Love Manchester": 3,
+    "Inside Housing": 3,
+    "Housing Today": 3,
     "Rochdale Borough Council": 3,
-    "Housing Today": 2,
-    "Inside Housing": 2,
+    "BBC": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
     "Squawka": 1,
     "The Mirror": 1,
     "Rochdale AFC": 1,
-    "BBC": 1,
     "Metro": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
@@ -1094,10 +1113,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaletimes.co.uk"
+    "healthwatchrochdale.org.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaletimes.co.uk": 2
+    "healthwatchrochdale.org.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1134,7 +1153,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T05:10:21.651368Z",
+  "frontpage_generated_at": "2026-11-20T05:28:10.488628Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
