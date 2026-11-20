@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T12:31:07.929609Z",
+  "updated_at": "2026-11-20T13:04:00.678906Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 203,
+  "count": 205,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -163,13 +163,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T11:05:07.898421Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "📸 These incredible drone pictures show the aftermath of an explosion in Rochdale. The photos show a scene of destruction at a property just ",
       "source_name": "Facebook",
       "category": "news",
       "text_fingerprint": "0030fd4ba01ed35b",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNS3drMmNwdG1HaFFQQzRyTy1VTnliaWhrN3BWTlp0c3J2NEZCUDNpbXpLQXNQWWFQbDlWdEFPM0dZdEJzenNpWlRIc21tUVFCczVITDYzSVhkNTJQNFVlRXNwMTQyMEhUdDFDVF9zMGFvYi1NMVpVajJ2cmFXV0hUVGFzMjZzcm5jM1BKbkFOQVNzd2hnZDlmdk1uTC1JbkxMLTdoMEtGMGFPdmp5MGRHUVMwbEtJb1hwdjFuLVZQN1NKd1E?oc=5": {
@@ -554,14 +554,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:11:24.582766Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-20T13:04:00.678354Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
       "text_fingerprint": "b712074496090c96",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://rochdaledaily.co.uk/articles/life-without-limits-gym-relocates-to-new-premises-in-littleborough": {
       "first_attempt_at": "2026-11-19T22:27:17.828112Z",
@@ -637,9 +638,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:28:15.054869Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 19 November are neither stated nor implied by the source. Use",
+      "last_attempt_at": "2026-11-20T13:04:00.678222Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Borough Council establishes Integrated Commissioning Board - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
@@ -672,12 +673,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T00:27:47.432191Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale Masters Rugby League and Mayfield Movers raise £14,698 for charity - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "sport",
-      "text_fingerprint": "458b83a599d02817"
+      "text_fingerprint": "458b83a599d02817",
+      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-metrolink-patrols-sceptre-knife-crime-week-november-2026": {
       "first_attempt_at": "2026-11-20T10:35:30.550355Z",
@@ -703,14 +705,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:11:24.582701Z",
+      "last_attempt_at": "2026-11-20T12:59:25.095502Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We need to work t",
       "title": "Rochdale MP seeks local role in pilot targeting repeat shoplifters - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
       "text_fingerprint": "9e5845f216f75e72",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-restaurant-s-sunday-roast-named-among-the-best-in-the-uk": {
       "first_attempt_at": "2026-11-19T23:00:39.811237Z",
@@ -1141,8 +1144,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T12:31:07.928941Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
       "source_name": "BBC Manchester",
       "category": "community",
@@ -2944,14 +2947,14 @@
     },
     "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20": {
       "first_attempt_at": "2026-11-20T09:54:24.660870Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMikgFBVV95cUxQZzE5Uk9vN3pOTzd1M0xuZXZQbXdrNXBxM3g4YVhhd2dXWjBWWUEzZXg4MURQYk9EeGNST2RDa2g1VzRJN3hYQlJOMFlpRXdraF9kWTdjTUprSTVuWWphZEVkQ2VhQ3BpbGZCODU0Ym9OeFZnTi1BMkxMNGp2d1FSS2g5N2k3TUw0TkJzeTFBM0lCZw?oc=5",
         "https://www.rochdaletimes.co.uk/tributes-to-exceptional-former-student-who-died-aged-20"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:28:19.634070Z",
+      "last_attempt_at": "2026-11-20T12:59:29.505984Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We received the d",
       "title": "Tributes to ‘exceptional’ former student who died aged 20 - Rochdale Times",
@@ -3123,13 +3126,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T12:31:07.929201Z",
+      "last_attempt_at": "2026-11-20T13:04:00.678501Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Masters and Mayfield Movers raise almost £15,000 in two walks",
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
-      "text_fingerprint": "051b069f8373d0e6"
+      "text_fingerprint": "051b069f8373d0e6",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named": {
       "first_attempt_at": "2026-11-15T14:20:11.653556Z",
@@ -3205,6 +3209,39 @@
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
       "text_fingerprint": "db3d3e66bdcd2b9f"
+    },
+    "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west": {
+      "first_attempt_at": "2026-11-20T13:04:00.678709Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026",
+        "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T13:04:00.678709Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Springhill Hospice wins three awards including best hospice garden in the North West",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "environment",
+      "text_fingerprint": "c9af2345303fcc41"
+    },
+    "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1457/newhey-mum-receives-hundreds-of-birthday-cards-after-son-s-appeal": {
+      "first_attempt_at": "2026-11-20T13:04:00.678424Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1457/newhey-mum-receives-hundreds-of-birthday-cards-after-son-s-appeal"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T13:04:00.678424Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Newhey mum receives hundreds of birthday cards after son’s appeal",
+      "source_name": "Roch Valley Radio",
+      "category": "news",
+      "text_fingerprint": "0011e2927b990524"
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill": {
       "first_attempt_at": "2026-11-10T22:13:18.456211Z",
