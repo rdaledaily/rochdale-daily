@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T02:06:55.076109Z",
+  "last_run_at": "2026-11-20T02:27:29.127241Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,27 +54,22 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 158,
+  "raw_candidates_before_job_filter": 203,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 158,
-  "candidate_clusters": 55,
+  "raw_candidates": 203,
+  "candidate_clusters": 57,
   "google_news_resolution": {
-    "wrappers": 134,
-    "resolved": 83,
-    "text_recovered": 14,
-    "reattributed": 38,
-    "images_found": 19
+    "wrappers": 179,
+    "resolved": 93,
+    "text_recovered": 16,
+    "reattributed": 48,
+    "images_found": 21
   },
-  "duplicates_merged": 103,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464"
-    }
-  ],
-  "new_articles": 1,
+  "duplicates_merged": 146,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 666,
   "skipped": 1,
   "rewrite_skip_reasons": {
@@ -82,8 +77,8 @@
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
-    "queued_for_retry": 1,
+    "missing_from_feed": 0,
+    "queued_for_retry": 0,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -279,19 +274,15 @@
       "last_attempt_at": "2026-11-18T06:50:09.627973Z"
     }
   ],
-  "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
     "shown": 0,
-    "outcomes": {
-      "writer offered no points": 1
-    },
+    "outcomes": {},
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 147,
+    "rss_and_google_news": 192,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -302,7 +293,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 5
+    "men_newsletter": 4
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -357,14 +348,6 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
-      "feed_title": ""
-    },
     "Greater Manchester Police": {
       "url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
       "http_status": 403,
@@ -404,17 +387,26 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 14,
-    "covered": 9,
-    "outstanding": 5,
+    "covered": 8,
+    "outstanding": 6,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
       "held": 2,
       "held_for_editor": 2,
-      "not_found": 1,
-      "published": 2
+      "not_found": 2,
+      "published": 1
     },
     "outstanding_stories": [
+      {
+        "id": "a723c79277982b33",
+        "headline": "Homes rocked by huge explosion as emergency services rush to 'hot tub' blast",
+        "received_at": "2026-11-18T08:05:55+00:00",
+        "status": "not_found",
+        "reason": "its article massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond is no longer live; searching again",
+        "resolved_url": "",
+        "resolved_title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street"
+      },
       {
         "id": "50ee33497f513a91",
         "headline": "Rochdale explosion RECAP as emergency crews scrambled to 'massive' hot tub blast",
@@ -464,33 +456,34 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 50,
-    "Rochdaledaily": 37,
+    "rochdaledaily.co.uk": 84,
+    "Rochdaledaily": 47,
     "Rochdale Times": 14,
-    "Manchester Evening News": 8,
-    "Nacionale": 5,
+    "Manchester Evening News": 7,
+    "Oldham Times": 5,
     "BBC Manchester": 4,
     "I Love Manchester": 4,
+    "Nacionale": 4,
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
-    "Oldham Times": 3,
+    "The Bury Times": 3,
     "Inside Housing": 3,
     "Housing Today": 3,
     "Rochdale Borough Council": 3,
-    "The Bury Times": 2,
-    "The Mirror": 2,
     "BBC": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
-    "UKNIP": 1,
+    "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
+    "Dublin Live": 1,
+    "UKNIP": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "news": 2
+    "news": 1
   },
   "published_by_category": {
     "business": 72,
@@ -500,7 +493,7 @@
     "environment": 51,
     "events": 40,
     "health": 19,
-    "news": 99,
+    "news": 98,
     "politics": 21,
     "sport": 58,
     "traffic": 48,
@@ -529,11 +522,9 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-7bec3917a5559de2fd76",
     "hard-news-v3-e343f343d1ec440702a9"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
     "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
   ],
   "x_social_records": 0,
@@ -570,7 +561,7 @@
     "selected_by_source": {
       "visit rochdale": 1
     },
-    "must_cover_selected": 1
+    "must_cover_selected": 0
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1118,7 +1109,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1126,7 +1117,8 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k"
+    "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k",
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxNYS1LbGlqQ2Y0eWd3V2xLb1p3S0psMVlLRjFsTkF1UVZhWUk1SXJORENJcWpPUnloYlNLY1RPOVFUajRLNlFzUzRUUmsxbmUyTktoVGM5bG5zLWFYTThSOXllN2s4T005VzFHb1FsMzJQNENvTGVKWG43TFc4d2N4Z01mMlQ3N2JfaHVWRy00ZmJWaUpnVUNzSzZn?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1166,7 +1158,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T02:08:38.468626Z",
+  "frontpage_generated_at": "2026-11-20T02:28:44.256880Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1284,10 +1276,8 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "explosion-causes-significant-damage-to-property-off-bury-road-in-bamford"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
