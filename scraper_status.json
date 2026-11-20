@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T03:56:13.584533Z",
+  "last_run_at": "2026-11-20T04:25:33.665672Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -68,32 +68,35 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 197,
+  "raw_candidates_before_job_filter": 181,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 197,
-  "candidate_clusters": 59,
+  "raw_candidates": 181,
+  "candidate_clusters": 58,
   "google_news_resolution": {
-    "wrappers": 173,
-    "resolved": 92,
+    "wrappers": 157,
+    "resolved": 82,
     "text_recovered": 14,
-    "reattributed": 48,
+    "reattributed": 40,
     "images_found": 19
   },
-  "duplicates_merged": 138,
+  "duplicates_merged": 123,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "totally-u-manchester-limited-enters-liquidation-in-middleton",
+      "source_url": "https://www.thegazette.co.uk/notice/5256049"
+    }
+  ],
   "new_articles": 0,
   "live_articles": 665,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the date(s) 19 November are neither stated nor implied by the source. Use": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 4,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 3,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -105,13 +108,13 @@
     "entries": 194,
     "by_outcome": {
       "editorial_twin": 20,
-      "failed": 23,
-      "published": 94,
-      "rejected": 57
+      "failed": 24,
+      "published": 90,
+      "rejected": 60
     },
-    "held_back_this_run": 42,
-    "held_already_published": 22,
-    "held_rejected": 20,
+    "held_back_this_run": 41,
+    "held_already_published": 20,
+    "held_rejected": 21,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -124,6 +127,24 @@
       "outcome": "rejected",
       "attempts": 1,
       "last_attempt_at": "2026-11-20T03:20:31.228751Z"
+    },
+    {
+      "url": "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269",
+      "title": "Massive explosion that 'shook houses' in Rochdale may have been caused by hottub",
+      "source_name": "Metro.co.uk",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T01:28:05.417752Z"
+    },
+    {
+      "url": "https://www.examinerlive.co.uk/news/uk-world-news/video-shows-moment-hot-tub-34927847.amp",
+      "title": "Video shows moment hot tub bursts into flames in Rochdale back garden - Yorkshire Live",
+      "source_name": "Yorkshire Live",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T01:03:46.765486Z"
     },
     {
       "url": "https://rochdaledaily.co.uk/articles/armwrestling-champion-agi-gorzynska-grushka-house-rochdale-december-2026",
@@ -286,26 +307,23 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-18T11:21:40.962689Z"
-    },
-    {
-      "url": "https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx#claimants-october-2026",
-      "title": "Rochdale claimant count rose in October 2026",
-      "source_name": "Office for National Statistics (Nomis)",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-18T06:50:09.627973Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "local_impact": {
     "shown": 0,
-    "outcomes": {},
-    "points": {}
+    "outcomes": {
+      "no box: fewer than two points survived": 1
+    },
+    "points": {
+      "dropped: no story sentence to correct it to": 2
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 185,
+    "rss_and_google_news": 169,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -316,7 +334,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 1,
-    "men_newsletter": 4
+    "men_newsletter": 5
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -423,9 +441,9 @@
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
-      "held": 2,
+      "held": 3,
       "held_for_editor": 2,
-      "not_found": 2,
+      "not_found": 1,
       "published": 1
     },
     "outstanding_stories": [
@@ -433,9 +451,9 @@
         "id": "a723c79277982b33",
         "headline": "Homes rocked by huge explosion as emergency services rush to 'hot tub' blast",
         "received_at": "2026-11-18T08:05:55+00:00",
-        "status": "not_found",
-        "reason": "its article massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond is no longer live; searching again",
-        "resolved_url": "",
+        "status": "held",
+        "reason": "already rejected: missing from feed after repeated publication attempts; review required",
+        "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
         "resolved_title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street"
       },
       {
@@ -487,9 +505,9 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 80,
-    "Rochdaledaily": 47,
-    "Rochdale Times": 14,
+    "rochdaledaily.co.uk": 74,
+    "Rochdaledaily": 39,
+    "Rochdale Times": 13,
     "Manchester Evening News": 7,
     "BBC Manchester": 4,
     "Oldham Times": 4,
@@ -502,13 +520,13 @@
     "Rochdale Borough Council": 3,
     "The Bury Times": 2,
     "BBC": 2,
-    "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
+    "UKNIP": 1,
     "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
-    "ePHOTOzine": 1,
+    "About Manchester": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1,
     "The Gazette": 1
@@ -518,13 +536,13 @@
   },
   "published_by_category": {
     "business": 72,
-    "community": 102,
+    "community": 103,
     "crime": 46,
     "education": 31,
     "environment": 51,
     "events": 40,
     "health": 19,
-    "news": 98,
+    "news": 96,
     "politics": 21,
     "sport": 58,
     "traffic": 48,
@@ -1190,7 +1208,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T04:03:55.465739Z",
+  "frontpage_generated_at": "2026-11-20T04:27:11.449981Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1245,10 +1263,10 @@
       "education": 1,
       "sport": 1,
       "business": 1,
-      "community": 5,
+      "community": 4,
       "health": 1,
       "environment": 1,
-      "news": 2
+      "news": 3
     },
     "selected_by_ward": {
       "borough-wide": 15
@@ -1257,7 +1275,7 @@
       "falinge": 1,
       "littleborough": 1,
       "middleton": 2,
-      "rochdale": 17,
+      "rochdale": 18,
       "shawclough": 1
     },
     "selected_by_source": {
@@ -1285,13 +1303,13 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 43,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
+  "events_kept_other_source": 31,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 2,
   "duplicate_articles_after_postprocessing": 665,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1305,7 +1323,7 @@
   "whats_on_event_count": 16,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
