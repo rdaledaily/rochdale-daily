@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T09:11:18.424475Z",
+  "last_run_at": "2026-11-20T09:30:19.164863Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,47 +54,37 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 178,
+  "raw_candidates_before_job_filter": 181,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 178,
+  "raw_candidates": 181,
   "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 138,
-    "resolved": 67,
+    "wrappers": 157,
+    "resolved": 81,
     "text_recovered": 11,
-    "reattributed": 46,
+    "reattributed": 47,
     "images_found": 16
   },
-  "duplicates_merged": 125,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 4,
+  "duplicates_merged": 128,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "explosion-causes-significant-damage-to-property-in-bamford-area-of-rochdale",
-      "source_url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQTnBsY3RxcjAxSjMxUjhzMFYwckpUenBrZ3RuRXFDZjhHRkl1UDNPQ1NGbUJLRFUtNUxUaGFac3VaZkloQVZKNWVIakhGdzVqRElBdTVNLU9kbWI0VkM2ZkRZSl9VelMtRnpUbkxSWERjRC1BcXdzRGZxWVNoZ0tSaEEtRktLOXNRNkl1VkRJaWg3UXRIeXpsaktlRy1heTdtMVZsNmpjMi1fTFVPVzc3SFBKZ3Q2NmYyQ3ZJeWwyUVJPQ3lWemFVSlhYQ29SOExTTHVZYUZQd2cwSDYyTWdYWG1iZHd3Zw?oc=5"
-    },
-    {
-      "slug": "residents-return-home-after-gas-explosion-on-bury-road-rochdale",
+      "slug": "gas-explosion-at-house-on-bury-road-rochdale-prompts-emergency-response",
       "source_url": "https://www.theoldhamtimes.co.uk/news/26739471.update-gas-explosion-reported-house-bury-road-rochdale/"
-    },
-    {
-      "slug": "rochdale-man-jailed-for-life-for-murdering-wife-and-hiding-her-body",
-      "source_url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc"
-    },
-    {
-      "slug": "kyle-howard-sentenced-to-life-for-murdering-wife-keeley-aspinall",
-      "source_url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 0,
   "live_articles": 667,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Source fidelity: the draft says death but the source does not. Never change a legal status": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 2,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -107,16 +97,25 @@
     "by_outcome": {
       "editorial_twin": 19,
       "failed": 24,
-      "published": 96,
-      "rejected": 55
+      "published": 94,
+      "rejected": 57
     },
-    "held_back_this_run": 33,
-    "held_already_published": 18,
-    "held_rejected": 15,
+    "held_back_this_run": 35,
+    "held_already_published": 19,
+    "held_rejected": 16,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
+      "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T09:11:18.419993Z"
+    },
     {
       "url": "https://www.thegazette.co.uk/notice/5256049",
       "title": "TOTALLY U (MANCHESTER) LIMITED: Appointment of Liquidators",
@@ -254,23 +253,19 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write at least 151 body words using only facts already present in the sources; the draft currently has 143.": 1,
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 157.": 1
+    "Write at least 151 body words using only facts already present in the sources; the draft currently has 147.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "not eligible: crime, court, police or death": 3,
       "writer offered no points": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 162,
-    "website_discovery": 11,
+    "rss_and_google_news": 170,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -284,7 +279,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -320,12 +314,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -435,10 +429,10 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 61,
-    "Rochdaledaily": 45,
-    "Rochdale Times": 17,
-    "Manchester Evening News": 13,
+    "rochdaledaily.co.uk": 66,
+    "Rochdaledaily": 46,
+    "Rochdale Times": 13,
+    "Manchester Evening News": 12,
     "Oldham Times": 4,
     "I Love Manchester": 4,
     "Bee Network live travel alerts": 4,
@@ -446,6 +440,7 @@
     "Inside Housing": 3,
     "Housing Today": 3,
     "Rochdale Borough Council": 3,
+    "Falinge Park High School": 2,
     "The Manc": 2,
     "BBC": 2,
     "About Manchester": 2,
@@ -455,13 +450,12 @@
     "Rochdale AFC": 1,
     "Metro": 1,
     "ePHOTOzine": 1,
-    "Visit Rochdale": 1,
     "The Independent — Rochdale": 1,
+    "Visit Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 2,
-    "news": 1,
+    "crime": 1,
     "traffic": 1
   },
   "published_by_category": {
@@ -501,16 +495,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-bd7dcdf49e91434bded5",
-    "transport-v3-7b67da53624496b399fa",
-    "hard-news-v3-1c185f3bded9b8be0a89",
-    "hard-news-v3-cd9d653ce11b111467ea"
+    "hard-news-v3-15010a898711870cd7a2",
+    "transport-v3-7b67da53624496b399fa"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life/",
-    "https://www.theoldhamtimes.co.uk/news/26739471.update-gas-explosion-reported-house-bury-road-rochdale/",
-    "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQTnBsY3RxcjAxSjMxUjhzMFYwckpUenBrZ3RuRXFDZjhHRkl1UDNPQ1NGbUJLRFUtNUxUaGFac3VaZkloQVZKNWVIakhGdzVqRElBdTVNLU9kbWI0VkM2ZkRZSl9VelMtRnpUbkxSWERjRC1BcXdzRGZxWVNoZ0tSaEEtRktLOXNRNkl1VkRJaWg3UXRIeXpsaktlRy1heTdtMVZsNmpjMi1fTFVPVzc3SFBKZ3Q2NmYyQ3ZJeWwyUVJPQ3lWemFVSlhYQ29SOExTTHVZYUZQd2cwSDYyTWdYWG1iZHd3Zw?oc=5",
-    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc"
+    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/man-jailed-for-life-for-murdering-woman-in-rochdale/?__cf_chl_rt_tk=CbRr3ZOkP4DoH7F2HEe.83WsuocfRTn.1cEHdMWLqso-1795083965-1.0.1.1-KeBbadiWQJkRvJCDtLfSOw6EP6PHe2mVBNCufVyWDGc",
+    "https://www.theoldhamtimes.co.uk/news/26739471.update-gas-explosion-reported-house-bury-road-rochdale/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -523,47 +513,32 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "news",
       "traffic"
     ],
     "selected_categories": [
       "crime",
-      "news",
       "traffic"
     ],
-    "available_wards": [
-      "Bamford"
-    ],
-    "selected_wards": [
-      "Bamford"
-    ],
-    "available_areas": [
-      "bamford"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
     "selected_areas": [
-      "bamford",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 2,
-      "news": 1,
+      "crime": 1,
       "traffic": 1
     },
-    "selected_by_ward": {
-      "Bamford": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
-      "bamford": 1,
-      "rochdale": 3
+      "rochdale": 2
     },
     "selected_by_source": {
-      "facebook": 1,
       "greater manchester police": 1,
-      "oldham times": 1,
-      "rochdale times": 1
+      "oldham times": 1
     },
     "must_cover_selected": 0
   },
@@ -1113,7 +1088,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 10,
+  "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1122,9 +1097,8 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k",
-    "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQTnBsY3RxcjAxSjMxUjhzMFYwckpUenBrZ3RuRXFDZjhHRkl1UDNPQ1NGbUJLRFUtNUxUaGFac3VaZkloQVZKNWVIakhGdzVqRElBdTVNLU9kbWI0VkM2ZkRZSl9VelMtRnpUbkxSWERjRC1BcXdzRGZxWVNoZ0tSaEEtRktLOXNRNkl1VkRJaWg3UXRIeXpsaktlRy1heTdtMVZsNmpjMi1fTFVPVzc3SFBKZ3Q2NmYyQ3ZJeWwyUVJPQ3lWemFVSlhYQ29SOExTTHVZYUZQd2cwSDYyTWdYWG1iZHd3Zw?oc=5",
     "https://news.google.com/rss/articles/CBMivwFBVV95cUxNc19BOXR1YmlocVFRT0pVMmlrY0FnRmlCUXFOQl93RVJVcEdRc1NUcmdZZVhWb2g1LU1BNTRCSGdUdHp1NGdYeE9obHZzOE56SDF4QkpzZTNTQk9rUkctaFIwQVRpZ3o3ZXoxUjJKT0lQV2U0Q195ZlhvNDFGNVJHUkNVU2cxeDY0bG5uRHk2ZFNhRHAySkZmVDBsTTQ1RlpfMFlEbHZQelBWaTVMY2pRQ0VjOHV4OC12bTZQSFVCWdIBxAFBVV95cUxQS1NpMHo3VW5DZUpjalh2azdDQlROUk9RbktLRU53bkNuNlZIUk9ZNlRtajBBRG1KOWtiQ0g2M0FVREZrN3FkTkpudTluYkJEYTI3RnhYRTlscmpOSVBwZnZrWDUyQzMwY1Bmbm5nRm80Ml9FbWswTEFPVmF4Y2FCdHU5VGQ2elJxNUNwcFdRNXhyRTV6cEZpbHJ2YlpMUHVwTDBhVU9nR2VDRUdIc2hjZUdOMzJRNGRhd1FSeEdiVGJzLTJL?oc=5",
-    "https://news.google.com/rss/articles/CBMiW0FVX3lxTFByZmZFZXVyNUl0bVJxUE0zZ1pmUlktT2tVZFdTRVpNOXpiMmFRaHJFeWNta0FBeXF6cnRHQkVjNG82NTJNY0FfQzNqWFlucnhyQ1VZNnFFSjZCcFU?oc=5"
+    "https://news.google.com/rss/articles/CBMipwFBVV95cUxPSWoxSmI1SFdJOGg1UUZEeGZxRV9XakI2djlwTmNrUzB2Q2hOR2tMQ0JXNkY5RzJqeWdGcnlYMEZsWTNUMTkyRHMtM1VPTjBqYWFjNmwxVEQ2WWlwRlFCWDlDN0RQUktZdkU0UkFQUXd6QUxtbENwRVVIRVJESVhIVnBFeUF3cndIMmN3dU9DNkcwd0ZRWUxUUER5SEEwR2UwaHZRR1prZw?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1164,7 +1138,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T09:25:39.149705Z",
+  "frontpage_generated_at": "2026-11-20T09:37:41.332439Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1274,12 +1248,9 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "massive-explosion-rocks-rochdale-debris-scattered-across-bury-road",
-    "rochdale-man-jailed-for-life-for-murdering-wife-and-hiding-her-body"
-  ],
-  "drafts_not_published": 2,
-  "publication_health": "partial",
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
