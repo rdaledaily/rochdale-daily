@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T20:25:08.384564Z",
+  "last_run_at": "2026-11-20T20:48:10.139155Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 166,
+  "raw_candidates_before_job_filter": 169,
   "job_or_career_posts_rejected": 9,
-  "raw_candidates": 157,
-  "candidate_clusters": 55,
+  "raw_candidates": 160,
+  "candidate_clusters": 54,
   "google_news_resolution": {
-    "wrappers": 127,
-    "resolved": 82,
+    "wrappers": 111,
+    "resolved": 73,
     "text_recovered": 5,
-    "reattributed": 54,
+    "reattributed": 56,
     "images_found": 11
   },
-  "duplicates_merged": 102,
+  "duplicates_merged": 106,
   "attempted_rewrites": 9,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -88,10 +88,10 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 209,
+    "entries": 210,
     "by_outcome": {
       "editorial_twin": 23,
-      "failed": 32,
+      "failed": 33,
       "published": 93,
       "rejected": 61
     },
@@ -219,8 +219,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 156,
-    "website_discovery": 5,
+    "rss_and_google_news": 154,
+    "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -234,6 +234,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -269,12 +270,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -393,9 +394,9 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 54,
+    "Rochdaledaily": 56,
     "rochdaledaily.co.uk": 24,
-    "Rochdale Times": 18,
+    "Rochdale Times": 20,
     "Manchester Evening News": 10,
     "Roch Valley Radio": 9,
     "BBC": 7,
@@ -404,12 +405,11 @@
     "BBC Manchester": 3,
     "West Yorkshire Police": 3,
     "The Manc": 3,
-    "Oldham Evening Chronicle": 3,
     "UKNIP": 3,
+    "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
+    "Oldham Evening Chronicle": 2,
     "Oldham Times": 2,
-    "Rochdale Borough Council": 2,
-    "Falinge Park High School": 1,
     "Northampton Chronicle and Echo": 1,
     "ePHOTOzine": 1,
     "Food Standards Agency": 1
@@ -417,9 +417,8 @@
   "selected_by_category": {
     "business": 1,
     "community": 1,
-    "crime": 1,
     "environment": 1,
-    "news": 2,
+    "news": 3,
     "sport": 2,
     "transport": 1
   },
@@ -460,26 +459,26 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-ebc98dd13d0c9ba9bb46",
     "transport-v3-a2c96981b2874045944b",
     "sport-v3-b8cee5537efd8fc3c1f2",
     "business-v3-be400ebf1417789ff9b0",
     "community-v3-58f251e12b12d826f1e6",
     "environment-v3-067c2da89eb3059b5b91",
-    "hard-news-v3-b210b9a8481530ba6f77",
+    "hard-news-v3-c58cf65fd257ea2812f4",
     "sport-v3-1147ac272e526a109ee5",
-    "hard-news-v3-e343f343d1ec440702a9"
+    "hard-news-v3-e343f343d1ec440702a9",
+    "hard-news-v3-b210b9a8481530ba6f77"
   ],
   "selected_candidate_urls": [
-    "https://www.bbc.co.uk/news/articles/cmy86plnw5qvo",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b092b0bc2c7426e99b",
     "https://www.northamptonchron.co.uk/sport/football/watson-targets-areas-that-rochdale-can-hurt-cobblers-in-sixfields-clash-9363754",
     "https://www.find-tender.service.gov.uk/Notice/110309-2026",
     "https://www.bbc.co.uk/news/articles/cjn502xr04w2o",
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west",
-    "https://www.rochdaletimes.co.uk/fund-helps-families-struggling-to-afford-school-uniforms/",
+    "https://www.rochdaletimes.co.uk/college-showcases-new-cutting-edge-skills-hub-in-historic-chapel/",
     "https://www.fansnetwork.co.uk/football/rochdale/news/67251/refwatch--northampton-town-v-rochdale",
-    "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area"
+    "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
+    "https://www.rochdaletimes.co.uk/fund-helps-families-struggling-to-afford-school-uniforms/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -493,7 +492,6 @@
     "available_categories": [
       "business",
       "community",
-      "crime",
       "environment",
       "news",
       "sport",
@@ -502,7 +500,6 @@
     "selected_categories": [
       "business",
       "community",
-      "crime",
       "environment",
       "news",
       "sport",
@@ -520,9 +517,8 @@
     "selected_by_category": {
       "business": 1,
       "community": 1,
-      "crime": 1,
       "environment": 1,
-      "news": 2,
+      "news": 3,
       "sport": 2,
       "transport": 1
     },
@@ -531,13 +527,13 @@
       "rochdale": 9
     },
     "selected_by_source": {
-      "bbc manchester": 2,
+      "bbc manchester": 1,
       "bee network live travel alerts": 1,
       "fansnetwork": 1,
       "find a tender": 1,
       "northampton chronicle and echo": 1,
       "roch valley radio local news": 1,
-      "rochdale times": 1,
+      "rochdale times": 2,
       "rochdaledaily": 1
     },
     "must_cover_selected": 0
@@ -1088,7 +1084,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 9,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1097,16 +1093,13 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQd01MU0dvWGpxUHhHSFZFZlRCSER6bENUMFlwemhFcnAyRk1zMm1fVHBMUHpjYnBtSXhScmp5SGpXeGQ2NDcySEppZkl0SDJPRjNfZXBOR2RLVWpfakhCRG4zUWoyRFlQTWdoaDllT21oZXdFX1BiTFJDa3hmOE9URG96dmNDTkF0NVhWMkFYQ21GUGlibWF2VklCbVVFSlBuVXprQm5HdVBqY2M1SmdiMDUxTWFacG02Mm5Jb3ZnZjBndWUxR0NsVg?oc=5",
-    "https://news.google.com/rss/articles/CBMikwFBVV95cUxPTXlQVU5rS1dZRWEtTDJWeWppTTViN0xDNjFWRjEyaXdqVi04NE13SFNvVWRCZy0wMlhwN2JxR3ZOaWdLXzR1b0lCTWdqRkFYZDRzb2xXSnFyVjBVWkxtX0NVdmhVV3JfR2g2LXNibGF2OGFRdm0xOTcyWkRLV3dZTk5lbUJUOGZtWFhNSkFMa3dwM2s?oc=5",
-    "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1kTU9aY3ppUVRqZ19CME5CN2lYeXJtZlNPeWVXSkxYMTB3Mi01NTNneVJvdmxoMmpQdHlTd3A3YXdMRHFJRnVybTBsOVNXb0R5bWc0MV92ZExldENvSEN6a0lsNA?oc=5"
+    "https://news.google.com/rss/articles/CBMingFBVV95cUxPbWFfMmJSSnAwRkUzQ2EtUW9MZlJCZElRdVhFaTc5V2g4M2xhTGRJMVNHRW90VTRLSm1pY0JKMG9MR0RJdGNTbENaTHkybVRwdjE2bkkxN1VEWUhsNVF6OUh6ZVJhLXFwY0xwNFNGczBQeExYWndxRkxPakpFOFAwNDdwMzdlRHpWRTZ6UDRsNVBSUXl2RURDODQtSWtLQQ?oc=5",
+    "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1kTU9aY3ppUVRqZ19CME5CN2lYeXJtZlNPeWVXSkxYMTB3Mi01NTNneVJvdmxoMmpQdHlTd3A3YXdMRHFJRnVybTBsOVNXb0R5bWc0MV92ZExldENvSEN6a0lsNA?oc=5",
+    "https://news.google.com/rss/articles/CBMikwFBVV95cUxPTXlQVU5rS1dZRWEtTDJWeWppTTViN0xDNjFWRjEyaXdqVi04NE13SFNvVWRCZy0wMlhwN2JxR3ZOaWdLXzR1b0lCTWdqRkFYZDRzb2xXSnFyVjBVWkxtX0NVdmhVV3JfR2g2LXNibGF2OGFRdm0xOTcyWkRLV3dZTk5lbUJUOGZtWFhNSkFMa3dwM2s?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1142,8 +1135,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T20:26:22.782201Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-11-20T20:49:52.091010Z",
+  "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1200,12 +1193,11 @@
       "education": 2,
       "sport": 1,
       "community": 3,
-      "health": 1,
       "environment": 2,
       "news": 4
     },
     "selected_by_ward": {
-      "borough-wide": 15,
+      "borough-wide": 14,
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
@@ -1214,11 +1206,11 @@
       "littleborough": 1,
       "middleton": 2,
       "newhey": 1,
-      "rochdale": 14
+      "rochdale": 13
     },
     "selected_by_source": {
       "gmp press office": 1,
-      "rochdale times": 5,
+      "rochdale times": 4,
       "rochdale borough council": 2,
       "rochdale afc": 1,
       "source": 2,
@@ -1227,15 +1219,15 @@
       "rochdale daily": 2,
       "rochdaledaily": 1
     },
-    "pool_size": 20,
-    "primary_pool_size": 20,
+    "pool_size": 19,
+    "primary_pool_size": 19,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 15,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 6,
-    "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 12,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
