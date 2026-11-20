@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T00:45:55.219434Z",
+  "last_run_at": "2026-11-20T01:03:46.770854Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -22,9 +22,13 @@
       "interval_hours": 12
     },
     "ons_housing": {
-      "status": "not due",
-      "last_checked": "2026-11-19T00:56:12.985232Z",
-      "interval_hours": 24
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 1,
+      "already_seen": 1,
+      "new": 0
     },
     "contract_notices": {
       "status": "not due",
@@ -54,37 +58,43 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 178,
+  "raw_candidates_before_job_filter": 185,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 178,
-  "candidate_clusters": 54,
+  "raw_candidates": 185,
+  "candidate_clusters": 55,
   "google_news_resolution": {
-    "wrappers": 151,
-    "resolved": 99,
-    "text_recovered": 18,
-    "reattributed": 51,
-    "images_found": 23
+    "wrappers": 139,
+    "resolved": 80,
+    "text_recovered": 16,
+    "reattributed": 49,
+    "images_found": 21
   },
-  "duplicates_merged": 124,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 130,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
+    {
+      "slug": "hot-tub-explosion-shakes-homes-in-rochdale-s-camberley-drive",
+      "source_url": "https://www.examinerlive.co.uk/news/uk-world-news/video-shows-moment-hot-tub-34927847.amp"
+    },
     {
       "slug": "explosion-on-camberley-drive-in-rochdale-may-have-been-caused-by-hot-tub",
       "source_url": "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269/"
+    },
+    {
+      "slug": "ignite-fire-festival-to-transform-rochdale-town-hall-square",
+      "source_url": "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 666,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: The Ignite Fire F": 1
-  },
+  "new_articles": 1,
+  "live_articles": 667,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 3,
+    "queued_for_retry": 2,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -100,8 +110,8 @@
       "published": 95,
       "rejected": 56
     },
-    "held_back_this_run": 41,
-    "held_already_published": 21,
+    "held_back_this_run": 40,
+    "held_already_published": 20,
     "held_rejected": 20,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -289,19 +299,22 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 149.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "not eligible: crime, court, police or death": 1
+      "not eligible: crime, court, police or death": 2,
+      "not eligible: events category": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 166,
-    "website_discovery": 7,
+    "rss_and_google_news": 168,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -315,6 +328,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -348,14 +362,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -474,27 +480,26 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 51,
-    "Rochdaledaily": 50,
-    "Rochdale Times": 14,
-    "Manchester Evening News": 7,
+    "rochdaledaily.co.uk": 59,
+    "Rochdaledaily": 48,
+    "Rochdale Times": 19,
+    "Manchester Evening News": 6,
     "Oldham Times": 5,
-    "Nacionale": 5,
-    "I Love Manchester": 5,
     "BBC Manchester": 4,
+    "I Love Manchester": 4,
+    "Nacionale": 4,
     "Rochdale Borough Council": 4,
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
+    "BBC": 3,
     "Inside Housing": 3,
     "Housing Today": 3,
     "Falinge Park High School": 2,
     "The Bury Times": 2,
-    "The Mirror": 2,
-    "BBC": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
-    "UKNIP": 1,
+    "The Mirror": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
     "The Independent — Rochdale": 1,
@@ -503,12 +508,13 @@
   },
   "selected_by_category": {
     "crime": 1,
-    "news": 1
+    "news": 1,
+    "sport": 1
   },
   "published_by_category": {
     "business": 72,
     "community": 102,
-    "crime": 46,
+    "crime": 47,
     "education": 31,
     "environment": 51,
     "events": 40,
@@ -543,10 +549,12 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-7bec3917a5559de2fd76",
+    "sport-v3-fad4621964c809c4f6dd",
     "hard-news-v3-e343f343d1ec440702a9"
   ],
   "selected_candidate_urls": [
     "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269/",
+    "https://www.examinerlive.co.uk/news/uk-world-news/video-shows-moment-hot-tub-34927847.amp",
     "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
   ],
   "x_social_records": 0,
@@ -560,11 +568,13 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "news"
+      "news",
+      "sport"
     ],
     "selected_categories": [
       "crime",
-      "news"
+      "news",
+      "sport"
     ],
     "available_wards": [
       "Bamford"
@@ -581,17 +591,19 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 1,
-      "news": 1
+      "news": 1,
+      "sport": 1
     },
     "selected_by_ward": {
-      "Bamford": 1
+      "Bamford": 2
     },
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 3
     },
     "selected_by_source": {
       "metro.co.uk": 1,
-      "visit rochdale": 1
+      "visit rochdale": 1,
+      "yorkshire live": 1
     },
     "must_cover_selected": 0
   },
@@ -1141,7 +1153,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 9,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1150,12 +1162,15 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k",
-    "https://news.google.com/rss/articles/CBMimgFBVV95cUxNYS1LbGlqQ2Y0eWd3V2xLb1p3S0psMVlLRjFsTkF1UVZhWUk1SXJORENJcWpPUnloYlNLY1RPOVFUajRLNlFzUzRUUmsxbmUyTktoVGM5bG5zLWFYTThSOXllN2s4T005VzFHb1FsMzJQNENvTGVKWG43TFc4d2N4Z01mMlQ3N2JfaHVWRy00ZmJWaUpnVUNzSzZn?oc=5",
     "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPQ1VnN2tReDVEYmhyaG5xbGFCUDJNREo5TnVJZ2hTc3VYWG9lOXFqakVxOUNxOEdpcVpUQU9RSGlhcFllVU1UNV9LNnlfMDZuMmxySUgzYVdGVW02a3FiNF9TSFJRbU5RT1B1UW1rcWlsZ1NJQ1pqaXZOYW1pX3hnWTh4REthdElBSkhEakVCaGFFSGxMSjNLTVo4TWVsd0d2MXlSSXFPMkxrTGRJVWJQNF8zYjRnZjhC?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1191,8 +1206,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T00:47:04.451223Z",
-  "frontpage_article_count": 19,
+  "frontpage_generated_at": "2026-11-20T01:04:53.841239Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1250,17 +1265,17 @@
       "education": 1,
       "sport": 1,
       "business": 1,
-      "community": 5,
+      "community": 4,
       "health": 1,
       "environment": 1,
       "news": 4
     },
     "selected_by_ward": {
-      "borough-wide": 18,
+      "borough-wide": 17,
       "Bamford": 1
     },
     "selected_by_area": {
-      "bamford": 1,
+      "bamford": 2,
       "falinge": 1,
       "littleborough": 1,
       "middleton": 2,
@@ -1269,7 +1284,7 @@
     },
     "selected_by_source": {
       "gmp press office": 2,
-      "rochdale times": 5,
+      "rochdale times": 4,
       "rochdale afc": 1,
       "theoldhamtimes": 1,
       "inyourarea": 1,
@@ -1278,18 +1293,18 @@
       "rochdale daily": 1,
       "office of paul waugh mp": 1,
       "springhill hospice communications team": 1,
-      "facebook": 1,
-      "healey dell heritage centre and tearooms": 1
+      "healey dell heritage centre and tearooms": 1,
+      "facebook": 1
     },
-    "pool_size": 24,
-    "primary_pool_size": 24,
+    "pool_size": 25,
+    "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 19,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 18,
-    "short_briefs_selected": 12,
+    "fresh_under_homepage_window": 17,
+    "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1300,7 +1315,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 666,
+  "duplicate_articles_after_postprocessing": 667,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1311,9 +1326,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "hot-tub-explosion-shakes-homes-in-rochdale-s-camberley-drive"
+  ],
   "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
