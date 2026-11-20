@@ -1,17 +1,10 @@
 {
-  "last_run_at": "2026-11-20T11:48:29.732117Z",
+  "last_run_at": "2026-11-20T12:11:24.589277Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 1,
-      "daily_cap": 4,
-      "offered_today": 1,
-      "listed": 34,
-      "already_seen": 20,
-      "started_long_ago": 0,
-      "too_far_ahead": 12,
-      "undated": 1,
-      "in_window": 1
+      "status": "not due",
+      "last_checked": "2026-11-20T11:44:39.260616Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -19,15 +12,9 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 11,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 11,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-20T11:44:39.260616Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
       "status": "not due",
@@ -40,27 +27,14 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "pages": 1,
-      "releases": 68,
-      "borough_buyer": 0,
-      "not_story_type": 0,
-      "already_seen": 0,
-      "new": 0,
-      "complete": 1
+      "status": "not due",
+      "last_checked": "2026-11-20T11:44:39.260616Z",
+      "interval_hours": 6
     },
     "weather_warnings": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 0,
-      "not_rochdale": 0,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-20T11:44:39.260616Z",
+      "interval_hours": 6
     },
     "claimant_count": {
       "status": "not due",
@@ -80,20 +54,20 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 175,
-  "job_or_career_posts_rejected": 9,
-  "raw_candidates": 166,
-  "candidate_clusters": 53,
+  "raw_candidates_before_job_filter": 120,
+  "job_or_career_posts_rejected": 7,
+  "raw_candidates": 113,
+  "candidate_clusters": 52,
   "google_news_resolution": {
-    "wrappers": 120,
-    "resolved": 110,
-    "text_recovered": 13,
-    "reattributed": 86,
-    "images_found": 20
+    "wrappers": 82,
+    "resolved": 71,
+    "text_recovered": 11,
+    "reattributed": 49,
+    "images_found": 17
   },
-  "duplicates_merged": 113,
-  "attempted_rewrites": 7,
-  "draft_rewrites_created": 5,
+  "duplicates_merged": 61,
+  "attempted_rewrites": 6,
+  "draft_rewrites_created": 4,
   "drafted_articles": [
     {
       "slug": "morning-briefing-20-november-2026",
@@ -104,32 +78,28 @@
       "source_url": "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026"
     },
     {
-      "slug": "roadworks-on-schofield-street-in-heywood-to-start-on-20-november-2026",
-      "source_url": "https://www.rochdale.gov.uk/directory-record/2670/schofield-street-roadworks-in-heywood-from-20-november-2026"
+      "slug": "ignite-fire-festival-to-transform-rochdale-town-hall-area",
+      "source_url": "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area"
     },
     {
-      "slug": "explosion-shakes-homes-in-rochdale-debris-found-on-bury-road",
-      "source_url": "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269/"
-    },
-    {
-      "slug": "bev-craig-criticises-rbh-over-seven-sisters-demolition-plans",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309"
+      "slug": "investigation-launched-into-death-of-boy-in-middleton-care",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/boy-3-who-died-middleton-34931816"
     }
   ],
-  "new_articles": 3,
+  "new_articles": 2,
   "live_articles": 672,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This festival wil": 1,
-    "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: Howev": 1
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We want to create": 1,
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: The work is vital": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 3,
-    "queued_for_retry": 3,
-    "recovery_limit_reached": 0,
+    "queued_for_retry": 2,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
@@ -140,8 +110,8 @@
     "by_outcome": {
       "editorial_twin": 19,
       "failed": 23,
-      "published": 97,
-      "rejected": 64
+      "published": 96,
+      "rejected": 65
     },
     "held_back_this_run": 38,
     "held_already_published": 21,
@@ -151,13 +121,13 @@
   },
   "rewrite_ledger_held_rejected": [
     {
-      "url": "https://rochdaledaily.co.uk/articles/plans-revealed-to-replace-rochdale-s-seven-sisters-towers",
-      "title": "Plans revealed to replace Rochdale’s Seven Sisters towers - rochdaledaily.co.uk",
-      "source_name": "Rochdaledaily",
-      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited to",
+      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309",
+      "title": "Bev Craig says social housing stock in Rochdale being 'run into the ground' - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
       "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-20T11:23:17.237043Z"
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T11:48:29.727570Z"
     },
     {
       "url": "https://rochdaledaily.co.uk/articles/rochdale-metrolink-patrols-sceptre-knife-crime-week-november-2026",
@@ -196,13 +166,13 @@
       "last_attempt_at": "2026-11-20T04:46:02.834621Z"
     },
     {
-      "url": "https://rochdaledaily.co.uk/articles/armwrestling-champion-agi-gorzynska-grushka-house-rochdale-december-2026",
-      "title": "World armwrestling champion Agi Gorzyńska to take on challengers at Rochdale's Grushka House - rochdaledaily.co.uk",
-      "source_name": "Rochdaledaily",
-      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: I am excited to m",
+      "url": "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141",
+      "title": "Ignite Fire Festival",
+      "source_name": "Visit Rochdale",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
       "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-20T00:02:16.995966Z"
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T03:20:31.228751Z"
     },
     {
       "url": "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html",
@@ -306,34 +276,31 @@
   ],
   "published_with_style_issues": {
     "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 2,
-    "The source names a road, time, figure or organisation and the draft does not. Carry the specific detail through.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 164.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 184.": 1
+    "Align the headline with the report: most of its key words never appear in the body, so the headline and body describe di": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 145.": 1
   },
   "local_impact": {
-    "shown": 1,
+    "shown": 0,
     "outcomes": {
-      "writer offered no points": 4,
-      "shown": 1
+      "writer offered no points": 2,
+      "not eligible: events category": 1,
+      "not eligible: crime, court, police or death": 1
     },
-    "points": {
-      "corrected to the story's own sentence": 1,
-      "dropped: no story sentence to correct it to": 1
-    }
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 158,
+    "rss_and_google_news": 105,
     "website_discovery": 10,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
     "gmp_email_releases": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 1,
+    "primary_data": 0,
     "men_newsletter": 4
   },
   "collector_errors": {},
@@ -498,32 +465,32 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 85,
-    "Rochdale Times": 18,
-    "rochdaledaily.co.uk": 8,
-    "BBC": 8,
-    "Manchester Evening News": 7,
-    "Bee Network live travel alerts": 5,
-    "I Love Manchester": 4,
+    "Rochdaledaily": 48,
+    "Rochdale Times": 10,
+    "rochdaledaily.co.uk": 9,
+    "Manchester Evening News": 6,
+    "Oldham Times": 4,
+    "Bee Network live travel alerts": 4,
     "BBC Manchester": 3,
     "Roch Valley Radio": 3,
-    "Oldham Times": 3,
-    "Housing Today": 3,
-    "Rochdale Borough Council": 3,
-    "The Manc": 2,
+    "BBC": 3,
+    "I Love Manchester": 2,
     "UKNIP": 2,
+    "Housing Today": 2,
     "Rochdale AFC": 2,
     "About Manchester": 2,
+    "Rochdale Borough Council": 2,
     "Greater Manchester Police": 2,
+    "The Manc": 2,
     "Roch Valley Radio Local News": 2,
     "Northampton Chronicle and Echo": 1,
     "Metro": 1,
+    "ePHOTOzine": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "community": 1,
-    "crime": 1,
     "environment": 2,
     "news": 2,
     "traffic": 1
@@ -565,21 +532,19 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-7bec3917a5559de2fd76",
     "transport-v3-0301417e9827ac35d5e1",
     "community-v3-58f251e12b12d826f1e6",
-    "environment-v3-b7ed23fe0674f688fff2",
-    "hard-news-v3-e343f343d1ec440702a9",
+    "environment-v3-4728b469fed33d63f469",
     "hard-news-v3-975629df28bb057fbb22",
+    "hard-news-v3-ba3515347413ae30e796",
     "environment-v3-ddf800e3693b6bd398d1"
   ],
   "selected_candidate_urls": [
-    "https://metro.co.uk/2026/11/18/massive-explosion-shook-houses-rochdale-may-caused-a-hot-tub-29801269/",
     "https://www.rochdale.gov.uk/directory-record/2670/schofield-street-roadworks-in-heywood-from-20-november-2026",
     "https://www.bbc.co.uk/news/articles/cjn502xr04w2o",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/bev-craig-says-rbh-running-34938309",
     "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
     "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/boy-3-who-died-middleton-34931816",
     "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026"
   ],
   "x_social_records": 0,
@@ -593,29 +558,25 @@
   "coverage": {
     "available_categories": [
       "community",
-      "crime",
       "environment",
       "news",
       "traffic"
     ],
     "selected_categories": [
       "community",
-      "crime",
       "environment",
       "news",
       "traffic"
     ],
-    "available_wards": [
-      "Bamford"
-    ],
-    "selected_wards": [
-      "Bamford"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [
-      "heywood"
+      "heywood",
+      "middleton"
     ],
     "selected_areas": [
       "heywood",
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -623,22 +584,19 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "community": 1,
-      "crime": 1,
       "environment": 2,
       "news": 2,
       "traffic": 1
     },
-    "selected_by_ward": {
-      "Bamford": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 6
+      "middleton": 1,
+      "rochdale": 4
     },
     "selected_by_source": {
       "bbc manchester": 1,
       "manchester evening news": 1,
-      "metro.co.uk": 1,
       "rochdale borough council": 1,
       "rochdaledaily": 3
     },
@@ -1190,7 +1148,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1198,14 +1156,16 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k"
+    "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k",
+    "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPaTdhcy1YdklzSUtLSkduVWtoY216Um9yX0YySEZ4SVlZc0hYb1ZLMVM2R3M5VmFVUHVrNUNtSDdSWUU2a0M1SUx4bUEyX3cxd2FwQkF0clEzSE9rNkJEem5nMl9iV0tzTkFmejgwX05lM2swdUFSZHFPbFhKWG5ZZjlPSjJyYWFlcWlKWTZPOE9DYnlyN0NHWlJKNXBZdTJVTldtOEFISmpjdw?oc=5",
+    "https://news.google.com/rss/articles/CBMipAFBVV95cUxNaF81b0VOaGJ3RFpZUHF1WG9tSndmTjhzR29ZVU1BcWpYVWNwMXh2blp2ZXNPXzA5M0tPdExPSXlBUjJ1b2dnc0ZEbl90ZVgyb1M2blNCTEhqZlpvUkFqcHZTUGZOUHF3TEdMZlpKQTZMbUN1MUNhS2RsSnJDX0hSR3pHSklmWDJsdDYyTHEyb3hNM1p6b1VZaDRMajNDbVZDWnV5edIBqgFBVV95cUxOLU44YldKaFlKVkliMEFxaU9ORURMSFo2bURMVk1wRUt2YUZwazNDQ1RZWnFJNGoxZWEwWmo2aGZRWUMwY2gxeTQwdWFzMTJqMy1xanZzNjZxSkk2X3RNY1pFUEZhd21NaTRHcmlBUWVzNktJUFhLTHJuSEdRdXpPLTEzQU12Q0ZscENOenpUQVk4azZwZGNsZmcyTjJLRHdOd19LNUZmSzI4QQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "visitrochdale.com"
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "visitrochdale.com": 3
+    "yourtrustrochdale.co.uk": 5
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1242,7 +1202,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T11:49:43.894694Z",
+  "frontpage_generated_at": "2026-11-20T12:12:58.305327Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1252,7 +1212,6 @@
       "crime",
       "education",
       "environment",
-      "events",
       "health",
       "news",
       "sport",
@@ -1264,19 +1223,16 @@
       "crime",
       "education",
       "environment",
-      "events",
       "health",
       "news",
       "sport",
       "traffic"
     ],
     "available_wards": [
-      "Bamford",
-      "Central Rochdale"
+      "Bamford"
     ],
     "selected_wards": [
-      "Bamford",
-      "Central Rochdale"
+      "Bamford"
     ],
     "available_areas": [
       "bamford",
@@ -1315,7 +1271,7 @@
       "heywood": 1,
       "littleborough": 1,
       "middleton": 3,
-      "rochdale": 19,
+      "rochdale": 18,
       "shawclough": 1
     },
     "selected_by_source": {
@@ -1330,8 +1286,8 @@
       "rochdaledaily": 1,
       "manchester evening news": 1
     },
-    "pool_size": 26,
-    "primary_pool_size": 26,
+    "pool_size": 25,
+    "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -1360,11 +1316,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 3,
+  "published_after_editorial_gate": 2,
   "published_new_slugs": [
     "morning-briefing-20-november-2026",
-    "roadworks-on-schofield-street-in-heywood-to-start-on-20-november-2026",
-    "explosion-shakes-homes-in-rochdale-debris-found-on-bury-road"
+    "investigation-launched-into-death-of-boy-in-middleton-care"
   ],
   "drafts_not_published": 2,
   "publication_health": "partial",
