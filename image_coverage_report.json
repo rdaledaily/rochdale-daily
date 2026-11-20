@@ -1,10 +1,10 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 134,
+    "kept_cards": 136,
     "cards_library": 0,
-    "cards_generated": 460,
-    "incident_card": 5,
+    "cards_generated": 459,
+    "incident_card": 6,
     "skipped": 0
   },
   "items": [
@@ -21,6 +21,13 @@
       "image_url": "assets/img/cards/christmas-carols-with-mustard-seed-church-heywood-canonical.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "ignite-fire-festival-to-transform-rochdale-town-hall-area",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 15378
     },
     {
       "slug": "greater-manchester-trial-targets-prolific-shoplifters-with-new-programme",
@@ -100,6 +107,13 @@
       "match_score": 20865
     },
     {
+      "slug": "explosion-causes-significant-damage-to-property-off-bury-road-in-bamford",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/bury_road.jpg",
+      "matched_filename": "bury_road.jpg",
+      "match_score": 15249
+    },
+    {
       "slug": "springhill-hospice-three-garden-awards-north-west-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/springhill-hospice-three-garden-awards-north-west-2026-team.jpg",
@@ -164,8 +178,8 @@
     },
     {
       "slug": "explosion-reported-on-camberley-drive-in-rochdale-may-have-been-caused-by-hot-tu",
-      "result": "town-photo",
-      "image_url": "assets/img/cards/ceccb47efbd5671d-town-photo.jpg",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
