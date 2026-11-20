@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T14:15:12.985984Z",
+  "updated_at": "2026-11-20T14:33:56.710348Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 206,
@@ -548,14 +548,14 @@
     },
     "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area": {
       "first_attempt_at": "2026-11-20T10:13:50.803700Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
         "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T14:12:10.155968Z",
+      "last_attempt_at": "2026-11-20T14:31:14.339985Z",
       "outcome": "failed",
       "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
@@ -1138,13 +1138,13 @@
     },
     "https://www.bbc.co.uk/news/articles/cjn502xr04w2o": {
       "first_attempt_at": "2026-11-20T10:38:27.094753Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.bbc.co.uk/news/articles/cjn502xr04w2o"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T14:12:10.785288Z",
+      "last_attempt_at": "2026-11-20T14:31:14.123449Z",
       "outcome": "failed",
       "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
@@ -2333,11 +2333,12 @@
       "first_attempt_at": "2026-11-20T14:12:09.790255Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQd01MU0dvWGpxUHhHSFZFZlRCSER6bENUMFlwemhFcnAyRk1zMm1fVHBMUHpjYnBtSXhScmp5SGpXeGQ2NDcySEppZkl0SDJPRjNfZXBOR2RLVWpfakhCRG4zUWoyRFlQTWdoaDllT21oZXdFX1BiTFJDa3hmOE9URG96dmNDTkF0NVhWMkFYQ21GUGlibWF2VklCbVVFSlBuVXprQm5HdVBqY2M1SmdiMDUxTWFacG02Mm5Jb3ZnZjBndWUxR0NsVg?oc=5",
         "https://www.northamptonchron.co.uk/sport/football/watson-targets-areas-that-rochdale-can-hurt-cobblers-in-sixfields-clash-9363754"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T14:12:09.790255Z",
+      "last_attempt_at": "2026-11-20T14:31:14.847493Z",
       "outcome": "failed",
       "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "Rochdale boss targets areas to ‘hurt’ Cobblers in Sixfields clash",
@@ -3232,21 +3233,22 @@
     },
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west": {
       "first_attempt_at": "2026-11-20T13:04:00.678709Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026",
         "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T13:52:29.955700Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-20T14:31:14.443450Z",
+      "outcome": "failed",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "Springhill Hospice wins three awards including best hospice garden in the North West",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
       "text_fingerprint": "c9af2345303fcc41",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1457/newhey-mum-receives-hundreds-of-birthday-cards-after-son-s-appeal": {
       "first_attempt_at": "2026-11-20T13:04:00.678424Z",
