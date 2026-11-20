@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-20T13:52:29.955915Z",
+  "updated_at": "2026-11-20T14:15:12.985984Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 205,
+  "count": 206,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -548,21 +548,21 @@
     },
     "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area": {
       "first_attempt_at": "2026-11-20T10:13:50.803700Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
         "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T13:52:29.955642Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-20T14:12:10.155968Z",
+      "outcome": "failed",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "Ignite Fire Festival to transform Rochdale Town Hall area - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "environment",
       "text_fingerprint": "b712074496090c96",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://rochdaledaily.co.uk/articles/life-without-limits-gym-relocates-to-new-premises-in-littleborough": {
@@ -1138,15 +1138,15 @@
     },
     "https://www.bbc.co.uk/news/articles/cjn502xr04w2o": {
       "first_attempt_at": "2026-11-20T10:38:27.094753Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.bbc.co.uk/news/articles/cjn502xr04w2o"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T13:49:19.842800Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: An RB",
+      "last_attempt_at": "2026-11-20T14:12:10.785288Z",
+      "outcome": "failed",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
       "title": "More 'family homes' planned for Seven Sisters estate in Rochdale",
       "source_name": "BBC Manchester",
       "category": "community",
@@ -2329,6 +2329,22 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
+    "https://www.northamptonchron.co.uk/sport/football/watson-targets-areas-that-rochdale-can-hurt-cobblers-in-sixfields-clash-9363754": {
+      "first_attempt_at": "2026-11-20T14:12:09.790255Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northamptonchron.co.uk/sport/football/watson-targets-areas-that-rochdale-can-hurt-cobblers-in-sixfields-clash-9363754"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-20T14:12:09.790255Z",
+      "outcome": "failed",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "title": "Rochdale boss targets areas to ‘hurt’ Cobblers in Sixfields clash",
+      "source_name": "Northampton Chronicle and Echo",
+      "category": "environment",
+      "text_fingerprint": "24f24e887f9e46f4"
+    },
     "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005#updated-18-november-2026": {
       "first_attempt_at": "2026-11-19T00:57:05.110563Z",
       "attempts": 3,
@@ -3224,8 +3240,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T13:52:29.955700Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Springhill Hospice wins three awards including best hospice garden in the North West",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
