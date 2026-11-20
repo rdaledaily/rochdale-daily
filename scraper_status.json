@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T07:35:34.247639Z",
+  "last_run_at": "2026-11-20T07:56:08.682151Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,22 +54,27 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 17,
+  "raw_candidates_before_job_filter": 188,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 17,
+  "raw_candidates": 188,
   "candidate_clusters": 56,
   "google_news_resolution": {
-    "wrappers": 0,
-    "resolved": 0,
-    "text_recovered": 0,
-    "reattributed": 0,
-    "images_found": 0
+    "wrappers": 147,
+    "resolved": 70,
+    "text_recovered": 13,
+    "reattributed": 49,
+    "images_found": 18
   },
-  "duplicates_merged": 0,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 132,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "failsworth-tram-stop-lifts-out-of-service-until-further-notice",
+      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-75488cbe5a8c9537c1"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 666,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -86,15 +91,15 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 194,
+    "entries": 195,
     "by_outcome": {
       "editorial_twin": 20,
       "failed": 24,
-      "published": 93,
+      "published": 94,
       "rejected": 57
     },
-    "held_back_this_run": 39,
-    "held_already_published": 21,
+    "held_back_this_run": 37,
+    "held_already_published": 19,
     "held_rejected": 18,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -263,16 +268,22 @@
       "last_attempt_at": "2026-11-18T14:24:52.931956Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
+  },
   "local_impact": {
-    "shown": 0,
-    "outcomes": {},
-    "points": {}
+    "shown": 1,
+    "outcomes": {
+      "shown": 1
+    },
+    "points": {
+      "dropped: no story sentence to correct it to": 1
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 6,
-    "website_discovery": 6,
+    "rss_and_google_news": 171,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -286,6 +297,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -321,12 +333,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -436,15 +448,32 @@
   },
   "immediate_first": [],
   "source_counts": {
+    "rochdaledaily.co.uk": 73,
+    "Rochdaledaily": 49,
+    "Rochdale Times": 18,
+    "Manchester Evening News": 7,
+    "Oldham Times": 5,
     "BBC Manchester": 4,
+    "I Love Manchester": 4,
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
-    "Falinge Park High School": 2,
+    "Inside Housing": 3,
+    "Housing Today": 3,
+    "Rochdale Borough Council": 3,
+    "BBC": 2,
     "Roch Valley Radio Local News": 2,
+    "Yahoo News UK": 1,
+    "UKNIP": 1,
+    "Mirror": 1,
+    "Rochdale AFC": 1,
+    "About Manchester": 1,
+    "Visit Rochdale": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "transport": 1
+  },
   "published_by_category": {
     "business": 72,
     "community": 102,
@@ -481,8 +510,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "transport-v3-a2c96981b2874045944b"
+  ],
+  "selected_candidate_urls": [
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-75488cbe5a8c9537c1"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -492,6 +525,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "transport"
+    ],
+    "selected_categories": [
+      "transport"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "transport": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "bee network live travel alerts": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -1040,14 +1098,15 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
@@ -1091,7 +1150,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T07:37:50.309991Z",
+  "frontpage_generated_at": "2026-11-20T07:57:25.058837Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1202,8 +1261,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "signalling-fault-disrupts-blackburn-and-rochdale-train-services"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
