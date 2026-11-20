@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-20T01:45:43.068686Z",
+  "last_run_at": "2026-11-20T02:06:55.076109Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,37 +54,39 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 178,
+  "raw_candidates_before_job_filter": 158,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 178,
-  "candidate_clusters": 54,
+  "raw_candidates": 158,
+  "candidate_clusters": 55,
   "google_news_resolution": {
-    "wrappers": 153,
-    "resolved": 92,
-    "text_recovered": 15,
-    "reattributed": 48,
-    "images_found": 20
+    "wrappers": 134,
+    "resolved": 83,
+    "text_recovered": 14,
+    "reattributed": 38,
+    "images_found": 19
   },
-  "duplicates_merged": 124,
-  "attempted_rewrites": 1,
+  "duplicates_merged": 103,
+  "attempted_rewrites": 2,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "ignite-fire-festival-to-transform-rochdale-town-hall-square",
-      "source_url": "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
+      "slug": "massive-explosion-rocks-bamford-rochdale-as-emergency-services-respond",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 667,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "new_articles": 1,
+  "live_articles": 666,
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited to": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
@@ -278,18 +280,18 @@
     }
   ],
   "published_with_style_issues": {
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "not eligible: events category": 1
+      "writer offered no points": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 167,
+    "rss_and_google_news": 147,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -300,7 +302,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 4
+    "men_newsletter": 5
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -345,6 +347,14 @@
       "content_type": "text/html",
       "final_url": "https://www.rochdaletimes.co.uk/feed/",
       "bozo": true,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -394,26 +404,17 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 14,
-    "covered": 8,
-    "outstanding": 6,
+    "covered": 9,
+    "outstanding": 5,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
       "held": 2,
       "held_for_editor": 2,
-      "not_found": 2,
-      "published": 1
+      "not_found": 1,
+      "published": 2
     },
     "outstanding_stories": [
-      {
-        "id": "a723c79277982b33",
-        "headline": "Homes rocked by huge explosion as emergency services rush to 'hot tub' blast",
-        "received_at": "2026-11-18T08:05:55+00:00",
-        "status": "not_found",
-        "reason": "its article explosion-rocks-bamford-rochdale-as-emergency-services-respond is no longer live; searching again",
-        "resolved_url": "",
-        "resolved_title": "Homes rocked by 'massive' explosion as emergency services scrambled to Rochdale street"
-      },
       {
         "id": "50ee33497f513a91",
         "headline": "Rochdale explosion RECAP as emergency crews scrambled to 'massive' hot tub blast",
@@ -463,33 +464,33 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 61,
-    "Rochdaledaily": 47,
+    "rochdaledaily.co.uk": 50,
+    "Rochdaledaily": 37,
     "Rochdale Times": 14,
-    "Manchester Evening News": 6,
-    "Oldham Times": 5,
+    "Manchester Evening News": 8,
+    "Nacionale": 5,
     "BBC Manchester": 4,
     "I Love Manchester": 4,
-    "Nacionale": 4,
     "Bee Network live travel alerts": 4,
     "Roch Valley Radio": 3,
+    "Oldham Times": 3,
     "Inside Housing": 3,
     "Housing Today": 3,
     "Rochdale Borough Council": 3,
-    "Falinge Park High School": 2,
     "The Bury Times": 2,
+    "The Mirror": 2,
     "BBC": 2,
     "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Roch Valley Radio Local News": 2,
-    "The Mirror": 1,
+    "UKNIP": 1,
     "Rochdale AFC": 1,
     "Metro": 1,
     "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "news": 1
+    "news": 2
   },
   "published_by_category": {
     "business": 72,
@@ -528,9 +529,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "hard-news-v3-7bec3917a5559de2fd76",
     "hard-news-v3-e343f343d1ec440702a9"
   ],
   "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
     "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
   ],
   "x_social_records": 0,
@@ -567,7 +570,7 @@
     "selected_by_source": {
       "visit rochdale": 1
     },
-    "must_cover_selected": 0
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1126,12 +1129,8 @@
     "https://aboutmanchester.co.uk/police-confirm-investigation-into-death-of-three-year-old-boy-at-middleton-nursery/?__cf_chl_rt_tk=Z0hSp7F3Eg.03XTvgHOEGI5hzjlh5lSeBjziHj9asKg-1795127187-1.0.1.1-o0ZZ8Mji2lIr4X5JLWuUaLvlUmD_r1c54k2nrlOfR1k"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdalevaliant.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdalevaliant.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1167,8 +1166,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-20T01:46:57.061359Z",
-  "frontpage_article_count": 17,
+  "frontpage_generated_at": "2026-11-20T02:08:38.468626Z",
+  "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1222,21 +1221,20 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 4,
+      "crime": 3,
       "education": 1,
       "sport": 1,
       "business": 1,
       "community": 4,
       "health": 1,
       "environment": 1,
-      "news": 4
+      "news": 3
     },
     "selected_by_ward": {
-      "borough-wide": 16,
-      "Bamford": 1
+      "borough-wide": 15
     },
     "selected_by_area": {
-      "bamford": 2,
+      "bamford": 1,
       "falinge": 1,
       "littleborough": 1,
       "middleton": 2,
@@ -1244,7 +1242,7 @@
       "shawclough": 1
     },
     "selected_by_source": {
-      "gmp press office": 2,
+      "gmp press office": 1,
       "rochdale times": 4,
       "rochdale afc": 1,
       "theoldhamtimes": 1,
@@ -1254,18 +1252,17 @@
       "manchester evening news": 2,
       "office of paul waugh mp": 1,
       "springhill hospice communications team": 1,
-      "healey dell heritage centre and tearooms": 1,
-      "facebook": 1
+      "healey dell heritage centre and tearooms": 1
     },
-    "pool_size": 25,
-    "primary_pool_size": 25,
+    "pool_size": 24,
+    "primary_pool_size": 24,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 17,
+    "frontpage_count": 15,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 16,
-    "short_briefs_selected": 11,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 10,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1276,7 +1273,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 667,
+  "duplicate_articles_after_postprocessing": 666,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1287,9 +1284,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "explosion-causes-significant-damage-to-property-off-bury-road-in-bamford"
+  ],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
