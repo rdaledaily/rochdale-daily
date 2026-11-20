@@ -1,38 +1,42 @@
 {
-  "examined_at": "2026-11-19T16:03:09.114816Z",
+  "examined_at": "2026-11-20T15:45:15.206260Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 139,
+  "candidates_examined": 193,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 118,
-    "would publish": 18,
-    "duplicate of published story": 3
+    "age": 152,
+    "would publish": 24,
+    "duplicate of published story": 16,
+    "not local": 1
   },
-  "would_publish": 18,
+  "would_publish": 24,
   "age_gate_sensitivity": {
-    "6h": 9,
-    "14h": 13,
-    "24h": 21,
-    "48h": 72,
-    "72h": 108,
-    "168h": 139
+    "6h": 17,
+    "14h": 23,
+    "24h": 41,
+    "48h": 76,
+    "72h": 151,
+    "168h": 193
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 19/11/2026 at 8:55am Live Failsworth Tram Stop - Lifts out of",
-      "InYourArea: Acclaimed £7 Winter Wood Grotto returns to Rochdale with new show - In"
+      "Bee Network live travel alerts: Updated: 20/11/2026 at 7:30am Live Failsworth Tram Stop - Lifts out of",
+      "Rochdale AFC: Behind The Sign | Player Visit Gymbound, Tranmere Prep & More - Rochda"
     ],
     "duplicate of published story": [
-      "Rochdale Times: Investigation under way into death of three-year-old boy - Rochdale Ti",
-      "BBC Manchester: Rochdale man who murdered wife and hid body under bed jailed",
-      "Manchester Evening News: Boy, 3, who died at Middleton nursery named as Cosy Toes issues statem"
+      "Rochdale AFC: Preview | Northampton Town (A) - Rochdale AFC",
+      "Roch Valley Radio: Newhey mum receives hundreds of birthday cards after son’s appeal",
+      "Roch Valley Radio Local News: Springhill Hospice wins three awards including best hospice garden in "
+    ],
+    "not local": [
+      "The Gazette: TOTALLY U (MANCHESTER) LIMITED: Appointment of Liquidators"
     ],
     "age": [
-      "Oldham Times: Life sentence for Rochdale man who stabbed wife and hid her body under",
-      "Manchester Evening News: Nursery in Middleton forced to close following tragic death of boy, 3",
-      "Greater Manchester Police: Man jailed for life for murdering woman in Rochdale - Greater Manchest"
+      "Rochdale Borough Council: 1 Appendix 1 The Integrated Commissioning Board was established by NHS",
+      "Rochdaledaily: Rochdale Borough Council establishes Integrated Commissioning Board - ",
+      "Fansnetwork: Refwatch - Northampton Town v Rochdale - FansNetwork.co.uk"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
