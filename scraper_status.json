@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-21T18:27:06.371896Z",
+  "last_run_at": "2026-11-21T18:44:43.606570Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-21T12:34:21.854935Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 35,
+      "already_seen": 21,
+      "started_long_ago": 0,
+      "too_far_ahead": 13,
+      "undated": 1,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-21T12:34:21.854935Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 6,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 6,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-21T12:34:21.854935Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 3,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-21T12:34:21.854935Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 1,
+      "not_rochdale": 1,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -54,18 +80,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 125,
+  "raw_candidates_before_job_filter": 119,
   "job_or_career_posts_rejected": 8,
-  "raw_candidates": 117,
+  "raw_candidates": 111,
   "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 97,
-    "resolved": 56,
-    "text_recovered": 6,
-    "reattributed": 28,
-    "images_found": 10
+    "wrappers": 91,
+    "resolved": 51,
+    "text_recovered": 5,
+    "reattributed": 25,
+    "images_found": 9
   },
-  "duplicates_merged": 70,
+  "duplicates_merged": 64,
   "attempted_rewrites": 12,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -138,7 +164,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 115,
+    "rss_and_google_news": 109,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -194,14 +220,6 @@
       "content_type": "text/html",
       "final_url": "https://www.rochdaletimes.co.uk/feed/",
       "bozo": true,
-      "feed_title": ""
-    },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -312,28 +330,29 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 28,
-    "Rochdale Times": 14,
+    "Rochdaledaily": 25,
+    "Rochdale Times": 11,
+    "BBC": 11,
     "Manchester Evening News": 11,
-    "BBC": 10,
-    "InYourArea": 8,
     "Roch Valley Radio": 6,
     "Rochdale AFC": 6,
-    "Northampton Chronicle and Echo": 4,
+    "InYourArea": 6,
+    "Rochdale Borough Council": 4,
     "Bee Network live travel alerts": 4,
     "West Yorkshire Police": 3,
     "The Manc": 3,
     "Oldham Evening Chronicle": 3,
-    "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "BBC Manchester": 2,
+    "County Times": 2,
+    "Northampton Chronicle and Echo": 2,
+    "Wilts and Gloucestershire Standard": 1,
+    "The Northern Echo": 1,
     "Sky Sports": 1,
+    "The Herald": 1,
     "Demokratis.co.id": 1,
-    "South Wales Argus": 1,
     "cwibc.co.id": 1,
     "Express and Star": 1,
-    "County Times": 1,
-    "Oxford Mail": 1,
     "Visit Rochdale": 1,
     "Food Standards Agency": 1
   },
@@ -350,13 +369,13 @@
   },
   "published_by_category": {
     "business": 72,
-    "community": 103,
+    "community": 102,
     "crime": 47,
     "education": 32,
     "environment": 52,
     "events": 40,
     "health": 19,
-    "news": 99,
+    "news": 100,
     "politics": 21,
     "sport": 58,
     "traffic": 49,
@@ -1049,8 +1068,12 @@
     "https://news.google.com/rss/articles/CBMirgFBVV95cUxNVEtGY2FORjZ3d0pRZTFVUE5TNXM2eG1tbk9iNllqNmV1WHBlbElUc19aaWpWOTIwN21za3NWeDh4TFJLUkNSZWsyQTNRUTNTdmczV2ZsVEZCaDVXckd6cld2V1ZHVDRITDdIRFJLcjlSTUk5dS1CV0RjMHFUYnYxWENfeUxWal9Gblh4WmZjOVNkSzA0RzVTNEhQSnE2bnM1dHFlMXZJSTVXODA4cUE?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "healthwatchrochdale.org.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "healthwatchrochdale.org.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1086,7 +1109,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-21T18:28:08.499385Z",
+  "frontpage_generated_at": "2026-11-21T18:45:49.232810Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1166,7 +1189,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 2,
+  "event_dates_corrected_from_ledger": 1,
   "duplicate_articles_after_postprocessing": 672,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
