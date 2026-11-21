@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-21T13:14:19.550541Z",
+  "last_run_at": "2026-11-21T13:32:25.296538Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 147,
+  "raw_candidates_before_job_filter": 148,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 140,
+  "raw_candidates": 141,
   "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 114,
+    "wrappers": 115,
     "resolved": 91,
     "text_recovered": 6,
-    "reattributed": 49,
-    "images_found": 18
+    "reattributed": 50,
+    "images_found": 17
   },
-  "duplicates_merged": 90,
+  "duplicates_merged": 91,
   "attempted_rewrites": 12,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -88,10 +88,10 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 195,
+    "entries": 196,
     "by_outcome": {
       "editorial_twin": 21,
-      "failed": 40,
+      "failed": 41,
       "published": 75,
       "rejected": 59
     },
@@ -192,7 +192,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 136,
+    "rss_and_google_news": 137,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -248,14 +248,6 @@
       "content_type": "text/html",
       "final_url": "https://www.rochdaletimes.co.uk/feed/",
       "bozo": true,
-      "feed_title": ""
-    },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -366,13 +358,13 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 49,
+    "Rochdaledaily": 50,
     "Rochdale Times": 23,
-    "Manchester Evening News": 11,
+    "Manchester Evening News": 10,
     "Roch Valley Radio": 8,
     "BBC": 8,
     "Rochdale AFC": 7,
-    "InYourArea": 6,
+    "InYourArea": 7,
     "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 5,
     "BBC Manchester": 3,
@@ -447,7 +439,7 @@
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/victim-of-rochdale-grooming-gang-34946810",
     "https://www.oldham-chronicle.co.uk/news/live/m62-crash-causes-90-minute-delays-as-queues-stretch-towards-rochdale?__cf_chl_rt_tk=AVh9tf5cQOwtSCUT9bf1o.kHJmjaYgK9HNm_HBSOuo8-1795212053-1.0.1.1-WLW2vLx44I0rik4GN.GjT1WnluYa5j_F5ZgVHCzoP5o",
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b092b0bc2c7426e99b",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-53a1516a530e74ac4e",
     "https://www.rochdaletimes.co.uk/college-showcases-new-cutting-edge-skills-hub-in-historic-chapel/",
     "https://rochdaleafc.co.uk/preview-northampton-town-a/",
     "https://www.find-tender.service.gov.uk/Notice/110309-2026",
@@ -1084,8 +1076,8 @@
   "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
-    "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
+    "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
@@ -1094,8 +1086,12 @@
     "https://news.google.com/rss/articles/CBMirgFBVV95cUxNVEtGY2FORjZ3d0pRZTFVUE5TNXM2eG1tbk9iNllqNmV1WHBlbElUc19aaWpWOTIwN21za3NWeDh4TFJLUkNSZWsyQTNRUTNTdmczV2ZsVEZCaDVXckd6cld2V1ZHVDRITDdIRFJLcjlSTUk5dS1CV0RjMHFUYnYxWENfeUxWal9Gblh4WmZjOVNkSzA0RzVTNEhQSnE2bnM1dHFlMXZJSTVXODA4cUE?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "wchs.co"
+  ],
+  "slow_domain_failure_counts": {
+    "wchs.co": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1131,7 +1127,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-21T13:15:28.905441Z",
+  "frontpage_generated_at": "2026-11-21T13:33:37.247429Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
