@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-21T19:30:30.199777Z",
+  "last_run_at": "2026-11-21T19:54:49.637255Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -59,11 +59,11 @@
   "raw_candidates": 117,
   "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 83,
+    "wrappers": 80,
     "resolved": 47,
     "text_recovered": 6,
     "reattributed": 26,
-    "images_found": 10
+    "images_found": 14
   },
   "duplicates_merged": 70,
   "attempted_rewrites": 12,
@@ -88,15 +88,15 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 197,
+    "entries": 198,
     "by_outcome": {
       "editorial_twin": 21,
-      "failed": 44,
+      "failed": 45,
       "published": 74,
       "rejected": 58
     },
-    "held_back_this_run": 8,
-    "held_already_published": 5,
+    "held_back_this_run": 7,
+    "held_already_published": 4,
     "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -314,9 +314,9 @@
   "immediate_first": [],
   "source_counts": {
     "Rochdaledaily": 26,
-    "Rochdale Times": 15,
-    "BBC": 11,
+    "Rochdale Times": 17,
     "Manchester Evening News": 11,
+    "BBC": 9,
     "Roch Valley Radio": 6,
     "Rochdale AFC": 6,
     "InYourArea": 6,
@@ -332,7 +332,7 @@
     "Northampton Chronicle and Echo": 2,
     "Wilts and Gloucestershire Standard": 1,
     "The Northern Echo": 1,
-    "Peeblesshire News": 1,
+    "The Argus": 1,
     "Demokratis.co.id": 1,
     "cwibc.co.id": 1,
     "Express and Star": 1,
@@ -344,9 +344,9 @@
     "community": 1,
     "crime": 1,
     "environment": 1,
-    "news": 1,
+    "news": 2,
     "politics": 1,
-    "sport": 2,
+    "sport": 1,
     "traffic": 1,
     "transport": 1
   },
@@ -395,10 +395,10 @@
     "business-v3-10720d6067ce8be75c90",
     "community-v3-8f8db5671ec13e50d85c",
     "environment-v3-067c2da89eb3059b5b91",
+    "hard-news-v3-585b5f16bb95f739ce57",
     "hard-news-v3-212c0a9e92a90077a30a",
     "business-v3-9b75979972c4d002f9ed",
-    "business-v3-be400ebf1417789ff9b0",
-    "sport-v3-419f030130ff409d74c7"
+    "business-v3-be400ebf1417789ff9b0"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/victim-of-rochdale-grooming-gang-34946810",
@@ -409,10 +409,10 @@
     "https://www.expressandstar.com/uk-sports/chris-hogg-hails-northampton-reaction-against-rochdale-9365864",
     "https://www.bbc.co.uk/news/articles/c5vg2mk9gznjo",
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1456/springhill-hospice-wins-three-awards-including-best-hospice-garden-in-the-north-west",
+    "https://www.rochdaletimes.co.uk/town-gets-ready-for-panto-fun-with-aladdin-and-the-gang/",
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty/",
     "https://www.bbc.com/news/videos/cq8e075r79nwo",
-    "https://www.find-tender.service.gov.uk/Notice/110309-2026",
-    "https://rochdaleafc.co.uk/report-northampton-town-away-211126/"
+    "https://www.find-tender.service.gov.uk/Notice/110309-2026"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -464,9 +464,9 @@
       "community": 1,
       "crime": 1,
       "environment": 1,
-      "news": 1,
+      "news": 2,
       "politics": 1,
-      "sport": 2,
+      "sport": 1,
       "traffic": 1,
       "transport": 1
     },
@@ -486,8 +486,7 @@
       "northampton chronicle and echo": 1,
       "oldham evening chronicle": 1,
       "roch valley radio local news": 1,
-      "rochdale afc": 1,
-      "rochdale times": 2
+      "rochdale times": 3
     },
     "must_cover_selected": 0
   },
@@ -1054,9 +1053,9 @@
     "https://news.google.com/rss/articles/CBMiowFBVV95cUxPY3hZdk9SRkxCVUZ3UGRIRTJLLU1nRXZvV3VhWWk5a0VCVTRwYUZ1RXZrWFFhWi1RLVFKLWMza2RhSkJIQlJPSHR3NjVhS01BdGlxbW9Tb2EwZUNFa2R1RDlDNkk4RERjVWw0SmxTM2I1RnRrYjg5Q29WSjJkN3A5V0VzNV9NaUt6bWxuc1NDaEZ3NEpyZEk0R25fMnUzMzRrdGhF?oc=5",
     "https://news.google.com/rss/articles/CBMiogFBVV95cUxOT2ladHNWcHJDMi10R2NDejBQeXdPZDctYzctNzNGczYtQzE0amI5UEpQSDRwLWp2OHY1NXRTcm4tblRMVWJQZ1RfWHpSQ09ObTNIYllGajQzTTkxV0I1R1h1OGNCZ1FTOHNSTDJzTllHeEZTb3E2OE1aTGkzSDZITjFxSUhSc3gxMm5wdzBCSnhUOFB6bnBpWjVyXzVJUXhaQVE?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxQdWRtdWdGMmtSV3JYUmI4S05DT1hGMnZRd3BESTZPWkRnTWxyZ2lZaUpvTUtfd0FDUmFUcUp4X09WUW5aRzk5R0oyTUJzMHBNWkxVQkNyN0VOYXgwWk5pWE1lV1JLZThWVGZuNEl4STZYT1hnczM5ZVNXZWt6ZmRpVG1rb0pOVHJ0NERlc2tYbHRyb0xacmxXTXJRbUNKZzhrUTRBOA?oc=5",
+    "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcEpIcDJjZXc3czVxMk1wQllld0V1YnZKS0doV094aTB5TDItbGVFdllVb3JFTVB6WW1zanZpQnd4cU5vVmFsTXhneVplMnJnUGhlZHM3LXkxdlN2WkF4YWNFRWlXWlB4MDBDaXZ6Szl3Ym1fUFVrTmNkdTB6RnEwV1pYcldQYnNHbk91eDZIQUdCRk52eWRvU1Z5TW5nVUE?oc=5",
     "https://news.google.com/rss/articles/CBMivwFBVV95cUxPZ2wtcHlwMm1QQU42TlI4SGl4dXh6NlVYQVo5U1ZRNWl5d3BUYTlhTEFtck1pVDN2ZkJvMlNfTFJDQUpBXzhFU2FLcHZyUVJESVhfaXk3T1J2Ml9GZmpZZGVVWl9sNUR4NEM0RnZMbm5SWEE4NUk5SXZIbWlSQndjQUhSZGhYY1NRNFJFT1ViN1lDclh1SnRxbTlXSDdITElSTzJDeE5oblk0ZUMwR0ZWZGt3NTZXQXp1eTJIRHVzOA?oc=5",
-    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVjlsd1J6WWQxS1NBejdIdjNOeXpTQm91aG41YWYxOFp0YnBWdzJJcmVfNnlzODBDT1NRS2wtZlBQMC1PRjBxdHFmdHRDZHpZbHpCMDFxb2JBTW9VeDlZRkxZMWFGOUxNYVhaRXI0WXU5ODhaVHdrR3pILWFwRUd1MjVlZDZLZTRBNlNYeHlTOFoxZTRqMjV5cTNRZmZ5cUI0bG1XV0hQU0w?oc=5",
-    "https://news.google.com/rss/articles/CBMib0FVX3lxTFB1MnlwVThrdndiZS1CS1FGMDJsb2FfSjJmTlIzYnpfWjNGRTR3SldxdFVNRUpMRjVLVlJtVHJvQkluYnNWQnlpNkhDd0Zua1FJVVRnRXZHZjBCbGZUajVfTjJhdm1hcjg0bHZEQ1Q4NA?oc=5"
+    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVjlsd1J6WWQxS1NBejdIdjNOeXpTQm91aG41YWYxOFp0YnBWdzJJcmVfNnlzODBDT1NRS2wtZlBQMC1PRjBxdHFmdHRDZHpZbHpCMDFxb2JBTW9VeDlZRkxZMWFGOUxNYVhaRXI0WXU5ODhaVHdrR3pILWFwRUd1MjVlZDZLZTRBNlNYeHlTOFoxZTRqMjV5cTNRZmZ5cUI0bG1XV0hQU0w?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1096,7 +1095,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-21T19:31:57.008006Z",
+  "frontpage_generated_at": "2026-11-21T19:56:22.487295Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
