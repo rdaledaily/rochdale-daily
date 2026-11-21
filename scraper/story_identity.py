@@ -1707,7 +1707,7 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
 # absorbed each other and the 4 Nov briefing absorbed "Israeli man threatened
 # with death at Rochdale gym"; the briefing was then restored from its manual
 # copy and the story it had swallowed vanished from the feed.
-ROUNDUP_SLUG_RE = re.compile(r"^(?:morning-briefing|evening-wrap(?:-up)?|evening-briefing)-")
+ROUNDUP_SLUG_RE = re.compile(r"^(?:morning-briefing|evening-wrap(?:-up)?|evening-briefing|rochdale-arrests-this-week)-")
 
 
 def _is_roundup(record: dict[str, Any]) -> bool:
