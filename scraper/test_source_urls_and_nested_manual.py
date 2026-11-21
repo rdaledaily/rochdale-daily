@@ -63,6 +63,25 @@ def test_reserialised_event_markup_is_not_an_update():
     assert fp._event_fingerprint(stored) != fp._event_fingerprint(dict(stored, event_location="Rochdale Town Hall"))
 
 
+def test_scrape_cited_in_source_urls_is_replaced():
+    """16 Nov 2026: an editor's story replaces every scrape whose source it cites."""
+    from unittest import mock
+    import frontpage_pipeline as fp
+
+    manual = [{
+        "id": "rd-editorial-x", "slug": "editor-story", "manual_article": True,
+        "source_url": "https://primary.example/release",
+        "source_urls": ["https://primary.example/release", "https://outlet.example/story?utm_source=fb"],
+    }]
+    merged = [
+        {"id": "a1", "slug": "scrape-dupe", "source_url": "https://outlet.example/story"},
+        {"id": "a2", "slug": "unrelated", "source_url": "https://outlet.example/other"},
+    ]
+    with mock.patch.object(fp, "load_manual_article_records", return_value=manual):
+        out = fp.inject_manual_articles(merged, NOW)
+    assert [a["slug"] for a in out] == ["editor-story", "unrelated"], out
+
+
 if __name__ == "__main__":
     failures = []
     for name, test in sorted(globals().items()):
