@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-22T22:40:50.681819Z",
+  "last_run_at": "2026-11-22T23:01:03.308553Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 11,
+  "raw_candidates_before_job_filter": 103,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 11,
-  "candidate_clusters": 39,
+  "raw_candidates": 103,
+  "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 0,
-    "resolved": 0,
-    "text_recovered": 0,
-    "reattributed": 0,
-    "images_found": 0
+    "wrappers": 53,
+    "resolved": 47,
+    "text_recovered": 34,
+    "reattributed": 4,
+    "images_found": 41
   },
-  "duplicates_merged": 0,
+  "duplicates_merged": 62,
   "attempted_rewrites": 12,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -95,13 +95,22 @@
       "published": 64,
       "rejected": 48
     },
-    "held_back_this_run": 3,
+    "held_back_this_run": 4,
     "held_already_published": 1,
-    "held_rejected": 2,
+    "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
+      "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-20T09:11:18.419993Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs",
       "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
@@ -129,7 +138,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 2,
+    "rss_and_google_news": 94,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -177,6 +186,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -296,9 +313,29 @@
   },
   "immediate_first": [],
   "source_counts": {
+    "Rochdale Times": 26,
+    "Manchester Evening News": 18,
+    "Rochdale AFC": 13,
+    "Northampton Chronicle and Echo": 7,
+    "InYourArea": 6,
     "Bee Network live travel alerts": 4,
     "BBC Manchester": 3,
-    "Rochdale Times": 2,
+    "Id": 3,
+    "Rochdale Borough Council": 3,
+    "Yahoo News UK": 2,
+    "Express and Star": 2,
+    "Roch Valley Radio": 2,
+    "Sky Sports": 2,
+    "County Times": 1,
+    "Wilts and Gloucestershire Standard": 1,
+    "The Northern Echo": 1,
+    "The Sun": 1,
+    "Yahoo Sports": 1,
+    "About Manchester": 1,
+    "Cotswold Journal": 1,
+    "Yahoo": 1,
+    "Ireland Live News": 1,
+    "Birmingham Now": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
@@ -1006,22 +1043,20 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
+    "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1057,7 +1092,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-22T22:42:16.765890Z",
+  "frontpage_generated_at": "2026-11-22T23:02:07.160695Z",
   "frontpage_article_count": 1,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
