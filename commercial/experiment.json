@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "experiment_id": "exp-founding-advertisers-2026",
+  "name": "Founding advertiser cohort",
+  "status": "ready-for-intake",
+  "cohort_target": 55,
+  "exploration_share": 0.20,
+  "primary_metrics": ["validated_impressions", "clicks", "ctr"],
+  "secondary_dimensions": ["sector", "creative", "placement", "area", "article_category", "device_class", "hour", "weekday", "month"],
+  "rules": {
+    "optimisation": "analysis-only",
+    "minimum_data": "Do not rank or price sectors from tiny samples; report sample size beside every comparison.",
+    "reader_profiling": "Do not create individual reader profiles from this experiment.",
+    "exploration": "Reserve inventory for exploration so early random winners cannot monopolise delivery.",
+    "commercial_opportunity_score": "Recommendation for the publisher, not an autonomous ad-selling decision."
+  }
+}

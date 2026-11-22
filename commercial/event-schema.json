@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "_docs": {
+    "purpose": "Canonical shape for privacy-minimised commercial measurement events. This is a contract for the tracker/backend; it does not itself collect data.",
+    "privacy": "No email address, name, precise GPS coordinate, fingerprint, free-form user agent, or cross-site identifier belongs in this event."
+  },
+  "event": {
+    "event_id": "server-generated-unique-id",
+    "event_type": "impression|click|conversion",
+    "occurred_at": "ISO-8601 UTC timestamp",
+    "advertiser_id": "adv-example",
+    "campaign_id": "cmp-example",
+    "placement_id": "existing-adverts-json-id",
+    "slot_id": "article-mrec",
+    "creative_id": "cr-example",
+    "page_id": "stable article/page id where available",
+    "article_category": "news",
+    "area_id": "rochdale|heywood|middleton|pennines|borough-wide|unknown",
+    "device_class": "mobile|tablet|desktop|unknown",
+    "local_hour": 12,
+    "local_weekday": 5,
+    "impression_sample_factor": 5,
+    "validation_state": "valid|duplicate|bot-suspected|invalid",
+    "conversion_kind": "lead|call|form|other|null"
+  },
+  "retention": {
+    "raw_event_guidance": "Keep raw measurement only as long as operationally necessary; prefer aggregated reporting for long-term analysis.",
+    "aggregate_keys": ["day", "advertiser_id", "campaign_id", "placement_id", "slot_id", "article_category", "area_id", "device_class", "local_hour", "local_weekday"]
+  }
+}
