@@ -660,6 +660,30 @@ def rate_limit_delay(exc: Exception) -> float | None:
     return 5.0
 
 
+
+def describe_api_error(exc):
+    """Name an API failure precisely enough to act on.
+
+    OpenAI raises RateLimitError for BOTH "out of credit" (code
+    insufficient_quota) and genuine throttling (rate_limit_exceeded), so the
+    class name alone cannot tell billing from pacing. Append the HTTP status
+    and the provider's own error code when the exception carries them.
+    """
+    name = type(exc).__name__
+    details = []
+    status = getattr(exc, "status_code", None)
+    if status:
+        details.append(str(status))
+    code = getattr(exc, "code", None)
+    if not code:
+        body = getattr(exc, "body", None)
+        if isinstance(body, dict):
+            err = body.get("error") if isinstance(body.get("error"), dict) else body
+            code = err.get("code") or err.get("type")
+    if code:
+        details.append(str(code))
+    return f"{name}: {' '.join(details)}" if details else name
+
 def create_with_rate_limit_retry(
     client: Any, request_kwargs: dict[str, Any], logger: Any = None
 ) -> Any:
@@ -1456,7 +1480,7 @@ def request_article(
             draft = normalise_draft(json.loads(extract_json_object(content) or "{}"))
         except Exception as exc:
             api_failures += 1
-            last_api_error = type(exc).__name__
+            last_api_error = describe_api_error(exc)
             logger.warning(
                 "OpenAI journalism attempt %d failed for %s: %s",
                 attempt + 1,
