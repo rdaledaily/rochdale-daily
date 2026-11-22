@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-22T18:52:23.923832Z",
+  "last_run_at": "2026-11-22T19:11:06.433927Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 93,
+  "raw_candidates_before_job_filter": 91,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 93,
-  "candidate_clusters": 40,
+  "raw_candidates": 91,
+  "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 67,
-    "resolved": 49,
-    "text_recovered": 18,
+    "wrappers": 55,
+    "resolved": 42,
+    "text_recovered": 23,
     "reattributed": 2,
-    "images_found": 24
+    "images_found": 28
   },
-  "duplicates_merged": 53,
+  "duplicates_merged": 50,
   "attempted_rewrites": 12,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -73,7 +73,7 @@
   "live_articles": 672,
   "skipped": 12,
   "rewrite_skip_reasons": {
-    "OpenAI: all 4 attempts failed (RateLimitError)": 12
+    "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)": 12
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -88,10 +88,10 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 200,
+    "entries": 201,
     "by_outcome": {
       "editorial_twin": 20,
-      "failed": 62,
+      "failed": 63,
       "published": 66,
       "rejected": 52
     },
@@ -120,8 +120,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 86,
-    "website_discovery": 2,
+    "rss_and_google_news": 82,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -135,6 +135,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -168,14 +169,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -294,10 +287,10 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 19,
-    "Rochdale AFC": 13,
-    "Manchester Evening News": 11,
-    "Northampton Chronicle and Echo": 9,
+    "Rochdale Times": 21,
+    "Rochdale AFC": 12,
+    "Manchester Evening News": 9,
+    "Northampton Chronicle and Echo": 8,
     "InYourArea": 6,
     "BBC Manchester": 4,
     "Bee Network live travel alerts": 4,
@@ -329,9 +322,9 @@
     "environment": 1,
     "events": 1,
     "news": 2,
-    "sport": 1,
+    "sport": 2,
     "traffic": 1,
-    "transport": 2
+    "transport": 1
   },
   "published_by_category": {
     "business": 72,
@@ -373,29 +366,29 @@
     "hard-news-v3-82ebd9ac1d4c80ccd18a",
     "transport-v3-f2d703729c8594864e68",
     "transport-v3-1a73074aa060f403a97a",
-    "sport-v3-990244172acb99c01b2b",
+    "sport-v3-e52881b765369ebe30e5",
     "events-v3-bd1ade5ca17a355f7b27",
     "business-v3-4488d55b40323bd930ce",
     "community-v3-7e901ddc5149f94aecc4",
     "environment-v3-1f077b2b8d44ceb00c06",
     "hard-news-v3-7ed4f7ba8d9cc96e148c",
     "hard-news-v3-212c0a9e92a90077a30a",
-    "community-v3-8f8db5671ec13e50d85c",
-    "transport-v3-2a74733bfd3df5942f1c"
+    "sport-v3-990244172acb99c01b2b",
+    "community-v3-8f8db5671ec13e50d85c"
   ],
   "selected_candidate_urls": [
     "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge/",
     "https://www.wiltsglosstandard.co.uk/sport/national/26751072.chris-hogg-hails-northampton-reaction-rochdale/",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0d45acfa92620931b9",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/breaking-rochdale-afc-sack-manager-34949387",
+    "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
     "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas/",
     "https://suaragarut.id/en/northampton-beat-rochdale-comeback",
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-21",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty/",
-    "https://www.bbc.co.uk/news/articles/c5vg2mk9gznjo",
-    "https://www.expressandstar.com/uk-sports/lee-evans-penalty-gives-northampton-win-in-five-goal-thriller-against-rochdale-9365783?__cf_chl_rt_tk=wOg5EKWRT7vJaP_RNzM5ZaoqLoLC5clGEnifkolXo9Y-1795342388-1.0.1.1-NjHUwHDtGsLLmjXAM7cIAmpGoKeYkBicHzM7_Xc4Lx8"
+    "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson/",
+    "https://www.bbc.co.uk/news/articles/c5vg2mk9gznjo"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -455,9 +448,9 @@
       "environment": 1,
       "events": 1,
       "news": 2,
-      "sport": 1,
+      "sport": 2,
       "traffic": 1,
-      "transport": 2
+      "transport": 1
     },
     "selected_by_ward": {
       "Spotland and Falinge": 1
@@ -469,12 +462,13 @@
       "spotland": 1
     },
     "selected_by_source": {
+      "about manchester": 1,
       "bbc manchester": 1,
       "bee network live travel alerts": 1,
-      "express and star": 1,
       "id": 1,
       "inyourarea": 1,
-      "manchester evening news": 3,
+      "manchester evening news": 2,
+      "rochdale afc": 1,
       "rochdale times": 2,
       "thenonleaguefootballpaper": 1,
       "wilts and gloucestershire standard": 1
@@ -1027,7 +1021,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 14,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1037,22 +1031,12 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://news.google.com/rss/articles/CBMidkFVX3lxTE43TlgyMDJ5U2RRZzZHNmFQY19mZ05FRjBhaDdlb0lBWks2RFlLWjJMT0hoSzRoNDJyeUxZUTF2U0I1Z0l1WUNqMlk4S2RXYUdGdzRJVEpOSUEwdzNGM3c0MXZpd29MVklXcUhTQTBhS29PY01acEE?oc=5",
-    "https://news.google.com/rss/articles/CBMiekFVX3lxTE5tckdFQWM5bzd2dE9ySEJTR3d5QW1ZN2FHb29oTlhKNkZWNFY3X0N2b09OeUJXTnR5M2wtS2NRdW5PclNWYkpYdGs0RFkxTG5fbllmdTZ4b3ZXNmFCQWUxRWFOS2dTcTZDUjJ2b2tRcldWQTAyeVpUV2N3?oc=5",
-    "https://news.google.com/rss/articles/CBMieEFVX3lxTFBRSUZHcElOdmYwSnVsaXBnY1BzMGltVm5yLUs3TjJ2WnFhNzRJWXVHZTdUSVlhdkVZcjVRYUxybGtWWEhranRjbDJEQXFPenhWNEluYTdVY2VsaldkQVBXUUZwejY5OUFDR3hjS2k3U3NuVUJaRzdtQQ?oc=5",
-    "https://news.google.com/rss/articles/CBMifkFVX3lxTE10dVhuUjZZc3FDdW9uZWhySHVUV2tvc09FT0ZxSFY2dFBMd2M1Q2YwMmNVVHAtTVp6OXFtSnNuN2ZfZHNBd2NKMExjeXU5TDhraHBkbW1mOGRUaHk3MWhwVkZ0bWJiTkhoUzlIUzdnT25yZnBqaUtIYmJMZDZUdw?oc=5",
-    "https://news.google.com/rss/articles/CBMisgFBVV95cUxQWnpuU0lvNWlXdHhwVXpZaGlkODhZRTNueGR2Y09zQWRRNVVDUk5VSG0yQWQyLVpKeVNqLXVOeHNvRXIwSGRobFpmZmJOWmUzbXR5MGk5LUg1Y0tRMTVXRDlSdkg3d2lkMlhZUHppS2Jvb3pDQlc3MWpZU1ZHdm5MYWNPQW9TRzJ2VTllVWNoRkJPOHhOMFhqTmp3UFVsdk5qV0VRZXI2RmtrQ0x5UmhsZjB30gG3AUFVX3lxTE8xekZOSGJDRDdFZVl5WTlvNXRrUFUwSDQ2WHhrSW1xenlqbUlwLUNLQXBWNFJyRFdYWDc2NE1HSlBKSGtkRTFkVU42Q0JXSG1rQy03VzlrWml1WFNHU2JlSXNYSDFfcXNEY2JGNFpDWEVsUzU0SDRaTmpyNnVfYkhPMktCcW0zdEJOY2xDWWdtVHBIcndEb0VBTDExX0l6UExIWWhHLVlhX2RfNTZQcE52MXg5czFxbw?oc=5",
     "https://news.google.com/rss/articles/CBMitwFBVV95cUxPN1hoMzNrTnVPbkp2RlJYa3FOTkRTbGNrQnpBTndUWW9maWZpVllVZXg4ckpGTXVmNHhWcWpCendvOVlBc0JFU3ZTTUxQNmMzTEo4RFJCeGl1c1BIbWpBSjltZmhzQUNQZlN4UFpkNTVZd21kN3NVNDNhSF9rXzA0V1hwbmFQRnRPUHpxVFlyb2RMeGdaYnVwR1VjRXhXc2RYeXJGdjRJSG5OLTRoVkk4TllHR3hjZEnSAbcBQVVfeXFMTzdYaDMza051T25KdkZSWGtxTk5EU2xja0J6QU53VFlvZmlmaVZZVWV4OHJKRk11ZjR4VnFqQnp3bzlZQXNCRVN2U01MUDZjM0xKOERSQnhpdXNQSG1qQUo5bWZoc0FDUGZTeFBaZDU1WXdtZDdzVTQzYUhfa18wNFdYcG5hUEZ0T1B6cVRZcm9kTHhnWmJ1cEdVY0V4V3NkWHlyRnY0SUhuTi00aFZJOE5ZR0d4Y2RJ?oc=5",
     "https://news.google.com/rss/articles/CBMisgFBVV95cUxOUUtDcUFibE9pRU9UenVRUm5BVzFUMEpUWEkxZTZXZFlaX3k5OFQtU1BNR3FPY1BKemZuOUdfOUZGT1VpdlV3ZEQ3NVRqSUNHaG42NTFpVFk3NGVPLWNzc2I3bGM0VUk0Q3FlVGtDQW5SZWs1UVNLeDF5c0NmR0l0SXcyNXhnTnR1Sm1xSDRXa1hKeFNRVDloZi15VnV6NGREczJoUlY1UXRGSDl1LXN3d05R0gG3AUFVX3lxTE83WGgzM2tOdU9uSnZGUlhrcU5ORFNsY2tCekFOd1RZb2ZpZmlWWVVleDhySkZNdWY0eFZxakJ6d285WUFzQkVTdlNNTFA2YzNMSjhEUkJ4aXVzUEhtakFKOW1maHNBQ1BmU3hQWmQ1NVl3bWQ3c1U0M2FIX2tfMDRXWHBuYVBGdE9QenFUWXJvZEx4Z1pidXBHVWNFeFdzZFh5ckZ2NElIbk4tNGhWSThOWUdHeGNkSQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "greatermanchester-ca.gov.uk",
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "greatermanchester-ca.gov.uk": 1,
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1062,7 +1046,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-11-22T17:55:53.632534Z",
+  "evergreen_fallback_attempt_at": "2026-11-22T19:11:06.610671Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 0,
   "evergreen_fallback": {
@@ -1088,7 +1072,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-22T18:53:22.590785Z",
+  "frontpage_generated_at": "2026-11-22T19:12:08.990398Z",
   "frontpage_article_count": 2,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {

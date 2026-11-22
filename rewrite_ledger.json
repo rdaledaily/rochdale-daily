@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-22T18:52:23.917943Z",
+  "updated_at": "2026-11-22T19:11:06.429329Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 200,
+  "count": 201,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -24,15 +24,15 @@
     },
     "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson": {
       "first_attempt_at": "2026-11-22T10:17:15.144800Z",
-      "attempts": 12,
+      "attempts": 13,
       "urls": [
         "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T17:08:34.265844Z",
+      "last_attempt_at": "2026-11-22T19:08:21.129168Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Rochdale part ways with Ian Watson - About Manchester",
       "source_name": "About Manchester",
       "category": "sport",
@@ -202,6 +202,22 @@
       "text_fingerprint": "e48a1f16d58f92d5",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://rochdaleafc.co.uk/at-home-a-week-on-saturday": {
+      "first_attempt_at": "2026-11-22T19:08:00.325187Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/at-home-a-week-on-saturday"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-22T19:08:00.325187Z",
+      "outcome": "failed",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
+      "title": "Dale Welcome York City - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "4550c25a59ee5700"
     },
     "https://rochdaleafc.co.uk/fill-the-family-stand-for-toy-appeal": {
       "first_attempt_at": "2026-11-17T10:55:57.949355Z",
@@ -668,16 +684,16 @@
     },
     "https://suaragarut.id/en/northampton-beat-rochdale-comeback": {
       "first_attempt_at": "2026-11-22T10:17:14.305506Z",
-      "attempts": 10,
+      "attempts": 11,
       "urls": [
         "https://cwibc.co.id/en/northampton-defeat-rochdale-sixfields",
         "https://suaragarut.id/en/northampton-beat-rochdale-comeback"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:15.102953Z",
+      "last_attempt_at": "2026-11-22T19:07:57.131725Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Northampton Beat Rochdale 3-2 After Second-Half Comeback - SuaraGarut.ID",
       "source_name": "Id",
       "category": "business",
@@ -719,15 +735,15 @@
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0d45acfa92620931b9": {
       "first_attempt_at": "2026-11-22T11:45:58.427189Z",
-      "attempts": 21,
+      "attempts": 22,
       "urls": [
         "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0d45acfa92620931b9"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:14.945810Z",
+      "last_attempt_at": "2026-11-22T19:07:57.063392Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Updated: 22/11/2026 at 11:20am Live Failsworth Tram Stop - Lifts out of service Duration Sun 22 Nov, 11:20am – until further notice Stops",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
@@ -993,15 +1009,15 @@
     },
     "https://www.bbc.co.uk/news/articles/c5vg2mk9gznjo": {
       "first_attempt_at": "2026-11-21T07:47:04.103115Z",
-      "attempts": 86,
+      "attempts": 87,
       "urls": [
         "https://www.bbc.co.uk/news/articles/c5vg2mk9gznjo"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:38.394934Z",
+      "last_attempt_at": "2026-11-22T19:08:21.992013Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "'I didn't want to move from Seven Sisters flats - but now I'm delighted'",
       "source_name": "BBC Manchester",
       "category": "community",
@@ -1669,15 +1685,15 @@
     },
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-21": {
       "first_attempt_at": "2026-11-22T10:17:15.404135Z",
-      "attempts": 25,
+      "attempts": 26,
       "urls": [
         "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-21"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:15.372632Z",
+      "last_attempt_at": "2026-11-22T19:07:57.823943Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Rochdale Faith News: Saturday, November 21 - InYourArea",
       "source_name": "InYourArea",
       "category": "community",
@@ -2092,7 +2108,7 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702": {
       "first_attempt_at": "2026-11-22T11:22:28.510313Z",
-      "attempts": 8,
+      "attempts": 9,
       "urls": [
         "https://news.google.com/rss/articles/CBMisgFBVV95cUxOUUtDcUFibE9pRU9UenVRUm5BVzFUMEpUWEkxZTZXZFlaX3k5OFQtU1BNR3FPY1BKemZuOUdfOUZGT1VpdlV3ZEQ3NVRqSUNHaG42NTFpVFk3NGVPLWNzc2I3bGM0VUk0Q3FlVGtDQW5SZWs1UVNLeDF5c0NmR0l0SXcyNXhnTnR1Sm1xSDRXa1hKeFNRVDloZi15VnV6NGREczJoUlY1UXRGSDl1LXN3d05R0gG3AUFVX3lxTE83WGgzM2tOdU9uSnZGUlhrcU5ORFNsY2tCekFOd1RZb2ZpZmlWWVVleDhySkZNdWY0eFZxakJ6d285WUFzQkVTdlNNTFA2YzNMSjhEUkJ4aXVzUEhtakFKOW1maHNBQ1BmU3hQWmQ1NVl3bWQ3c1U0M2FIX2tfMDRXWHBuYVBGdE9QenFUWXJvZEx4Z1pidXBHVWNFeFdzZFh5ckZ2NElIbk4tNGhWSThOWUdHeGNkSQ?oc=5",
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxPN1hoMzNrTnVPbkp2RlJYa3FOTkRTbGNrQnpBTndUWW9maWZpVllVZXg4ckpGTXVmNHhWcWpCendvOVlBc0JFU3ZTTUxQNmMzTEo4RFJCeGl1c1BIbWpBSjltZmhzQUNQZlN4UFpkNTVZd21kN3NVNDNhSF9rXzA0V1hwbmFQRnRPUHpxVFlyb2RMeGdaYnVwR1VjRXhXc2RYeXJGdjRJSG5OLTRoVkk4TllHR3hjZEnSAbcBQVVfeXFMTzdYaDMza051T25KdkZSWGtxTk5EU2xja0J6QU53VFlvZmlmaVZZVWV4OHJKRk11ZjR4VnFqQnp3bzlZQXNCRVN2U01MUDZjM0xKOERSQnhpdXNQSG1qQUo5bWZoc0FDUGZTeFBaZDU1WXdtZDdzVTQzYUhfa18wNFdYcG5hUEZ0T1B6cVRZcm9kTHhnWmJ1cEdVY0V4V3NkWHlyRnY0SUhuTi00aFZJOE5ZR0d4Y2RJ?oc=5",
@@ -2100,9 +2116,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:37.483748Z",
+      "last_attempt_at": "2026-11-22T19:08:19.413369Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Man rescued from burning house and rushed to hospital",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2127,15 +2143,15 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545": {
       "first_attempt_at": "2026-11-22T16:50:31.514788Z",
-      "attempts": 7,
+      "attempts": 8,
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:15.015215Z",
+      "last_attempt_at": "2026-11-22T19:07:57.140203Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "The sun sets on Rochdale's Seven Sisters",
       "source_name": "Manchester Evening News",
       "category": "environment",
@@ -2591,16 +2607,16 @@
     },
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty": {
       "first_attempt_at": "2026-11-21T11:07:11.654563Z",
-      "attempts": 87,
+      "attempts": 88,
       "urls": [
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVjlsd1J6WWQxS1NBejdIdjNOeXpTQm91aG41YWYxOFp0YnBWdzJJcmVfNnlzODBDT1NRS2wtZlBQMC1PRjBxdHFmdHRDZHpZbHpCMDFxb2JBTW9VeDlZRkxZMWFGOUxNYVhaRXI0WXU5ODhaVHdrR3pILWFwRUd1MjVlZDZLZTRBNlNYeHlTOFoxZTRqMjV5cTNRZmZ5cUI0bG1XV0hQU0w?oc=5",
         "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:37.504954Z",
+      "last_attempt_at": "2026-11-22T19:08:20.102911Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Daggers, swords, machetes and starting pistol surrendered in knife amnesty - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -2689,7 +2705,7 @@
     },
     "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas": {
       "first_attempt_at": "2026-11-22T09:50:17.141618Z",
-      "attempts": 21,
+      "attempts": 22,
       "urls": [
         "https://news.google.com/rss/articles/CBMidkFVX3lxTE43TlgyMDJ5U2RRZzZHNmFQY19mZ05FRjBhaDdlb0lBWks2RFlLWjJMT0hoSzRoNDJyeUxZUTF2U0I1Z0l1WUNqMlk4S2RXYUdGdzRJVEpOSUEwdzNGM3c0MXZpd29MVklXcUhTQTBhS29PY01acEE?oc=5",
         "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area",
@@ -2697,9 +2713,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:15.063958Z",
+      "last_attempt_at": "2026-11-22T19:07:57.018843Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Lighting up the town for Christmas - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "events",
@@ -3281,15 +3297,15 @@
     },
     "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge": {
       "first_attempt_at": "2026-11-22T10:17:15.555161Z",
-      "attempts": 25,
+      "attempts": 26,
       "urls": [
         "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:15.311824Z",
+      "last_attempt_at": "2026-11-22T19:07:56.371078Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "BOATENG DENIES DALE FAN CHARGE - The Non-League Football Paper",
       "source_name": "Thenonleaguefootballpaper",
       "category": "crime",
@@ -3473,7 +3489,7 @@
     },
     "https://www.wiltsglosstandard.co.uk/sport/national/26751072.chris-hogg-hails-northampton-reaction-rochdale": {
       "first_attempt_at": "2026-11-22T11:22:06.667478Z",
-      "attempts": 22,
+      "attempts": 23,
       "urls": [
         "https://www.birmingham-now.co.uk/sport/national/26751072.chris-hogg-hails-northampton-reaction-rochdale",
         "https://www.countytimes.co.uk/sport/national/26751072.chris-hogg-hails-northampton-reaction-rochdale",
@@ -3485,9 +3501,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-22T18:49:16.620371Z",
+      "last_attempt_at": "2026-11-22T19:07:57.868320Z",
       "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError)",
+      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
       "title": "Chris Hogg hails Northampton reaction against Rochdale - Wilts and Gloucestershire Standard",
       "source_name": "Wilts and Gloucestershire Standard",
       "category": "traffic",
