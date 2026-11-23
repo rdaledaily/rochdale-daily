@@ -99,6 +99,14 @@ class ProviderSwitchTests(unittest.TestCase):
         self.assertIn("maximum", out["properties"])
         self.assertNotIn("maxLength", out["properties"]["maximum"])
 
+    def test_thinking_disabled_for_claude_only(self):
+        with mock.patch.dict(os.environ, {"LLM_PROVIDER": "anthropic"}):
+            adapted = eu.adapt_request_for_provider({"model": "m", "max_tokens": 2000})
+        self.assertEqual(adapted["extra_body"], {"thinking": {"type": "disabled"}})
+        self.assertEqual(adapted["max_tokens"], 2000)
+        with mock.patch.dict(os.environ, {"LLM_PROVIDER": "openai"}):
+            self.assertNotIn("extra_body", eu.adapt_request_for_provider({"model": "m"}))
+
     def test_json_object_mode_dropped_for_claude(self):
         with mock.patch.dict(os.environ, {"LLM_PROVIDER": "anthropic"}):
             adapted = eu.adapt_request_for_provider({"model": "m", "response_format": {"type": "json_object"}})
@@ -109,7 +117,7 @@ class ProviderSwitchTests(unittest.TestCase):
         client = SimpleNamespace(chat=SimpleNamespace(completions=fake))
         with mock.patch.dict(os.environ, {"LLM_PROVIDER": "anthropic", "ANTHROPIC_MODEL": "claude-x"}):
             eu.create_with_rate_limit_retry(client, {"model": "gpt-4o-mini", "temperature": 0.18})
-        self.assertEqual(fake.calls, [{"model": "claude-x"}])
+        self.assertEqual(fake.calls, [{"model": "claude-x", "extra_body": {"thinking": {"type": "disabled"}}}])
         json.dumps(fake.calls)  # plain data only
 
 

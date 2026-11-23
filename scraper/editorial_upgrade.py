@@ -773,6 +773,14 @@ def adapt_request_for_provider(request_kwargs: dict[str, Any]) -> dict[str, Any]
     adapted = dict(request_kwargs)
     adapted["model"] = os.getenv("ANTHROPIC_MODEL", "").strip() or DEFAULT_ANTHROPIC_MODEL
     adapted.pop("temperature", None)
+    # Current Claude models think before answering unless told not to, and the
+    # thinking is charged against max_tokens: on 23 Nov 2026 it consumed the
+    # 2,000-token budget and left empty or cut-off articles. The rewrite is a
+    # structured writing task that never had thinking with gpt-4o-mini, so
+    # switch it off (as model_bridge.py already does for the native API).
+    extra_body = dict(adapted.get("extra_body") or {})
+    extra_body.setdefault("thinking", {"type": "disabled"})
+    adapted["extra_body"] = extra_body
     response_format = adapted.get("response_format")
     if isinstance(response_format, dict) and response_format.get("type") == "json_schema":
         json_schema = dict(response_format.get("json_schema") or {})
@@ -1548,6 +1556,7 @@ def request_article(
                 "Do not pad with generic prose, and never add reaction, "
                 "trends or consequences that the sources do not state."
             )
+        finish_reason = None
         try:
             # OpenAI supports strict json_schema output; most other
             # OpenAI-compatible providers (Cloudflare Workers AI / Llama, Groq,
@@ -1580,6 +1589,7 @@ def request_article(
                 request_kwargs["response_format"] = {"type": "json_object"}
             # mode == "none": send no response_format at all.
             response = create_with_rate_limit_retry(client, request_kwargs, logger)
+            finish_reason = getattr(response.choices[0], "finish_reason", None)
             message = response.choices[0].message
             content = (getattr(message, "content", "") or "").strip()
             # Reasoning models (Groq's gpt-oss especially) sometimes return an
@@ -1594,10 +1604,12 @@ def request_article(
             api_failures += 1
             last_api_error = describe_api_error(exc)
             logger.warning(
-                "OpenAI journalism attempt %d failed for %s: %s",
+                "%s journalism attempt %d failed for %s: %s%s",
+                llm_provider_label(),
                 attempt + 1,
                 getattr(candidate, "source_url", ""),
                 exc,
+                f" [finish_reason={finish_reason}]" if finish_reason else "",
             )
             continue
 
@@ -1632,10 +1644,14 @@ def request_article(
                 skip("quality gate: fact-note rebuild unavailable after source overlap")
                 return None
         veto_detail = ""
-        if isinstance(draft, dict) and any("unpublishable" in issue or "not about" in issue.lower() for issue in feedback):
+        if isinstance(draft, dict) and (
+            any("unpublishable" in issue or "not about" in issue.lower() for issue in feedback)
+            or not str(draft.get("title") or "").strip()
+        ):
             # Record the model's own explanation for a self-veto, so a run log
             # shows WHY a story was refused rather than only that it was.
-            veto_detail = " [model said: publishable=%s, content_class=%s, rochdale=%s, reason=%s]" % (
+            veto_detail = " [model said: finish=%s, publishable=%s, content_class=%s, rochdale=%s, reason=%s]" % (
+                finish_reason,
                 draft.get("publishable"),
                 draft.get("content_class"),
                 draft.get("is_about_rochdale_borough"),
