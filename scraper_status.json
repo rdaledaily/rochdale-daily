@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-23T08:37:56.732099Z",
+  "last_run_at": "2026-11-23T08:56:16.106135Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 86,
+  "raw_candidates_before_job_filter": 110,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 86,
+  "raw_candidates": 110,
   "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 55,
-    "resolved": 48,
-    "text_recovered": 15,
-    "reattributed": 3,
-    "images_found": 22
+    "wrappers": 76,
+    "resolved": 67,
+    "text_recovered": 18,
+    "reattributed": 5,
+    "images_found": 27
   },
-  "duplicates_merged": 44,
+  "duplicates_merged": 68,
   "attempted_rewrites": 14,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -147,7 +147,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 80,
+    "rss_and_google_news": 104,
     "website_discovery": 1,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -203,6 +203,14 @@
       "content_type": "text/html",
       "final_url": "https://www.rochdaletimes.co.uk/feed/",
       "bozo": true,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -320,33 +328,6 @@
         "resolved_title": "She worried about her daughter’s controlling relationship, then came the call no mother should get"
       },
       {
-        "id": "0f8ac375f931f186",
-        "headline": "Police to invite parents to station after town plagued by large group of youths",
-        "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 241 characters of source text (needs 500) - retried next run",
-        "resolved_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPYk8tWlRDT3gySmNkODJzUVAyNWJUeHNybnByNF90Y0RWSjM0ZmtFQ19EVDFqRnU0TVlyTGNWR21UZ0xDeXdBY2JpVmZSOXlIWnNHdDhQT2VhN3JrZDctcFRseTRrU0pfY3dUWjFxZF93a2JSOWtFQ01LcDdWclhPT1hJUXFLZFVUSFk5X1VNcERjVktfNXVHUXNFdFBsRnRGVjJGdDNoelFnVlZxQ0lfUFBJONIBuAFBVV95cUxNSmJFQkY1SU04SmM1b3poMWZZLVlabnlKWVhyT0ltRHZPZm1Ldld1eGwxdDZuT3d0VnRhSGN4QjhVSldJbUhiN3YzdE01RlhZN1FqUkNDQzV0UmstZmJSTGN3QVY4UVUwT0c1UEtVc1ItMjZTbllRckRkWHVxUmY1V1lJT3Nkc0lxQVJrZGNTdEJZMFlXdGcwc3paaTVROV9Nc2tfYllfODVNTmEtd1dGdVEteWxHdTF5?oc=5",
-        "resolved_title": "Police to 'invite parents to station' after Heywood town centre plagued by large group of youths"
-      },
-      {
-        "id": "6c36f5f05a6eacf8",
-        "headline": "The sun sets on Rochdale's Seven Sisters",
-        "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 129 characters of source text (needs 500) - retried next run",
-        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPc24tOGVodlFTcVZVTHU3RWdlZlh3VVJ6Nmh6NW9pcTZLSEtWQ3J2eWZhTEs3NDNKZ05lRkhDeHJwS05jSVplaVpQYmVhcUI0Y1Z2bEZlWHJVZFpQMUV4Zk9tbGR5bGtSOXd2ZWhYTTFOcXJVakU0M0VRZ2l1T3VhQUF4QkNuM2tZZ2xmMUxKUEp3XzU2NlZDbHdrclFTckNIc3F6WWswa3JiSHhUT3hB?oc=5",
-        "resolved_title": "The sun sets on Rochdale's Seven Sisters"
-      },
-      {
-        "id": "7fc1b0a449cd97da",
-        "headline": "Two iconic landmarks set to go in major developments for Greater Manchester",
-        "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 199 characters of source text (needs 500) - retried next run",
-        "resolved_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPZm5EZGx2OFlDcXhaU1ZVWXRGSjQ1VHVudEdsdjhGZTF1anBZenB6OHY5b2xUZ2VJWUl1RTVaeVZTNXBDQ09PU0kzOGI1NDhvVXl5eU4ycU5Lams2emY1TUZIeHYzSTlXQ1NEcWxPQTVMVkpzQUdQOVEwN3RQT3FSYjA1ZjNmZmZ50gGOAUFVX3lxTE82N1FCbkIwaUdkTVFiSkJocGgta0k0NjdGY21BOUh1cHdVWGtWbV9WYXIwV1h4MmN4Q1ZBYmVzaWRqamZmdmVnZXJqZUY3eUMtWXJZaWl6SzlQRzJFcW5mNFI1aXpDRnZzVGtFYjlSUnRUeGlRakRwM2xkbHJtaHQyRVhTOEVSd3lZdkwyY3c?oc=5",
-        "resolved_title": "Two iconic landmarks set to go in major developments for Greater Manchester"
-      },
-      {
         "id": "e21330d6319627a9",
         "headline": "Man rescued from burning house in Rochdale and rushed to hospital",
         "received_at": "2026-11-23T08:05:30+00:00",
@@ -354,6 +335,15 @@
         "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
         "resolved_title": "Man rescued from burning house in Rochdale and rushed to hospital"
+      },
+      {
+        "id": "0f8ac375f931f186",
+        "headline": "Police to invite parents to station after town plagued by large group of youths",
+        "received_at": "2026-11-23T08:05:30+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPYk8tWlRDT3gySmNkODJzUVAyNWJUeHNybnByNF90Y0RWSjM0ZmtFQ19EVDFqRnU0TVlyTGNWR21UZ0xDeXdBY2JpVmZSOXlIWnNHdDhQT2VhN3JrZDctcFRseTRrU0pfY3dUWjFxZF93a2JSOWtFQ01LcDdWclhPT1hJUXFLZFVUSFk5X1VNcERjVktfNXVHUXNFdFBsRnRGVjJGdDNoelFnVlZxQ0lfUFBJONIBuAFBVV95cUxNSmJFQkY1SU04SmM1b3poMWZZLVlabnlKWVhyT0ltRHZPZm1Ldld1eGwxdDZuT3d0VnRhSGN4QjhVSldJbUhiN3YzdE01RlhZN1FqUkNDQzV0UmstZmJSTGN3QVY4UVUwT0c1UEtVc1ItMjZTbllRckRkWHVxUmY1V1lJT3Nkc0lxQVJrZGNTdEJZMFlXdGcwc3paaTVROV9Nc2tfYllfODVNTmEtd1dGdVEteWxHdTF5?oc=5",
+        "resolved_title": "Police to 'invite parents to station' after Heywood town centre plagued by large group of youths"
       },
       {
         "id": "4bfc246b66687cdf",
@@ -369,32 +359,55 @@
         "headline": "The Greater Manchester venues still taking bookings for Christmas Day",
         "received_at": "2026-11-23T08:05:30+00:00",
         "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 271 characters of source text (needs 500) - retried next run",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
         "resolved_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQVjJ1dkN0aWh5Z05UQnZleWJCOC1DT1hWZ2JMZzM1N0c0cUY0OW5hVVpqTDBSdU9YejVjMG5HemEwRVQ5b21TaWlLNEY0X0I5NGFIZ0syTDkxVlpYQmluYmdPTzlyZTZ5SFJoMnY5c3c1Ym5QeXVxaTlNSHhoai1OZVNXSHZqUGNIMk03MlhndHVQVDRhZ1M2bzhwVFJQUU1nUERuWWJZZWZvbGxULUE?oc=5",
         "resolved_title": "The 18th-century farmhouse hotel and other places still taking bookings for Christmas Day in Greater Manchester"
+      },
+      {
+        "id": "6c36f5f05a6eacf8",
+        "headline": "The sun sets on Rochdale's Seven Sisters",
+        "received_at": "2026-11-23T08:05:30+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPc24tOGVodlFTcVZVTHU3RWdlZlh3VVJ6Nmh6NW9pcTZLSEtWQ3J2eWZhTEs3NDNKZ05lRkhDeHJwS05jSVplaVpQYmVhcUI0Y1Z2bEZlWHJVZFpQMUV4Zk9tbGR5bGtSOXd2ZWhYTTFOcXJVakU0M0VRZ2l1T3VhQUF4QkNuM2tZZ2xmMUxKUEp3XzU2NlZDbHdrclFTckNIc3F6WWswa3JiSHhUT3hB?oc=5",
+        "resolved_title": "The sun sets on Rochdale's Seven Sisters"
+      },
+      {
+        "id": "7fc1b0a449cd97da",
+        "headline": "Two iconic landmarks set to go in major developments for Greater Manchester",
+        "received_at": "2026-11-23T08:05:30+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPZm5EZGx2OFlDcXhaU1ZVWXRGSjQ1VHVudEdsdjhGZTF1anBZenB6OHY5b2xUZ2VJWUl1RTVaeVZTNXBDQ09PU0kzOGI1NDhvVXl5eU4ycU5Lams2emY1TUZIeHYzSTlXQ1NEcWxPQTVMVkpzQUdQOVEwN3RQT3FSYjA1ZjNmZmZ50gGOAUFVX3lxTE82N1FCbkIwaUdkTVFiSkJocGgta0k0NjdGY21BOUh1cHdVWGtWbV9WYXIwV1h4MmN4Q1ZBYmVzaWRqamZmdmVnZXJqZUY3eUMtWXJZaWl6SzlQRzJFcW5mNFI1aXpDRnZzVGtFYjlSUnRUeGlRakRwM2xkbHJtaHQyRVhTOEVSd3lZdkwyY3c?oc=5",
+        "resolved_title": "Two iconic landmarks set to go in major developments for Greater Manchester"
       }
     ]
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 23,
-    "Manchester Evening News": 19,
-    "Rochdale AFC": 13,
-    "InYourArea": 5,
-    "Northampton Chronicle and Echo": 4,
+    "Rochdale Times": 28,
+    "Manchester Evening News": 20,
+    "Rochdale AFC": 15,
+    "InYourArea": 7,
+    "Northampton Chronicle and Echo": 6,
     "Bee Network live travel alerts": 4,
+    "Id": 3,
+    "About Manchester": 3,
+    "Rochdale Borough Council": 3,
     "BBC Manchester": 2,
-    "About Manchester": 2,
-    "Rochdale Borough Council": 2,
+    "Express and Star": 2,
+    "Roch Valley Radio": 2,
+    "Sky Sports": 2,
     "Birmingham Now": 2,
     "County Times": 1,
     "Wilts and Gloucestershire Standard": 1,
     "The Northern Echo": 1,
-    "Roch Valley Radio": 1,
+    "The Sun": 1,
+    "Yahoo Sports": 1,
+    "Cotswold Journal": 1,
+    "Yahoo": 1,
     "Ireland Live News": 1,
-    "Express and Star": 1,
     "Stourbridge News": 1,
-    "Id": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
@@ -445,7 +458,7 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-7ed4f7ba8d9cc96e148c",
+    "hard-news-v3-9b6e89657304d5037f0b",
     "sport-v3-990244172acb99c01b2b",
     "hard-news-v3-74fedd36ba4a2345b956",
     "transport-v3-2fa82ba5448e8bd11429",
@@ -1101,18 +1114,24 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
+    "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1148,7 +1167,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-23T08:38:55.447491Z",
+  "frontpage_generated_at": "2026-11-23T08:57:14.751621Z",
   "frontpage_article_count": 1,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1156,7 +1175,6 @@
       "community",
       "crime",
       "education",
-      "health",
       "news",
       "traffic"
     ],
@@ -1164,21 +1182,24 @@
       "community",
       "crime",
       "education",
-      "health",
       "news",
       "traffic"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Milnrow and Newhey"
+    ],
+    "selected_wards": [
+      "Milnrow and Newhey"
+    ],
     "available_areas": [
       "heywood",
-      "littleborough",
-      "middleton"
+      "middleton",
+      "newhey"
     ],
     "selected_areas": [
       "heywood",
-      "littleborough",
       "middleton",
+      "newhey",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -1192,8 +1213,8 @@
     },
     "selected_by_area": {
       "heywood": 1,
-      "littleborough": 1,
       "middleton": 1,
+      "newhey": 1,
       "rochdale": 9
     },
     "selected_by_source": {
