@@ -38,6 +38,13 @@ jobs:
       # register_watch.py's CQC collector stays dark until this secret exists.
       CQC_SUBSCRIPTION_KEY: ${{ secrets.CQC_SUBSCRIPTION_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
+      # AI provider for story rewrites. "anthropic" sends the identical
+      # requests (same prompts, schema and gates) to Claude while OpenAI is out
+      # of credit. Set back to "openai" to return to OPENAI_MODEL.
+      LLM_PROVIDER: "anthropic"
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
+      ANTHROPIC_MODEL: "claude-haiku-5-5"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "48"
@@ -272,6 +279,13 @@ jobs:
       FACEBOOK_GRAPH_VERSION: "v22.0"
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
+      # AI provider for story rewrites. "anthropic" sends the identical
+      # requests (same prompts, schema and gates) to Claude while OpenAI is out
+      # of credit. Set back to "openai" to return to OPENAI_MODEL.
+      LLM_PROVIDER: "anthropic"
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
+      ANTHROPIC_MODEL: "claude-haiku-5-5"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "72"

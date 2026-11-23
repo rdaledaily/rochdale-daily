@@ -4376,6 +4376,8 @@ def main() -> int:
             client_options: dict[str, Any] = {'api_key': api_key}
             if base_url:
                 client_options['base_url'] = base_url
+            # LLM_PROVIDER=anthropic: same requests, sent to Claude instead.
+            client_options.update(editorial_upgrade.provider_client_options())
             # OpenAI's default HTTP timeout is much longer than the fast
             # newsroom's deadline. Bound requests in that lane so one stalled
             # provider call does not prevent every successful draft publishing.

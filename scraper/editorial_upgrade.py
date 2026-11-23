@@ -684,6 +684,108 @@ def describe_api_error(exc):
         details.append(str(code))
     return f"{name}: {' '.join(details)}" if details else name
 
+# ---------------------------------------------------------------------------
+# AI provider switch.
+#
+# LLM_PROVIDER=anthropic sends the same rewrite requests -- same prompts, same
+# schema, same quality gates, same publishing rules -- to Claude through
+# Anthropic's OpenAI-compatible endpoint instead of to OpenAI. Unset or
+# "openai" keeps everything exactly as before.
+#
+# Claude's endpoint differs from OpenAI's in three ways this adapter absorbs:
+#   * it rejects `temperature` below 1 on current models, so it is omitted;
+#   * strict json_schema is its only accepted response_format, and its
+#     structured outputs do not accept item/length/number limits (maxItems,
+#     minItems above 1, minLength, minimum...). Those limits are moved into the
+#     field's description so the model still sees them; the quality gates
+#     already enforce the counts that matter (paragraphs, local-impact points);
+#   * workspace-less keys need an anthropic-workspace-id header.
+# ---------------------------------------------------------------------------
+ANTHROPIC_OPENAI_BASE_URL = "https://api.anthropic.com/v1/"
+DEFAULT_ANTHROPIC_MODEL = "claude-haiku-5-5"
+_CLAUDE_LIMIT_WORDS = {
+    "minItems": "at least {} items",
+    "maxItems": "at most {} items",
+    "minLength": "at least {} characters",
+    "maxLength": "at most {} characters",
+    "minimum": "minimum {}",
+    "maximum": "maximum {}",
+    "exclusiveMinimum": "greater than {}",
+    "exclusiveMaximum": "less than {}",
+    "multipleOf": "a multiple of {}",
+}
+
+
+def llm_provider() -> str:
+    value = os.getenv("LLM_PROVIDER", "").strip().lower()
+    return value or "openai"
+
+
+def llm_provider_label() -> str:
+    return "Claude" if llm_provider() == "anthropic" else "OpenAI"
+
+
+def provider_client_options() -> dict[str, Any]:
+    """Client settings that replace the OpenAI defaults for the chosen provider."""
+    if llm_provider() != "anthropic":
+        return {}
+    key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("LLM_PROVIDER=anthropic but ANTHROPIC_API_KEY is not set")
+    options: dict[str, Any] = {
+        "api_key": key,
+        "base_url": os.getenv("ANTHROPIC_OPENAI_BASE_URL", "").strip() or ANTHROPIC_OPENAI_BASE_URL,
+    }
+    workspace = os.getenv("ANTHROPIC_WORKSPACE_ID", "").strip()
+    if workspace:
+        options["default_headers"] = {"anthropic-workspace-id": workspace}
+    return options
+
+
+def claude_schema(node: Any) -> Any:
+    """Copy of a JSON schema with limits Claude cannot enforce moved into descriptions."""
+    if isinstance(node, list):
+        return [claude_schema(item) for item in node]
+    if not isinstance(node, dict):
+        return node
+    out: dict[str, Any] = {}
+    notes: list[str] = []
+    for key, value in node.items():
+        if key == "properties" and isinstance(value, dict):
+            # Property NAMES are data, not keywords: recurse into each value only.
+            out[key] = {name: claude_schema(sub) for name, sub in value.items()}
+        elif key == "minItems" and isinstance(value, int) and value <= 1:
+            out[key] = value
+        elif key in _CLAUDE_LIMIT_WORDS:
+            notes.append(_CLAUDE_LIMIT_WORDS[key].format(value))
+        else:
+            out[key] = claude_schema(value)
+    if notes:
+        existing = str(out.get("description") or "").strip()
+        extra = "Must be " + ", ".join(notes) + "."
+        out["description"] = f"{existing} {extra}".strip()
+    return out
+
+
+def adapt_request_for_provider(request_kwargs: dict[str, Any]) -> dict[str, Any]:
+    if llm_provider() != "anthropic":
+        return request_kwargs
+    adapted = dict(request_kwargs)
+    adapted["model"] = os.getenv("ANTHROPIC_MODEL", "").strip() or DEFAULT_ANTHROPIC_MODEL
+    adapted.pop("temperature", None)
+    response_format = adapted.get("response_format")
+    if isinstance(response_format, dict) and response_format.get("type") == "json_schema":
+        json_schema = dict(response_format.get("json_schema") or {})
+        json_schema["strict"] = True
+        json_schema["schema"] = claude_schema(json_schema.get("schema") or {})
+        adapted["response_format"] = {"type": "json_schema", "json_schema": json_schema}
+    elif response_format is not None:
+        # json_object and text are a 400 on Claude's endpoint; the reply is
+        # still parsed and gated exactly as in "none" mode.
+        adapted.pop("response_format", None)
+    return adapted
+
+
 def create_with_rate_limit_retry(
     client: Any, request_kwargs: dict[str, Any], logger: Any = None
 ) -> Any:
@@ -694,6 +796,7 @@ def create_with_rate_limit_retry(
     dropped because the paper was briefly talking too fast. Sleep the advised
     time instead, and keep the attempts for genuine quality problems.
     """
+    request_kwargs = adapt_request_for_provider(request_kwargs)
     waits = 0
     max_waits = _int_env("LLM_RATE_LIMIT_RETRIES", 6)
     while True:
@@ -1545,7 +1648,7 @@ def request_article(
         return previous
     if previous is None:
         # No draft ever came back: every attempt raised inside the API call.
-        skip(f"OpenAI: all {api_failures} attempts failed ({last_api_error or 'unknown error'})")
+        skip(f"{llm_provider_label()}: all {api_failures} attempts failed ({last_api_error or 'unknown error'})")
     else:
         # A draft exists but still fails an integrity (non-style) check after
         # four repairs. Name the first such check so a gate that is too strict
