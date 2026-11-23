@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-23T14:05:06.016325Z",
+  "last_run_at": "2026-11-23T14:30:25.866365Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-23T08:12:06.202803Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 2,
+      "daily_cap": 4,
+      "offered_today": 3,
+      "listed": 35,
+      "already_seen": 20,
+      "started_long_ago": 0,
+      "too_far_ahead": 12,
+      "undated": 1,
+      "in_window": 2
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,8 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-23T08:12:06.202803Z",
-      "interval_hours": 6
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='questions-statements-api.parliament.uk', port=443): Max retries exceeded with url: /api/writtenquestions/questions?askingMemberId=5084&answeredWhenFrom=2026-"
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +33,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-23T08:12:06.202803Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 3,
+      "daily_cap": 3,
+      "offered_today": 3,
+      "pages": 3,
+      "releases": 229,
+      "borough_buyer": 3,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 3,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-23T08:12:06.202803Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -54,18 +73,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 108,
+  "raw_candidates_before_job_filter": 120,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 108,
-  "candidate_clusters": 47,
+  "raw_candidates": 120,
+  "candidate_clusters": 49,
   "google_news_resolution": {
-    "wrappers": 72,
-    "resolved": 50,
-    "text_recovered": 27,
-    "reattributed": 4,
-    "images_found": 41
+    "wrappers": 75,
+    "resolved": 51,
+    "text_recovered": 28,
+    "reattributed": 5,
+    "images_found": 42
   },
-  "duplicates_merged": 61,
+  "duplicates_merged": 71,
   "attempted_rewrites": 17,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -88,10 +107,10 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 198,
+    "entries": 201,
     "by_outcome": {
       "editorial_twin": 20,
-      "failed": 73,
+      "failed": 76,
       "published": 61,
       "rejected": 44
     },
@@ -138,7 +157,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 99,
+    "rss_and_google_news": 106,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -148,7 +167,7 @@
     "gmp_email_releases": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0,
+    "primary_data": 5,
     "men_newsletter": 10
   },
   "collector_errors": {},
@@ -359,25 +378,26 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 21,
+    "Rochdale Times": 23,
     "Rochdale AFC": 19,
-    "Manchester Evening News": 13,
+    "Manchester Evening News": 14,
     "rochdaledaily.co.uk": 11,
-    "Northampton Chronicle and Echo": 7,
+    "Northampton Chronicle and Echo": 10,
+    "Id": 4,
+    "Rochdale Borough Council": 4,
     "Bee Network live travel alerts": 4,
+    "Yahoo News UK": 3,
     "About Manchester": 3,
-    "Id": 3,
-    "Rochdale Borough Council": 3,
+    "Find a Tender": 3,
     "County Times": 2,
-    "Yahoo News UK": 2,
     "Express and Star": 2,
     "Roch Valley Radio": 2,
     "Sky Sports": 2,
     "BBC Manchester": 1,
     "Wilts and Gloucestershire Standard": 1,
     "The Northern Echo": 1,
-    "Dave.Sport": 1,
     "Yorkshire Post": 1,
+    "Dave.Sport": 1,
     "The Sun": 1,
     "Yahoo Sports": 1,
     "Cotswold Journal": 1,
@@ -394,9 +414,9 @@
     "environment": 2,
     "events": 1,
     "news": 5,
-    "sport": 3,
+    "sport": 4,
     "traffic": 1,
-    "transport": 2
+    "transport": 1
   },
   "published_by_category": {
     "business": 72,
@@ -440,18 +460,18 @@
     "hard-news-v3-9b6e89657304d5037f0b",
     "sport-v3-990244172acb99c01b2b",
     "hard-news-v3-f7c99791b903159f614a",
-    "hard-news-v3-e844d26532737593262b",
-    "transport-v3-2fa82ba5448e8bd11429",
+    "hard-news-v3-7520b94e4807f768327a",
+    "transport-v3-6a7ca75340d22911b870",
     "transport-v3-1a73074aa060f403a97a",
     "sport-v3-a1424274d99cefee87c5",
     "events-v3-6e1d6e1e5d1d9d53afc0",
-    "business-v3-4488d55b40323bd930ce",
-    "environment-v3-448572769a58fd55233a",
+    "business-v3-1c4990ad8f01a2495342",
+    "environment-v3-be52646ba2822e266141",
     "hard-news-v3-9770f90d8451c2bb4732",
     "hard-news-v3-82ebd9ac1d4c80ccd18a",
     "sport-v3-990244172acb99c01b2b",
-    "transport-v3-2a74733bfd3df5942f1c",
-    "environment-v3-1f077b2b8d44ceb00c06"
+    "environment-v3-0e7448411de568d38604",
+    "sport-v3-0d36373fe1d3cb0b0dab"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090",
@@ -459,18 +479,18 @@
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/breaking-rochdale-afc-sack-manager-34949387",
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/18th-century-farmhouse-hotel-places-34938159",
-    "https://www.northamptonchron.co.uk/sport/football/hogg-on-donacien-and-dyche-absences-against-rochdale-and-why-evans-took-crucial-penalty-9366065?__cf_chl_rt_tk=NOciTt2pMLGunAzj5zsLPwJN.P1PihvPrJGI7xYzTts-1795381064-1.0.1.1-ohVgsPm1ztuozeC2xZsdFd9tmrl6guQZ.bKldrROTj0",
-    "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026",
+    "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
+    "https://www.rochdale.gov.uk/directory-record/2673/middleton-pantomime-temporary-prohibition-of-waiting-in-middleton-from-26-november-2026",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0d45acfa92620931b9",
     "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy/",
     "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026/",
-    "https://suaragarut.id/en/northampton-beat-rochdale-comeback",
-    "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
+    "https://www.find-tender.service.gov.uk/Notice/110533-2026",
+    "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf",
     "https://www.rochdaletimes.co.uk/overwhelming-support-for-veterans-accommodation-plan/",
     "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge/",
     "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson/",
-    "https://www.expressandstar.com/uk-sports/lee-evans-penalty-gives-northampton-win-in-five-goal-thriller-against-rochdale-9365783?__cf_chl_rt_tk=wOg5EKWRT7vJaP_RNzM5ZaoqLoLC5clGEnifkolXo9Y-1795342388-1.0.1.1-NjHUwHDtGsLLmjXAM7cIAmpGoKeYkBicHzM7_Xc4Lx8",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545"
+    "https://www.expressandstar.com/uk-sports/chris-hogg-hails-northampton-reaction-against-rochdale-9365864",
+    "https://demokratis.co.id/en/northampton-beat-rochdale-sixfields"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -508,9 +528,11 @@
       "Spotland and Falinge"
     ],
     "available_areas": [
+      "middleton",
       "spotland"
     ],
     "selected_areas": [
+      "middleton",
       "rochdale",
       "spotland"
     ],
@@ -523,15 +545,16 @@
       "environment": 2,
       "events": 1,
       "news": 1,
-      "sport": 2,
+      "sport": 3,
       "traffic": 1,
-      "transport": 2
+      "transport": 1
     },
     "selected_by_ward": {
       "Spotland and Falinge": 1
     },
     "selected_by_area": {
-      "rochdale": 11,
+      "middleton": 1,
+      "rochdale": 10,
       "spotland": 1
     },
     "selected_by_source": {
@@ -539,11 +562,11 @@
       "bee network live travel alerts": 1,
       "express and star": 1,
       "falinge park high school": 1,
+      "find a tender": 1,
       "id": 1,
-      "manchester evening news": 1,
-      "northampton chronicle and echo": 2,
+      "northampton chronicle and echo": 1,
       "rochdale afc": 1,
-      "rochdale borough council": 1,
+      "rochdale borough council": 2,
       "rochdale times": 1,
       "thenonleaguefootballpaper": 1
     },
@@ -1105,8 +1128,8 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
-    "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHg3Wll3UlpYamhMQWpJWW1GM1RnYXkyZF9BQUlkZDFCNzBvYl9qakNmSUh6dEpzdHpKZFRveVNiVnMyX0FnaTRRMmIydVpCc2djLW51Uml0NFA2Y3piVHplVWg3SWxaUnNyd0E0XzRfWkpHVFg0VkRYQ2hUTmVER3N6RVE2RGNVOTRnQ0Zn?oc=5",
-    "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5"
+    "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5",
+    "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHg3Wll3UlpYamhMQWpJWW1GM1RnYXkyZF9BQUlkZDFCNzBvYl9qakNmSUh6dEpzdHpKZFRveVNiVnMyX0FnaTRRMmIydVpCc2djLW51Uml0NFA2Y3piVHplVWg3SWxaUnNyd0E0XzRfWkpHVFg0VkRYQ2hUTmVER3N6RVE2RGNVOTRnQ0Zn?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1146,7 +1169,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-23T14:06:16.584484Z",
+  "frontpage_generated_at": "2026-11-23T14:31:52.100366Z",
   "frontpage_article_count": 5,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
