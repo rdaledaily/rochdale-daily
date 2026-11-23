@@ -113,5 +113,37 @@ class ProviderSwitchTests(unittest.TestCase):
         json.dumps(fake.calls)  # plain data only
 
 
+class PublishableFlagTests(unittest.TestCase):
+    def _draft(self, **over):
+        d = {
+            "publishable": False, "content_class": "news_report", "is_about_rochdale_borough": True,
+            "title": "x", "excerpt": "", "paragraphs": [],
+        }
+        d.update(over)
+        return d
+
+    def test_flag_trusted_by_default(self):
+        with mock.patch.dict(os.environ, {"TRUST_MODEL_PUBLISHABLE_FLAG": ""}):
+            self.assertEqual(eu.quality_issues(self._draft(), "source"), ["The model marked the story unpublishable."])
+
+    def test_flag_ignored_but_other_checks_still_run(self):
+        with mock.patch.dict(os.environ, {"TRUST_MODEL_PUBLISHABLE_FLAG": "false"}):
+            issues = eu.quality_issues(self._draft(), "source")
+        self.assertNotIn("The model marked the story unpublishable.", issues)
+        self.assertTrue(issues)  # headline/standfirst/length checks still apply
+
+    def test_advert_gate_still_applies_when_flag_ignored(self):
+        with mock.patch.dict(os.environ, {"TRUST_MODEL_PUBLISHABLE_FLAG": "false"}):
+            issues = eu.quality_issues(self._draft(content_class="advert_or_listing"), "source")
+        self.assertTrue(any(i.startswith(eu.GATE_REJECTION_PREFIX) for i in issues), issues)
+
+
+class RetryClassificationTests(unittest.TestCase):
+    def test_claude_provider_failure_is_retryable(self):
+        import scraper as core
+        self.assertEqual(core.rewrite_outcome_for_reason("Claude: all 4 attempts failed (APIError)"), "failed")
+        self.assertEqual(core.rewrite_outcome_for_reason("OpenAI: all 4 attempts failed"), "failed")
+
+
 if __name__ == "__main__":
     unittest.main()

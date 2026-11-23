@@ -3738,7 +3738,7 @@ def save_rewrite_ledger() -> None:
 def rewrite_outcome_for_reason(reason: str) -> str:
     """Classify a skip reason: 'failed' is the provider's fault and retryable."""
     low = str(reason or '').casefold()
-    if low.startswith('openai') or low.startswith('worker crashed'):
+    if low.startswith('openai') or low.startswith('claude') or low.startswith('worker crashed'):
         return 'failed'
     return 'rejected'
 

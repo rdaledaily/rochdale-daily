@@ -1003,8 +1003,17 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
     # self-veto and let those independent gates decide. Set
     # TRUST_MODEL_SELF_CLASSIFICATION=false for Cloudflare/Llama.
     trust_self = os.getenv("TRUST_MODEL_SELF_CLASSIFICATION", "true").strip().lower() not in {"0", "false", "no", "off"}
+    # The bare `publishable` boolean has no written definition anywhere in the
+    # prompt or editorial gate, unlike content_class and is_about_rochdale_borough
+    # which carry explicit rules. GPT-4o-mini always set it true; Claude sets it
+    # false on genuine local news (all 18 of its first run's candidates,
+    # 23 Nov 2026, including a manager sacking and a house-fire rescue).
+    # TRUST_MODEL_PUBLISHABLE_FLAG=false ignores only that undefined flag; the
+    # advert/listing/out-of-borough gate and every integrity, legal and style
+    # check below still run unchanged.
+    trust_flag = os.getenv("TRUST_MODEL_PUBLISHABLE_FLAG", "true").strip().lower() not in {"0", "false", "no", "off"}
     if trust_self:
-        if not bool(clean.get("publishable")):
+        if trust_flag and not bool(clean.get("publishable")):
             return ["The model marked the story unpublishable."]
         rejection = gate_rejection(clean)
         if rejection and _borough_evidence_overrules_non_local(rejection, source_text):
@@ -1622,11 +1631,22 @@ def request_article(
                 # prose when a grounded fact pack could not be produced.
                 skip("quality gate: fact-note rebuild unavailable after source overlap")
                 return None
+        veto_detail = ""
+        if isinstance(draft, dict) and any("unpublishable" in issue or "not about" in issue.lower() for issue in feedback):
+            # Record the model's own explanation for a self-veto, so a run log
+            # shows WHY a story was refused rather than only that it was.
+            veto_detail = " [model said: publishable=%s, content_class=%s, rochdale=%s, reason=%s]" % (
+                draft.get("publishable"),
+                draft.get("content_class"),
+                draft.get("is_about_rochdale_borough"),
+                str(draft.get("reason") or "")[:300],
+            )
         logger.warning(
-            "Journalism repair requested after attempt %d for %s: %s",
+            "Journalism repair requested after attempt %d for %s: %s%s",
             attempt + 1,
             getattr(candidate, "source_url", ""),
             "; ".join(feedback),
+            veto_detail,
         )
 
     # Four attempts spent. The old behaviour discarded the best draft and

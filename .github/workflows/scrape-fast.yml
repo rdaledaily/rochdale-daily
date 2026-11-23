@@ -45,6 +45,9 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
       ANTHROPIC_MODEL: "claude-haiku-5-5"
+      # Claude marks genuine local news "unpublishable" via a flag that has no
+      # written rule behind it. Ignore that one flag; every other gate runs.
+      TRUST_MODEL_PUBLISHABLE_FLAG: "false"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "48"
@@ -286,6 +289,9 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
       ANTHROPIC_MODEL: "claude-haiku-5-5"
+      # Claude marks genuine local news "unpublishable" via a flag that has no
+      # written rule behind it. Ignore that one flag; every other gate runs.
+      TRUST_MODEL_PUBLISHABLE_FLAG: "false"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "72"
