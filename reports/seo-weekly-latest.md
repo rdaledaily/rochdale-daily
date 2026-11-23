@@ -1,15 +1,15 @@
 # Rochdale Daily weekly SEO technical audit
 
-Generated: 2026-11-16T15:44:09.848187+00:00
-URLs in sitemap: **1946**
-Files inspected: **1946**
+Generated: 2026-11-23T18:05:19.202000+00:00
+URLs in sitemap: **2047**
+Files inspected: **2047**
 
 ## Priorities
 
-- generated hero cards: **413**
-- duplicate page title: **19**
+- generated hero cards: **419**
+- duplicate page title: **20**
+- canonical mismatch: **9**
 - missing canonical: **3**
-- canonical mismatch: **2**
 - missing locality hub: **2**
 
 ## Top actionable issues
@@ -17,7 +17,14 @@ Files inspected: **1946**
 - **ERROR** missing_canonical at https://rochdaledaily.co.uk/articles/bus-driver-shot-dead-outside-london-pub-named-by-police
 - **ERROR** missing_canonical at https://rochdaledaily.co.uk/articles/rochdale-tiktoker-under-police-investigation-for-secret-filming
 - **ERROR** missing_canonical at https://rochdaledaily.co.uk/articles/six-teenage-boys-aged-13-to-17-arrested-after-police-officer-hit-by-stolen-car
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/guides/banks-rochdale (https://rochdaledaily.co.uk/guides/banks-rochdale.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/guides/death-notices-funerals-rochdale (https://rochdaledaily.co.uk/guides/death-notices-funerals-rochdale.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/guides/rochdale-online-closed (https://rochdaledaily.co.uk/guides/rochdale-online-closed.html)
 - **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/roadworks (https://rochdaledaily.co.uk/roadworks.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/weather/heywood (https://rochdaledaily.co.uk/weather/heywood.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/weather/littleborough (https://rochdaledaily.co.uk/weather/littleborough.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/weather/middleton (https://rochdaledaily.co.uk/weather/middleton.html)
+- **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/weather/milnrow (https://rochdaledaily.co.uk/weather/milnrow.html)
 - **WARNING** canonical_mismatch at https://rochdaledaily.co.uk/whats-on (https://rochdaledaily.co.uk/whats-on.html)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/al-rayyan-to-face-rochdale-in-upcoming-match (https://rochdaledaily.co.uk/articles/boreham-wood-to-play-rochdale-in-upcoming-match)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/atom-valley-northern-gateway-mayoral-development-corporation-meeting-scheduled-f (https://rochdaledaily.co.uk/articles/rochdale-borough-council-to-hold-health-and-wellbeing-board-development-session)
@@ -27,6 +34,7 @@ Files inspected: **1946**
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/daniel-meredith-rochdale-hornets-superhero-day-council-partnership (https://rochdaledaily.co.uk/articles/rochdale-hornets-celebrate-successful-superhero-day-despite-men-s-game-loss)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/evictions-at-seven-sisters-in-rochdale-leave-100-households-awaiting-rehousing (https://rochdaledaily.co.uk/articles/rochdale-boroughwide-housing-appoints-new-chair)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/ian-watson-praises-rochdale-afc-s-performance-in-trophy-tie-against-liverpool-un (https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-liverpool-under-21s-in-efl-trophy-match, https://rochdaledaily.co.uk/articles/rochdale-to-host-liverpool-u21-in-efl-trophy-match)
+- **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/massive-explosion-in-rochdale-believed-to-be-caused-by-hot-tub (https://rochdaledaily.co.uk/articles/residents-evacuated-after-hot-tub-explosion-in-bamford-rochdale)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-afc-celebrates-first-league-win-with-3-0-victory-over-shrewsbury (https://rochdaledaily.co.uk/articles/rochdale-afc-celebrates-first-league-win-with-3-0-victory-over-shrewsbury-town, https://rochdaledaily.co.uk/articles/rochdale-secures-first-league-win-with-3-0-victory-over-shrewsbury)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-afc-hosts-gillingham-in-sky-bet-league-two-match (https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-gillingham-in-league-two-match, https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-gillingham-in-sky-bet-league-two-match)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-afc-prepares-for-gillingham-match-with-tvos-programme (https://rochdaledaily.co.uk/articles/rochdale-afc-publishes-matchday-guide-for-saturday-s-fixture)
@@ -36,10 +44,6 @@ Files inspected: **1946**
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-defeats-oldham-athletic-2-0-in-league-two-derby (https://rochdaledaily.co.uk/articles/rochdale-to-face-oldham-athletic-on-19-september-2026)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-secures-first-efl-win-with-3-0-victory-over-shrewsbury (https://rochdaledaily.co.uk/articles/rochdale-secures-first-league-win-of-the-season-against-shrewsbury-town)
 - **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-to-compete-against-shrewsbury-town-in-league-two-fixture (https://rochdaledaily.co.uk/articles/rochdale-to-host-shrewsbury-town-in-league-two-match-on-september-2)
-- **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/rochdale-town-centre-to-host-community-audio-walk-event (https://rochdaledaily.co.uk/articles/rochdale-town-centre-to-host-stories-we-tell-audio-walk)
-- **WARNING** duplicate_page_title at https://rochdaledaily.co.uk/articles/train-services-between-rochdale-and-manchester-victoria-resume-after-points-fail (https://rochdaledaily.co.uk/articles/train-services-between-rochdale-and-manchester-victoria-resume-following-points)
-- **WARNING** missing_locality_hub at https://rochdaledaily.co.uk/heywood.html
-- **WARNING** missing_locality_hub at https://rochdaledaily.co.uk/milnrow.html
 
 ## What this does not tell us
 
