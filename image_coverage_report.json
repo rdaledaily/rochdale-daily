@@ -1,10 +1,10 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 137,
+    "kept_cards": 138,
     "cards_library": 0,
-    "cards_generated": 467,
-    "incident_card": 5,
+    "cards_generated": 469,
+    "incident_card": 6,
     "skipped": 0
   },
   "items": [
@@ -26,6 +26,13 @@
       "slug": "you-may-be-able-to-claim-for-turner-brothers-asbestos",
       "result": "kept-existing",
       "image_url": "assets/img/cards/asbestos_factory.png",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "temporary-no-waiting-restriction-on-part-of-lance-corporal-joel-halliwell-vc-way",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/1db503de8d38-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -58,9 +65,37 @@
       "match_score": null
     },
     {
+      "slug": "overwhelming-support-for-veterans-flats-plan-at-denehurst-house",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "man-rescued-from-house-fire-on-abbott-street-castleton-taken-to-hospital",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-sack-head-coach-ian-watson",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale_fc.jpg",
+      "matched_filename": "rochdale_fc.jpg",
+      "match_score": -1
+    },
+    {
       "slug": "morning-briefing-22-november-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-vehicles-seized-in-gmp-safer-business-action-week",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -200,13 +235,6 @@
     {
       "slug": "rochdale-repeat-shoplifters-pilot-november-2026",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/police.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "rochdale-man-jailed-for-life-for-murdering-wife-and-hiding-her-body",
-      "result": "police-photo",
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "",
       "match_score": null
@@ -1614,7 +1642,7 @@
     {
       "slug": "patrick-whelan-62-dies-in-roadside-work-incident-in-rochdale",
       "result": "cards-generated",
-      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
+      "image_url": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
