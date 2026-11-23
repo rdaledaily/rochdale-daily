@@ -17,6 +17,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import send_newsletter as mail  # noqa: E402
 
+# The live repo may carry a pause file; the sending tests run as if it is absent.
+mail.PAUSE_FILE = Path(__file__).resolve().parent / "_no_such_newsletter_pause.json"
+
 MORNING = datetime(2026, 10, 20, 8, 30, tzinfo=timezone.utc)      # 09:30 London
 ENV = {"BREVO_API_KEY": "xkeysib-test", "BREVO_LIST_ID": "7"}
 BRIEFING = {
@@ -52,6 +55,34 @@ class Brevo:
 def run(web=None, env=ENV, now=MORNING, articles=None):
     web = web or Brevo()
     return mail.run(dict(env), now, web, [BRIEFING] if articles is None else articles), web
+
+
+class Pause(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp()) / "pause.json"
+        self.real, mail.PAUSE_FILE = mail.PAUSE_FILE, self.tmp
+
+    def tearDown(self):
+        mail.PAUSE_FILE = self.real
+
+    def test_paused_sends_nothing_and_contacts_no_one(self):
+        self.tmp.write_text('{"paused": true, "reason": "paper on hold"}')
+        report, web = run()
+        self.assertEqual((report["sent"], web.calls), (False, []))
+        self.assertIn("paper on hold", report["status"])
+
+    def test_paused_keeps_the_missed_day_alarm_quiet(self):
+        self.tmp.write_text('{"paused": true}')
+        late = datetime(2026, 10, 20, 13, 10, tzinfo=timezone.utc)
+        report, web = run(env={**ENV, "NEWSLETTER_ALARM": "true"}, now=late)
+        self.assertFalse(report.get("error"), report)
+        self.assertEqual(web.calls, [])
+
+    def test_paused_false_resumes_sending(self):
+        self.tmp.write_text('{"paused": false}')
+        report, _ = run()
+        self.assertTrue(report["sent"], report)
 
 
 class Sending(unittest.TestCase):

@@ -50,6 +50,10 @@ except Exception:  # pragma: no cover
 
 ROOT = Path(__file__).resolve().parent.parent
 ARTICLES = ROOT / "articles.json"
+# Editor's off switch. While this file exists with "paused": true, nothing is
+# sent and the missed-day alarm stays quiet, so a deliberate pause never shows
+# as a failing run. Delete the file (or set "paused": false) to resume.
+PAUSE_FILE = ROOT / "newsletter_pause.json"
 SITE = "https://rochdaledaily.co.uk"
 BREVO = "https://api.brevo.com/v3"
 DEFAULT_SENDER = "news@rochdaledaily.co.uk"
@@ -312,10 +316,27 @@ def already_created(request: Request, key: str, name: str) -> bool | None:
     return any(str(row.get("name")) == name for row in data.get("campaigns") or [])
 
 
+def paused_reason() -> str | None:
+    """The editor's pause note if the newsletter is switched off, else None."""
+    try:
+        data = json.loads(PAUSE_FILE.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    except (OSError, ValueError):
+        return "pause file present but unreadable"
+    if not isinstance(data, dict) or data.get("paused", True) is False:
+        return None
+    return str(data.get("reason") or "paused by the editor")
+
+
 def run(env: dict[str, str], now: datetime, request: Request = http,
         articles: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     day = now.astimezone(LONDON).strftime("%Y-%m-%d")
     report: dict[str, Any] = {"date": day, "sent": False, "status": ""}
+    reason = paused_reason()
+    if reason:
+        report["status"] = f"paused ({reason}); nothing sent"
+        return report
     hour = now.astimezone(LONDON).hour
     # The alarm: once the sending window has closed, today's campaign must
     # exist. On 3, 5, 6, 7 and 12 November 2026 the newsletter silently never
