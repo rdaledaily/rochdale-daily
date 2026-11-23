@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-23T20:57:01.017300Z",
+  "updated_at": "2026-11-23T21:19:53.268313Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 210,
@@ -58,13 +58,13 @@
     },
     "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf": {
       "first_attempt_at": "2026-11-23T11:09:26.204267Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:02.705210Z",
+      "last_attempt_at": "2026-11-23T21:15:19.333591Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Committee Report - Rochdale Borough Council",
@@ -125,13 +125,13 @@
     },
     "https://investinrochdale.co.uk/news/post/driving-stem-education-with-the-primary-engineer-vehicle-programme": {
       "first_attempt_at": "2026-11-23T19:13:18.900437Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://investinrochdale.co.uk/news/post/driving-stem-education-with-the-primary-engineer-vehicle-programme"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:53:50.026174Z",
+      "last_attempt_at": "2026-11-23T21:15:07.427410Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Driving STEM education with the Primary Engineer Vehicle Programme",
@@ -204,13 +204,13 @@
     },
     "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5": {
       "first_attempt_at": "2026-11-23T19:54:43.578999Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:53:57.720610Z",
+      "last_attempt_at": "2026-11-23T21:15:14.858191Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
       "title": "💔 Daalat Ali feared he would never get home after being pulled off a flight back from Pakistan. Rochdale’s deputy council leader was detaine",
@@ -750,13 +750,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:55:21.796524Z",
+      "last_attempt_at": "2026-11-23T21:15:35.861434Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Rochdale Sack Ian Watson After Five Months in Charge - SuaraGarut.ID",
       "source_name": "Id",
       "category": "sport",
-      "text_fingerprint": "910efd1c56951731"
+      "text_fingerprint": "910efd1c56951731",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-05503a1a42fec0ea92": {
       "first_attempt_at": "2026-11-17T15:30:03.672423Z",
@@ -834,12 +835,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-20T07:56:08.677664Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 20/11/2026 at 7:30am Live Failsworth Tram Stop - Lifts out of service Duration Fri 20 Nov, 7:30am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "d9480bb88f3c7ad0"
+      "text_fingerprint": "d9480bb88f3c7ad0",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-8f28d50f3feee9e973": {
       "first_attempt_at": "2026-11-18T18:17:20.224241Z",
@@ -1512,13 +1514,13 @@
     },
     "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026": {
       "first_attempt_at": "2026-11-23T12:12:48.332555Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:53:58.578698Z",
+      "last_attempt_at": "2026-11-23T21:15:13.353105Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Ignite Fire Festival 2026",
@@ -1578,7 +1580,7 @@
     },
     "https://www.find-tender.service.gov.uk/Notice/110533-2026": {
       "first_attempt_at": "2026-11-23T14:25:43.537990Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.find-tender.service.gov.uk/Notice/110514-2026",
         "https://www.find-tender.service.gov.uk/Notice/110533-2026",
@@ -1586,7 +1588,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:17.367986Z",
+      "last_attempt_at": "2026-11-23T21:15:32.109030Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 23 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Borough Council awards contract: Lowerplace Primary School Hot and Cold Water Pipework (Infants) Phase 1 of 2",
@@ -2172,15 +2174,15 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090": {
       "first_attempt_at": "2026-11-22T20:32:09.924041Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:03.883894Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Evening, News do not appear in the source. Name only people,",
+      "last_attempt_at": "2026-11-23T21:19:53.267905Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Police to 'invite parents to station' after Heywood town centre plagued by large group of youths",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2205,13 +2207,13 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627": {
       "first_attempt_at": "2026-11-23T18:40:37.239860Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:01.242739Z",
+      "last_attempt_at": "2026-11-23T21:15:23.071293Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "'This is how people go missing': How one man got trapped in Pakistan",
@@ -2290,13 +2292,13 @@
     },
     "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664": {
       "first_attempt_at": "2026-11-23T11:06:31.318227Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:03.195303Z",
+      "last_attempt_at": "2026-11-23T21:15:18.208367Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Evening do not appear in the source. Name only people, places",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
@@ -2323,13 +2325,13 @@
     },
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/18th-century-farmhouse-hotel-places-34938159": {
       "first_attempt_at": "2026-11-23T11:06:32.055563Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/18th-century-farmhouse-hotel-places-34938159"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:53:52.559786Z",
+      "last_attempt_at": "2026-11-23T21:15:08.475247Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "The 18th-century farmhouse hotel and other places still taking bookings for Christmas Day in Greater Manchester",
@@ -2446,14 +2448,14 @@
     },
     "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744": {
       "first_attempt_at": "2026-11-23T18:41:15.252226Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSngyUG81aVJucHN5SlpQczUzbDF4WHRMT0FWS2x5YU0wN0FmYVl0REM5akxSLUlqdnM0MExTZk04S0NpUGNpcWpmMnptTlo1QWZob2VNamRRZHFXc0lBTVFGSTdHSUZKTEoxejY3cExaNFo5cFl2OWwwUnd1RV9USWVEYTZRbmU2OExKS045R2lfSUJoQmJUaExnRWM3WGFsUFdlbV9LdmtMbVZQRExDN1cxakY3T2F2QktHcw?oc=5",
         "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:53:58.647742Z",
+      "last_attempt_at": "2026-11-23T21:15:14.948226Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
       "title": "Dale ‘really enjoys’ playing for Cobblers after standout display",
@@ -2500,7 +2502,7 @@
     },
     "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306": {
       "first_attempt_at": "2026-11-23T11:54:30.518486Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5",
         "https://www.expressandstar.com/uk-sports/chris-hogg-hails-northampton-reaction-against-rochdale-9365864",
@@ -2512,7 +2514,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:02.252836Z",
+      "last_attempt_at": "2026-11-23T21:15:19.127236Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
       "title": "Hogg reveals ‘angriness’ in Cobblers dressing room despite Rochdale win",
@@ -2611,15 +2613,15 @@
     },
     "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale": {
       "first_attempt_at": "2026-11-23T15:23:05.166076Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:17.680086Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Getting active an",
+      "last_attempt_at": "2026-11-23T21:19:53.268080Z",
+      "outcome": "published",
+      "reason": "",
       "title": "New mental health football project kicks off in Rochdale",
       "source_name": "Pennine Care NHS",
       "category": "health",
@@ -2676,19 +2678,20 @@
     },
     "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026": {
       "first_attempt_at": "2026-11-23T01:41:11.460375Z",
-      "attempts": 36,
+      "attempts": 1,
       "urls": [
         "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T14:01:15.347931Z",
-      "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
+      "last_attempt_at": "2026-11-23T21:19:53.268011Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Healey Lane, roadworks in Rochdale from 7 December 2026",
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
-      "text_fingerprint": "e52d8ffee6783570"
+      "text_fingerprint": "e52d8ffee6783570",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.rochdale.gov.uk/directory-record/2665/clover-hall-crescent-roadworks-in-rochdale-from-17-november-2026": {
       "first_attempt_at": "2026-11-16T19:50:58.314872Z",
@@ -3227,13 +3230,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-23T20:57:01.017231Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-23T21:15:25.275471Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Young guitar star reaches national finals - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "837bf96c63d51808"
+      "text_fingerprint": "837bf96c63d51808",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/139/news/1233/today-marks-215-years-since-the-birth-of-the-greatest-master-of-english-oratory-john-bright-influential-rochdale-born-st": {
       "first_attempt_at": "2026-11-16T07:55:13.594358Z",
@@ -3544,13 +3548,13 @@
     },
     "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge": {
       "first_attempt_at": "2026-11-22T10:17:15.555161Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:54:07.360884Z",
+      "last_attempt_at": "2026-11-23T21:15:23.103061Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "BOATENG DENIES DALE FAN CHARGE - The Non-League Football Paper",
