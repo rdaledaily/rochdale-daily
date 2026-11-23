@@ -3747,6 +3747,24 @@ NEWSROOM_RETRY_POLICY_EPOCH = '2026-10-11-unblock-source-attributed-v1'
 OVERLAP_REBUILD_POLICY_EPOCH = '2026-10-19-fact-notes-v1'
 
 
+# 23 Nov 2026: the switch to Claude went through two faults before rewrites
+# worked (the undefined `publishable` flag, then thinking eating the token
+# budget). Every story rejected while those faults were live was turned down
+# by the faults, not on its merits, so each gets one fresh set of attempts.
+CLAUDE_SWITCH_RETRY_EPOCH = '2026-11-23-claude-switch-v1'
+CLAUDE_SWITCH_FAULT_WINDOW = ('2026-11-23T17:00:00', '2026-11-23T21:00:00')
+
+
+def _claude_switch_retry(entry: dict[str, Any]) -> bool:
+    """Reopen a rejection made while the Claude-switch faults were live, once."""
+    last = str(entry.get('last_attempt_at') or '')
+    return (
+        entry.get('outcome') == 'rejected'
+        and entry.get('claude_switch_epoch') != CLAUDE_SWITCH_RETRY_EPOCH
+        and CLAUDE_SWITCH_FAULT_WINDOW[0] <= last < CLAUDE_SWITCH_FAULT_WINDOW[1]
+    )
+
+
 def _overlap_rebuild_retry(entry: dict[str, Any]) -> bool:
     """Reopen held copying failures once after introducing the fact-note rebuild."""
     return (
@@ -3778,12 +3796,13 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
             and 'quality gate after' in str(entry.get('reason') or '')
             and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH
         )
-        if new_material or entry.get('outcome') != outcome or policy_retry or _overlap_rebuild_retry(entry):
+        if new_material or entry.get('outcome') != outcome or policy_retry or _overlap_rebuild_retry(entry) or _claude_switch_retry(entry):
             # Updated source material or a changed rewrite policy gets a
             # bounded fresh attempt, not an infinite retry on each run.
             entry['attempts'] = 0
         entry['policy_epoch'] = NEWSROOM_RETRY_POLICY_EPOCH
         entry['overlap_rebuild_epoch'] = OVERLAP_REBUILD_POLICY_EPOCH
+        entry['claude_switch_epoch'] = CLAUDE_SWITCH_RETRY_EPOCH
         entry['attempts'] = int(entry.get('attempts') or 0) + 1
         entry['last_attempt_at'] = now
         entry['outcome'] = outcome
@@ -3822,6 +3841,8 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     if outcome == 'rejected' and 'quality gate after' in reason and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH:
         return ''  # One bounded reattempt after today's rewrite-policy fix.
     if _overlap_rebuild_retry(entry):
+        return ''
+    if _claude_switch_retry(entry):
         return ''
     if outcome == 'published':
         return 'already published from this source material'
