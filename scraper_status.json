@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-23T19:35:32.912872Z",
+  "last_run_at": "2026-11-23T19:59:41.267610Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,27 +54,27 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 111,
+  "raw_candidates_before_job_filter": 108,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 109,
-  "candidate_clusters": 50,
+  "raw_candidates": 106,
+  "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 61,
-    "resolved": 30,
-    "text_recovered": 7,
+    "wrappers": 51,
+    "resolved": 25,
+    "text_recovered": 8,
     "reattributed": 2,
-    "images_found": 10
+    "images_found": 19
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 18,
+  "duplicates_merged": 55,
+  "attempted_rewrites": 12,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 677,
-  "skipped": 18,
+  "skipped": 12,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 14,
-    "editorial gate: REJECTED_NON_NEWS": 3,
+    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 10,
+    "editorial gate: REJECTED_NON_NEWS": 1,
     "Claude: all 4 attempts failed (JSONDecodeError)": 1
   },
   "rewrite_skips_unattributed": 0,
@@ -90,20 +90,110 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 208,
+    "entries": 210,
     "by_outcome": {
       "editorial_twin": 20,
-      "failed": 65,
+      "failed": 60,
       "published": 61,
-      "rejected": 62
+      "rejected": 69
     },
-    "held_back_this_run": 4,
+    "held_back_this_run": 14,
     "held_already_published": 1,
-    "held_rejected": 3,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge",
+      "title": "BOATENG DENIES DALE FAN CHARGE - The Non-League Football Paper",
+      "source_name": "Thenonleaguefootballpaper",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:51.518166Z"
+    },
+    {
+      "url": "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan",
+      "title": "Rochdale councillor shares ‘scary’ detainment experience in Pakistan",
+      "source_name": "Roch Valley Radio Local News",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:41.875029Z"
+    },
+    {
+      "url": "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson",
+      "title": "Rochdale part ways with Ian Watson - About Manchester",
+      "source_name": "About Manchester",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:41.032736Z"
+    },
+    {
+      "url": "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026",
+      "title": "Ignite Fire Festival 2026",
+      "source_name": "Falinge Park High School",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:40.775978Z"
+    },
+    {
+      "url": "https://www.find-tender.service.gov.uk/Notice/110533-2026",
+      "title": "Rochdale Borough Council awards contract: Lowerplace Primary School Hot and Cold Water Pipework (Infants) Phase 1 of 2",
+      "source_name": "Find a Tender",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:40.677377Z"
+    },
+    {
+      "url": "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
+      "title": "Hogg reveals ‘angriness’ in Cobblers dressing room despite Rochdale win",
+      "source_name": "Northampton Chronicle and Echo",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:40.381922Z"
+    },
+    {
+      "url": "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale",
+      "title": "New mental health football project kicks off in Rochdale",
+      "source_name": "Pennine Care NHS",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:38.265157Z"
+    },
+    {
+      "url": "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf",
+      "title": "Committee Report - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:11.563312Z"
+    },
+    {
+      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627",
+      "title": "'This is how people go missing': How one man got trapped in Pakistan",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:01.012776Z"
+    },
+    {
+      "url": "https://www.rochdale.gov.uk/directory-record/2673/middleton-pantomime-temporary-prohibition-of-waiting-in-middleton-from-26-november-2026",
+      "title": "Middleton Pantomime, temporary prohibition of waiting in Middleton from 26 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T19:32:00.077687Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
       "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
@@ -140,7 +230,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 98,
+    "rss_and_google_news": 95,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -251,11 +341,10 @@
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 6,
-      "held": 3,
+      "held": 8,
       "held_for_editor": 2,
       "not_found": 1,
-      "published": 1,
-      "rewrite_failed": 5
+      "published": 1
     },
     "outstanding_stories": [
       {
@@ -316,8 +405,8 @@
         "id": "e21330d6319627a9",
         "headline": "Man rescued from burning house in Rochdale and rushed to hospital",
         "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "rewrite_failed",
-        "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+        "status": "held",
+        "reason": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
         "resolved_title": "Man rescued from burning house in Rochdale and rushed to hospital"
       },
@@ -325,8 +414,8 @@
         "id": "0f8ac375f931f186",
         "headline": "Police to invite parents to station after town plagued by large group of youths",
         "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "rewrite_failed",
-        "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+        "status": "held",
+        "reason": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090",
         "resolved_title": "Police to 'invite parents to station' after Heywood town centre plagued by large group of youths"
       },
@@ -334,8 +423,8 @@
         "id": "4bfc246b66687cdf",
         "headline": "Rochdale AFC sack manager Ian Watson",
         "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "rewrite_failed",
-        "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+        "status": "held",
+        "reason": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/breaking-rochdale-afc-sack-manager-34949387",
         "resolved_title": "Rochdale AFC sack manager Ian Watson"
       },
@@ -343,8 +432,8 @@
         "id": "0a86ebdb71ae47ea",
         "headline": "The Greater Manchester venues still taking bookings for Christmas Day",
         "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "rewrite_failed",
-        "reason": "editorial gate: REJECTED_NON_NEWS",
+        "status": "held",
+        "reason": "already rejected: editorial gate: REJECTED_NON_NEWS",
         "resolved_url": "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/18th-century-farmhouse-hotel-places-34938159",
         "resolved_title": "The 18th-century farmhouse hotel and other places still taking bookings for Christmas Day in Greater Manchester"
       },
@@ -352,25 +441,18 @@
         "id": "7fc1b0a449cd97da",
         "headline": "Two iconic landmarks set to go in major developments for Greater Manchester",
         "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "rewrite_failed",
-        "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+        "status": "held",
+        "reason": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664",
         "resolved_title": "Two iconic landmarks set to go in major developments for Greater Manchester"
       }
     ]
   },
-  "immediate_first": [
-    {
-      "title": "'This is how people go missing': How one man got trapped in Pakistan",
-      "source": "Manchester Evening News",
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627",
-      "kind": "missing-person"
-    }
-  ],
+  "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 21,
+    "Rochdale Times": 20,
     "Rochdale AFC": 18,
-    "Manchester Evening News": 14,
+    "Manchester Evening News": 12,
     "rochdaledaily.co.uk": 10,
     "Rochdale Borough Council": 10,
     "Roch Valley Radio": 5,
@@ -379,7 +461,6 @@
     "About Manchester": 3,
     "Oldham Evening Chronicle": 2,
     "Id": 2,
-    "Oldham Times": 2,
     "Roch Valley Radio Local News": 2,
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
@@ -389,23 +470,22 @@
     "The Sun": 1,
     "Yahoo Sports": 1,
     "Yahoo": 1,
+    "Facebook": 1,
+    "Oldham Times": 1,
     "Rochdale Hornets": 1,
-    "Rochdale Development Agency": 1,
     "Rochdale Borough Council News": 1,
+    "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 1,
-    "crime": 2,
-    "education": 1,
+    "crime": 1,
+    "education": 2,
     "environment": 1,
-    "events": 1,
-    "health": 1,
-    "news": 6,
+    "news": 2,
     "sport": 3,
     "traffic": 1,
-    "transport": 1
+    "transport": 2
   },
   "published_by_category": {
     "business": 72,
@@ -444,44 +524,32 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-de5060855de249978169",
-    "hard-news-v3-9c237810c37e6d7e9946",
-    "hard-news-v3-9b6e89657304d5037f0b",
-    "sport-v3-990244172acb99c01b2b",
-    "hard-news-v3-f7c99791b903159f614a",
-    "hard-news-v3-bb8f4338bdce052d2f31",
-    "hard-news-v3-e844d26532737593262b",
-    "transport-v3-6a7ca75340d22911b870",
+    "hard-news-v3-ff69d09750d0c01cca06",
+    "transport-v3-81bf5ab2ce9b6549a290",
     "transport-v3-8d5fe4c09713bf71b895",
     "education-v3-50a51b029d5ed2f6e3c1",
-    "sport-v3-2a4209846b5ea649a70a",
-    "events-v3-6e1d6e1e5d1d9d53afc0",
-    "business-v3-1c4990ad8f01a2495342",
-    "health-v3-854373f1a6ca5ed19b14",
-    "environment-v3-be52646ba2822e266141",
-    "hard-news-v3-ff69d09750d0c01cca06",
-    "hard-news-v3-82ebd9ac1d4c80ccd18a",
-    "sport-v3-990244172acb99c01b2b"
+    "sport-v3-50dd761b868d914837db",
+    "environment-v3-1f077b2b8d44ceb00c06",
+    "hard-news-v3-9770f90d8451c2bb4732",
+    "hard-news-v3-9df2f4132d9d33fec380",
+    "transport-v3-1a73074aa060f403a97a",
+    "sport-v3-cf1fe7f0da1401f66944",
+    "education-v3-d12033d1c25861f97f49",
+    "sport-v3-397b593ec62eb38400b3"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090",
-    "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/breaking-rochdale-afc-sack-manager-34949387",
-    "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/18th-century-farmhouse-hotel-places-34938159",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627",
-    "https://www.northamptonchron.co.uk/sport/football/hogg-on-donacien-and-dyche-absences-against-rochdale-and-why-evans-took-crucial-penalty-9366065?__cf_chl_rt_tk=NOciTt2pMLGunAzj5zsLPwJN.P1PihvPrJGI7xYzTts-1795381064-1.0.1.1-ohVgsPm1ztuozeC2xZsdFd9tmrl6guQZ.bKldrROTj0",
-    "https://www.rochdale.gov.uk/directory-record/2673/middleton-pantomime-temporary-prohibition-of-waiting-in-middleton-from-26-november-2026",
+    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
+    "https://www.rochdale.gov.uk/directory-record/2672/letchworth-avenue-roadworks-in-rochdale-from-23-november-2026",
     "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744",
     "https://investinrochdale.co.uk/news/post/driving-stem-education-with-the-primary-engineer-vehicle-programme",
-    "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
-    "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026/",
-    "https://www.find-tender.service.gov.uk/Notice/110533-2026",
-    "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale",
-    "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf",
-    "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan",
-    "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge/",
-    "https://aboutmanchester.co.uk/rochdale-part-ways-with-ian-watson/"
+    "https://rochdaleafc.co.uk/dale-support-power-of-72/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545",
+    "https://www.rochdaletimes.co.uk/overwhelming-support-for-veterans-accommodation-plan/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0d45acfa92620931b9",
+    "https://suaragarut.id/en/rochdale-sack-ian-watson",
+    "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
+    "https://www.skysports.com/football/news/13611611/northampton-3-2-rochdale"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -493,82 +561,63 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "business",
       "crime",
       "education",
       "environment",
-      "events",
-      "health",
       "news",
       "sport",
       "traffic",
       "transport"
     ],
     "selected_categories": [
-      "business",
       "crime",
       "education",
       "environment",
-      "events",
-      "health",
       "news",
       "sport",
       "traffic",
       "transport"
     ],
-    "available_wards": [
-      "Spotland and Falinge"
-    ],
-    "selected_wards": [
-      "Spotland and Falinge"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [
-      "heywood",
-      "middleton",
-      "spotland"
+      "heywood"
     ],
     "selected_areas": [
       "heywood",
-      "middleton",
-      "rochdale",
-      "spotland"
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
-      "crime": 2,
-      "education": 1,
+      "crime": 1,
+      "education": 2,
       "environment": 1,
-      "events": 1,
-      "health": 1,
-      "news": 1,
-      "sport": 2,
+      "news": 2,
+      "sport": 3,
       "traffic": 1,
-      "transport": 1
+      "transport": 2
     },
-    "selected_by_ward": {
-      "Spotland and Falinge": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
-      "middleton": 1,
-      "rochdale": 9,
-      "spotland": 1
+      "rochdale": 11
     },
     "selected_by_source": {
-      "about manchester": 1,
-      "falinge park high school": 1,
-      "find a tender": 1,
-      "northampton chronicle and echo": 3,
-      "pennine care nhs": 1,
-      "roch valley radio local news": 1,
-      "rochdale borough council": 2,
+      "bee network live travel alerts": 1,
+      "facebook": 1,
+      "id": 1,
+      "manchester evening news": 2,
+      "northampton chronicle and echo": 1,
+      "rochdale afc": 1,
+      "rochdale borough council": 1,
+      "rochdale borough council news": 1,
       "rochdale development agency": 1,
-      "thenonleaguefootballpaper": 1
+      "rochdale times": 1,
+      "sky sports": 1
     },
-    "must_cover_selected": 6
+    "must_cover_selected": 0
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1116,7 +1165,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 11,
+  "robots_denied_count": 12,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1126,13 +1175,18 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
+    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
     "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSngyUG81aVJucHN5SlpQczUzbDF4WHRMT0FWS2x5YU0wN0FmYVl0REM5akxSLUlqdnM0MExTZk04S0NpUGNpcWpmMnptTlo1QWZob2VNamRRZHFXc0lBTVFGSTdHSUZKTEoxejY3cExaNFo5cFl2OWwwUnd1RV9USWVEYTZRbmU2OExKS045R2lfSUJoQmJUaExnRWM3WGFsUFdlbV9LdmtMbVZQRExDN1cxakY3T2F2QktHcw?oc=5",
-    "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5",
-    "https://news.google.com/rss/articles/CBMiygFBVV95cUxNUXUzU2hwMllfWVR4ZTREbXVoUVpaZGR3dElpZ25USHotMTVzODYyamo2MDhtVV90d2FxVWFQaGpvVEtvUUxlNjhEemdwYktoY001V0hHMVBVNGZ5WWZKMnIwTGtzZUJiSDZ4ZEZ6SzJDMWhEUHF3QTUzekM2cmRlczF5N1U2LU93dVFKM2taLTVUN3VBTXpnRERUQmJ6V3BFRDZMU0F4eFhoVUtxX3dmU0tEMlhIWXpyRlRTcEtSdHZZRVlEYlNLaFRR?oc=5"
+    "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHg3Wll3UlpYamhMQWpJWW1GM1RnYXkyZF9BQUlkZDFCNzBvYl9qakNmSUh6dEpzdHpKZFRveVNiVnMyX0FnaTRRMmIydVpCc2djLW51Uml0NFA2Y3piVHplVWg3SWxaUnNyd0E0XzRfWkpHVFg0VkRYQ2hUTmVER3N6RVE2RGNVOTRnQ0Zn?oc=5",
+    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5sQmVaQ3c0NGg2NlM2amdIMlVzTjVmSVV3Y0RDZnEtb2c1SU4zTm5aLTlheEJVLUhKTzdtYlpFTG52eGZhdTcyWUpVSXJvMjNuSEQ3UTd0QmE0MVpQM2ljYQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "healthwatchrochdale.org.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "healthwatchrochdale.org.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1142,9 +1196,9 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-11-23T18:45:50.771330Z",
+  "evergreen_fallback_attempt_at": "2026-11-23T19:59:41.514435Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
-  "evergreen_fallback_attempt_count": 4,
+  "evergreen_fallback_attempt_count": 5,
   "evergreen_fallback": {
     "enabled": true,
     "thin_threshold": 6,
@@ -1168,7 +1222,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-23T20:07:20.583258Z",
+  "frontpage_generated_at": "2026-11-23T20:20:01.316374Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
