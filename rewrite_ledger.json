@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-23T21:19:53.268313Z",
+  "updated_at": "2026-11-23T21:39:56.575663Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 210,
+  "count": 211,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -279,13 +279,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:54:11.002353Z",
+      "last_attempt_at": "2026-11-23T21:36:45.686355Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Dale Support Power Of 72",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "e29864dd282a74d6"
+      "text_fingerprint": "e29864dd282a74d6",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://rochdaleafc.co.uk/fill-the-family-stand-for-toy-appeal": {
       "first_attempt_at": "2026-11-17T10:55:57.949355Z",
@@ -396,19 +397,20 @@
     },
     "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy": {
       "first_attempt_at": "2026-11-23T11:09:29.000389Z",
-      "attempts": 14,
+      "attempts": 1,
       "urls": [
         "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T15:40:24.506705Z",
-      "outcome": "failed",
-      "reason": "OpenAI: all 4 attempts failed (RateLimitError: 429 credit_balance_exhausted)",
+      "last_attempt_at": "2026-11-23T21:37:11.263627Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
       "title": "Dale Face Bolton In Midweek Cup Tie - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "f6a749613674b158"
+      "text_fingerprint": "f6a749613674b158",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://rochdaleafc.co.uk/were-fighting-every-single-day-watson": {
       "first_attempt_at": "2026-11-20T10:13:28.348505Z",
@@ -736,7 +738,7 @@
     },
     "https://suaragarut.id/en/rochdale-sack-ian-watson": {
       "first_attempt_at": "2026-11-23T19:55:21.796524Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://suaragarut.id/en/rochdale-sack-ian-watson",
         "https://the72.co.uk/2026/11/22/rochdale-managers-to-target-ian-watson-sacking",
@@ -750,7 +752,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T21:15:35.861434Z",
+      "last_attempt_at": "2026-11-23T21:36:58.314246Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Rochdale Sack Ian Watson After Five Months in Charge - SuaraGarut.ID",
@@ -2159,17 +2161,18 @@
       "urls": [
         "https://news.google.com/rss/articles/CBMisgFBVV95cUxOUUtDcUFibE9pRU9UenVRUm5BVzFUMEpUWEkxZTZXZFlaX3k5OFQtU1BNR3FPY1BKemZuOUdfOUZGT1VpdlV3ZEQ3NVRqSUNHaG42NTFpVFk3NGVPLWNzc2I3bGM0VUk0Q3FlVGtDQW5SZWs1UVNLeDF5c0NmR0l0SXcyNXhnTnR1Sm1xSDRXa1hKeFNRVDloZi15VnV6NGREczJoUlY1UXRGSDl1LXN3d05R0gG3AUFVX3lxTE83WGgzM2tOdU9uSnZGUlhrcU5ORFNsY2tCekFOd1RZb2ZpZmlWWVVleDhySkZNdWY0eFZxakJ6d285WUFzQkVTdlNNTFA2YzNMSjhEUkJ4aXVzUEhtakFKOW1maHNBQ1BmU3hQWmQ1NVl3bWQ3c1U0M2FIX2tfMDRXWHBuYVBGdE9QenFUWXJvZEx4Z1pidXBHVWNFeFdzZFh5ckZ2NElIbk4tNGhWSThOWUdHeGNkSQ?oc=5",
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxPN1hoMzNrTnVPbkp2RlJYa3FOTkRTbGNrQnpBTndUWW9maWZpVllVZXg4ckpGTXVmNHhWcWpCendvOVlBc0JFU3ZTTUxQNmMzTEo4RFJCeGl1c1BIbWpBSjltZmhzQUNQZlN4UFpkNTVZd21kN3NVNDNhSF9rXzA0V1hwbmFQRnRPUHpxVFlyb2RMeGdaYnVwR1VjRXhXc2RYeXJGdjRJSG5OLTRoVkk4TllHR3hjZEnSAbcBQVVfeXFMTzdYaDMza051T25KdkZSWGtxTk5EU2xja0J6QU53VFlvZmlmaVZZVWV4OHJKRk11ZjR4VnFqQnp3bzlZQXNCRVN2U01MUDZjM0xKOERSQnhpdXNQSG1qQUo5bWZoc0FDUGZTeFBaZDU1WXdtZDdzVTQzYUhfa18wNFdYcG5hUEZ0T1B6cVRZcm9kTHhnWmJ1cEdVY0V4V3NkWHlyRnY0SUhuTi00aFZJOE5ZR0d4Y2RJ?oc=5",
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702"
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-rescued-burning-house-rochdale-34949702.amp"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T20:39:30.886330Z",
+      "last_attempt_at": "2026-11-23T21:39:56.575569Z",
       "outcome": "published",
       "reason": "",
-      "title": "Man rescued from burning house in Rochdale and rushed to hospital",
+      "title": "Man rescued from burning house in Rochdale and rushed to hospital - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "1bb56493bf5a308e",
+      "text_fingerprint": "c6ff729cd094ab73",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-invite-parents-station-after-34951090": {
@@ -2197,13 +2200,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:54:39.664414Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "last_attempt_at": "2026-11-23T21:39:56.575120Z",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
       "title": "The sun sets on Rochdale's Seven Sisters",
       "source_name": "Manchester Evening News",
       "category": "environment",
-      "text_fingerprint": "42395f25fa2a3c4f"
+      "text_fingerprint": "42395f25fa2a3c4f",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627": {
       "first_attempt_at": "2026-11-23T18:40:37.239860Z",
@@ -2492,13 +2496,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:32:00.646659Z",
-      "outcome": "failed",
-      "reason": "Claude: all 4 attempts failed (JSONDecodeError)",
+      "last_attempt_at": "2026-11-23T21:36:57.700799Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Hogg on Donacien and Dyche absences against Rochdale and why Evans took the penalty - Northampton Chronicle and Echo",
       "source_name": "Northampton Chronicle and Echo",
       "category": "crime",
-      "text_fingerprint": "19041710de9f179b"
+      "text_fingerprint": "19041710de9f179b",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306": {
       "first_attempt_at": "2026-11-23T11:54:30.518486Z",
@@ -2684,14 +2689,16 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T21:19:53.268011Z",
+      "last_attempt_at": "2026-11-23T21:39:56.575386Z",
       "outcome": "published",
       "reason": "",
       "title": "Healey Lane, roadworks in Rochdale from 7 December 2026",
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
       "text_fingerprint": "e52d8ffee6783570",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "recovery_attempts": 0,
+      "structured_official_notice_recovery": 1
     },
     "https://www.rochdale.gov.uk/directory-record/2665/clover-hall-crescent-roadworks-in-rochdale-from-17-november-2026": {
       "first_attempt_at": "2026-11-16T19:50:58.314872Z",
@@ -2815,19 +2822,20 @@
     },
     "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted": {
       "first_attempt_at": "2026-11-23T15:06:15.116224Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:55:24.758263Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "last_attempt_at": "2026-11-23T21:39:56.575429Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Redwood learners 'superbly prepared for their next steps', says Ofsted – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "education",
-      "text_fingerprint": "dfc344496add2df0"
+      "text_fingerprint": "dfc344496add2df0",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.rochdaletimes.co.uk/campaigners-hit-out-at-absurd-college-bank-demolition-decision": {
       "first_attempt_at": "2026-11-17T10:12:35.358818Z",
@@ -3230,9 +3238,9 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-23T21:15:25.275471Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "last_attempt_at": "2026-11-23T21:39:56.574956Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Young guitar star reaches national finals - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -3440,20 +3448,21 @@
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan": {
       "first_attempt_at": "2026-11-23T17:05:02.708490Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMiygFBVV95cUxNUXUzU2hwMllfWVR4ZTREbXVoUVpaZGR3dElpZ25USHotMTVzODYyamo2MDhtVV90d2FxVWFQaGpvVEtvUUxlNjhEemdwYktoY001V0hHMVBVNGZ5WWZKMnIwTGtzZUJiSDZ4ZEZ6SzJDMWhEUHF3QTUzekM2cmRlczF5N1U2LU93dVFKM2taLTVUN3VBTXpnRERUQmJ6V3BFRDZMU0F4eFhoVUtxX3dmU0tEMlhIWXpyRlRTcEtSdHZZRVlEYlNLaFRR?oc=5",
         "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:32:41.875029Z",
+      "last_attempt_at": "2026-11-23T21:36:58.712501Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Roch, Valley, Radio do not appear in the source. Name only pe",
       "title": "Rochdale councillor shares ‘scary’ detainment experience in Pakistan",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
-      "text_fingerprint": "5bd8eec9ebcc24f3"
+      "text_fingerprint": "5bd8eec9ebcc24f3",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell": {
       "first_attempt_at": "2026-11-18T14:24:52.932442Z",
@@ -3489,13 +3498,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T19:55:22.953251Z",
+      "last_attempt_at": "2026-11-23T21:37:05.692427Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Town do not appear in the source. Name only people, places an",
       "title": "Northampton 3-2 Rochdale - Sky Sports",
       "source_name": "Sky Sports",
       "category": "sport",
-      "text_fingerprint": "913640fc0f1e4805"
+      "text_fingerprint": "913640fc0f1e4805",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
     "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights": {
       "first_attempt_at": "2026-11-15T16:58:39.233926Z",
@@ -3612,6 +3622,24 @@
       "source_name": "Theoldhamtimes",
       "category": "news",
       "text_fingerprint": "f31f0ca56f07476e"
+    },
+    "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson": {
+      "first_attempt_at": "2026-11-23T21:37:03.296264Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson",
+        "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "last_attempt_at": "2026-11-23T21:37:03.296264Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "title": "Rochdale SACK manager Ian Watson as club release blunt 62-word statement as they fall into relegation fight - The Irish Sun",
+      "source_name": "The Irish Sun",
+      "category": "sport",
+      "text_fingerprint": "e80d96bdd81be94f"
     },
     "https://www.totalrl.com/busy-rochdale-hornets-closing-in-on-squad-completion": {
       "first_attempt_at": "2026-11-17T13:55:33.905307Z",
