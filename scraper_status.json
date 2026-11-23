@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-23T23:20:27.740538Z",
+  "last_run_at": "2026-11-23T23:39:45.047435Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,49 +54,41 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 132,
-  "job_or_career_posts_rejected": 4,
+  "raw_candidates_before_job_filter": 131,
+  "job_or_career_posts_rejected": 3,
   "raw_candidates": 128,
   "candidate_clusters": 56,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 32,
-    "text_recovered": 14,
+    "wrappers": 70,
+    "resolved": 30,
+    "text_recovered": 7,
     "reattributed": 4,
-    "images_found": 25
+    "images_found": 18
   },
   "duplicates_merged": 72,
-  "attempted_rewrites": 12,
-  "draft_rewrites_created": 3,
+  "attempted_rewrites": 9,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "healey-lane-in-rochdale-to-close-for-roadworks-from-7-december",
-      "source_url": "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026"
-    },
-    {
-      "slug": "castleton-care-home-for-eight-adults-approved-on-thornham-new-road",
+      "slug": "castleton-house-approved-for-eight-bed-care-home",
       "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home"
-    },
-    {
-      "slug": "rochdale-deputy-council-leader-detained-twice-in-pakistan",
-      "source_url": "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 0,
   "live_articles": 688,
-  "skipped": 9,
+  "skipped": 8,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 3,
+    "editorial gate: REJECTED_NON_NEWS": 2,
     "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 2,
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan, AFC, Football do not appear in the source. Name": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) AFC, Metropolitan do not appear in the source. Name only peop": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1
+    "quality gate after 4 repairs: Source fidelity: the figure(s) two do not appear in the source. Use only figures the sourc": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) AFC, Metropolitan, EFL do not appear in the source. Name only": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) Westminster do not appear in the source. Name only people, pl": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -106,20 +98,65 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 214,
+    "entries": 216,
     "by_outcome": {
       "editorial_twin": 21,
-      "failed": 56,
+      "failed": 55,
       "published": 72,
-      "rejected": 65
+      "rejected": 68
     },
-    "held_back_this_run": 25,
-    "held_already_published": 11,
-    "held_rejected": 14,
+    "held_back_this_run": 31,
+    "held_already_published": 13,
+    "held_rejected": 18,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy",
+      "title": "Dale Face Bolton In Midweek Cup Tie - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:17:13.067868Z"
+    },
+    {
+      "url": "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson",
+      "title": "Rochdale SACK manager Ian Watson as club release blunt 62-word statement as they fall into relegation fight - The Irish Sun",
+      "source_name": "The Irish Sun",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) AFC, Metropolitan do not appear in the source. Name only peop",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:17:08.042749Z"
+    },
+    {
+      "url": "https://www.northamptonchron.co.uk/sport/football/hogg-on-donacien-and-dyche-absences-against-rochdale-and-why-evans-took-crucial-penalty-9366065?__cf_chl_rt_tk=NOciTt2pMLGunAzj5zsLPwJN.P1PihvPrJGI7xYzTts-1795381064-1.0.1.1-ohVgsPm1ztuozeC2xZsdFd9tmrl6guQZ.bKldrROTj0",
+      "title": "Hogg on Donacien and Dyche absences against Rochdale and why Evans took the penalty - Northampton Chronicle and Echo",
+      "source_name": "Northampton Chronicle and Echo",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:16:59.427165Z"
+    },
+    {
+      "url": "https://www.skysports.com/football/news/13611611/northampton-3-2-rochdale",
+      "title": "Northampton 3-2 Rochdale - Sky Sports",
+      "source_name": "Sky Sports",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:16:59.085185Z"
+    },
+    {
+      "url": "https://rochdaleafc.co.uk/dale-support-power-of-72",
+      "title": "Dale Support Power Of 72",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:16:54.188326Z"
+    },
     {
       "url": "https://suaragarut.id/en/rochdale-sack-ian-watson",
       "title": "Rochdale Sack Ian Watson After Five Months in Charge - SuaraGarut.ID",
@@ -193,15 +230,6 @@
       "last_attempt_at": "2026-11-23T21:15:14.948226Z"
     },
     {
-      "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
-      "title": "💔 Daalat Ali feared he would never get home after being pulled off a flight back from Pakistan. Rochdale’s deputy council leader was detaine",
-      "source_name": "Facebook",
-      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-23T21:15:14.858191Z"
-    },
-    {
       "url": "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026",
       "title": "Ignite Fire Festival 2026",
       "source_name": "Falinge Park High School",
@@ -248,21 +276,18 @@
     }
   ],
   "published_with_style_issues": {
-    "Write a social_headline for Facebook.": 1,
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Write at least 184 body words using only facts already present in the sources; the draft currently has 159.": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
   },
   "local_impact": {
-    "shown": 2,
+    "shown": 1,
     "outcomes": {
-      "shown": 2,
-      "writer offered no points": 1
+      "shown": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 118,
+    "rss_and_google_news": 117,
     "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -310,14 +335,6 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -455,19 +472,20 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 23,
-    "Rochdale AFC": 19,
-    "rochdaledaily.co.uk": 19,
+    "Rochdale Times": 22,
+    "rochdaledaily.co.uk": 22,
+    "Rochdale AFC": 20,
     "Rochdale Borough Council": 10,
-    "Manchester Evening News": 10,
-    "Northampton Chronicle and Echo": 8,
+    "Manchester Evening News": 9,
     "Roch Valley Radio": 7,
+    "Northampton Chronicle and Echo": 5,
     "Id": 4,
     "Bee Network live travel alerts": 4,
-    "Oldham Evening Chronicle": 3,
     "About Manchester": 3,
     "Roch Valley Radio Local News": 3,
+    "Oldham Evening Chronicle": 2,
     "BBC Manchester": 1,
+    "Falinge Park High School": 1,
     "Rochdale Borough Council RSS": 1,
     "Yorkshire Post": 1,
     "Dave.Sport": 1,
@@ -476,6 +494,7 @@
     "Yahoo Sports": 1,
     "Transfermarkt": 1,
     "The72": 1,
+    "Facebook": 1,
     "Oldham Times": 1,
     "Rochdale Hornets": 1,
     "Rochdale Borough Council News": 1,
@@ -486,9 +505,8 @@
   "selected_by_category": {
     "crime": 2,
     "environment": 2,
-    "news": 2,
-    "sport": 5,
-    "traffic": 1
+    "news": 1,
+    "sport": 4
   },
   "published_by_category": {
     "business": 73,
@@ -498,8 +516,8 @@
     "environment": 52,
     "events": 40,
     "health": 22,
-    "news": 103,
-    "politics": 21,
+    "news": 102,
+    "politics": 22,
     "sport": 59,
     "traffic": 52,
     "transport": 14
@@ -527,32 +545,26 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-c51760d73c547e0a4e25",
-    "transport-v3-8fa56f02959fb65b5919",
-    "sport-v3-50dd761b868d914837db",
+    "hard-news-v3-ff69d09750d0c01cca06",
+    "sport-v3-e52881b765369ebe30e5",
     "environment-v3-b13390608b5cfcf8d664",
     "hard-news-v3-b6d2eee3c58500533c65",
     "sport-v3-0625f6f3bc7926277aba",
-    "hard-news-v3-e844d26532737593262b",
+    "environment-v3-6080866864cd762881af",
     "sport-v3-397b593ec62eb38400b3",
-    "sport-v3-c77981901c783f3ec46a",
-    "hard-news-v3-ff69d09750d0c01cca06",
-    "sport-v3-a1424274d99cefee87c5",
-    "environment-v3-6080866864cd762881af"
+    "sport-v3-a932916ef1af6dea88fc",
+    "hard-news-v3-c51760d73c547e0a4e25"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy/",
-    "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026",
-    "https://rochdaleafc.co.uk/dale-support-power-of-72/",
+    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
+    "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
     "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas/",
     "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home",
     "https://cwibc.co.id/en/rochdale-sack-ian-watson",
-    "https://www.northamptonchron.co.uk/sport/football/hogg-on-donacien-and-dyche-absences-against-rochdale-and-why-evans-took-crucial-penalty-9366065?__cf_chl_rt_tk=NOciTt2pMLGunAzj5zsLPwJN.P1PihvPrJGI7xYzTts-1795381064-1.0.1.1-ohVgsPm1ztuozeC2xZsdFd9tmrl6guQZ.bKldrROTj0",
-    "https://www.skysports.com/football/news/13611611/northampton-3-2-rochdale",
-    "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson/",
-    "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan",
-    "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy/",
-    "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026"
+    "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026",
+    "https://sports.yahoo.com/articles/rochdale-sack-boss-watson-northampton-105509802.html?guccounter=1",
+    "https://rochdaleafc.co.uk/watson-departs-221126/",
+    "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -567,23 +579,19 @@
       "crime",
       "environment",
       "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "selected_categories": [
       "crime",
       "environment",
       "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "available_wards": [
-      "Castleton",
-      "Healey"
+      "Castleton"
     ],
     "selected_wards": [
-      "Castleton",
-      "Healey"
+      "Castleton"
     ],
     "available_areas": [
       "castleton"
@@ -598,27 +606,24 @@
     "selected_by_category": {
       "crime": 2,
       "environment": 2,
-      "news": 2,
-      "sport": 5,
-      "traffic": 1
+      "news": 1,
+      "sport": 4
     },
     "selected_by_ward": {
-      "Castleton": 1,
-      "Healey": 1
+      "Castleton": 1
     },
     "selected_by_area": {
       "castleton": 1,
-      "rochdale": 11
+      "rochdale": 8
     },
     "selected_by_source": {
+      "facebook": 1,
       "id": 1,
-      "northampton chronicle and echo": 1,
-      "roch valley radio local news": 2,
+      "roch valley radio local news": 1,
       "rochdale afc": 2,
-      "rochdale borough council": 2,
+      "rochdale borough council": 1,
       "rochdale times": 2,
-      "sky sports": 1,
-      "the irish sun": 1
+      "yahoo sports": 1
     },
     "must_cover_selected": 0
   },
@@ -1168,7 +1173,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 13,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1178,15 +1183,16 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
-    "https://news.google.com/rss/articles/CBMioAFBVV95cUxONW9PYmpQU21hZ0xZbU1LVS1XeGFfSFBEaEFQNmtTQzJ5ajcyQnIyanBtYkhBUmZ2SHVLUWVIMnpoRFpqQXh4bDZhMWYxdTFFcU1uQWk4ZG5SRXM4UlZCdkZSSWtOQWVnd2ltNFUxbE1wdk54bVJkUFBzZ0lyd21Nb3BVWFgyWXZIcDA0Z1lvbnU2VmpDYTVteUFxdUxPSnlt?oc=5",
-    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5sQmVaQ3c0NGg2NlM2amdIMlVzTjVmSVV3Y0RDZnEtb2c1SU4zTm5aLTlheEJVLUhKTzdtYlpFTG52eGZhdTcyWUpVSXJvMjNuSEQ3UTd0QmE0MVpQM2ljYQ?oc=5",
-    "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson/",
-    "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson",
-    "https://news.google.com/rss/articles/CBMiygFBVV95cUxNUXUzU2hwMllfWVR4ZTREbXVoUVpaZGR3dElpZ25USHotMTVzODYyamo2MDhtVV90d2FxVWFQaGpvVEtvUUxlNjhEemdwYktoY001V0hHMVBVNGZ5WWZKMnIwTGtzZUJiSDZ4ZEZ6SzJDMWhEUHF3QTUzekM2cmRlczF5N1U2LU93dVFKM2taLTVUN3VBTXpnRERUQmJ6V3BFRDZMU0F4eFhoVUtxX3dmU0tEMlhIWXpyRlRTcEtSdHZZRVlEYlNLaFRR?oc=5"
+    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxPQU9VbENXd1RUNktCSmNWR3NZUjA3cW5qR2FGazBERlM5ZWhPVV9FNl9QVmU3cnpmTzVDX05yNTlSSTZKbGd0OTIyMDNRaElkNWNtVEFlaFVqY2tkSTJXRUxFUDhNWGZ4eVljUVdVeG5oalQ0VnVISnhScExBTW5Vbk9SeE9ITEJBcFJHWG1DdnFYQmxndW5fa3RR?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1222,7 +1228,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-23T23:21:50.119674Z",
+  "frontpage_generated_at": "2026-11-23T23:40:46.478876Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1232,6 +1238,7 @@
       "education",
       "health",
       "news",
+      "politics",
       "sport",
       "traffic",
       "transport"
@@ -1242,6 +1249,7 @@
       "education",
       "health",
       "news",
+      "politics",
       "sport",
       "traffic",
       "transport"
@@ -1279,9 +1287,10 @@
       "crime": 1,
       "traffic": 3,
       "transport": 1,
+      "politics": 1,
       "education": 1,
       "community": 3,
-      "news": 2
+      "news": 1
     },
     "selected_by_ward": {
       "Spotland and Falinge": 1,
@@ -1301,9 +1310,9 @@
       "manchester evening news": 1,
       "rochdale borough council": 6,
       "rochdale times": 1,
+      "source": 1,
       "rochdale borough council news": 1,
       "pennine care nhs": 1,
-      "source": 1,
       "rochdale daily": 1
     },
     "pool_size": 16,
@@ -1336,12 +1345,9 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "healey-lane-in-rochdale-to-close-for-roadworks-from-7-december",
-    "rochdale-deputy-council-leader-detained-twice-in-pakistan"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 1,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
