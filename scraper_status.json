@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T20:48:24.766375Z",
+  "last_run_at": "2026-11-24T21:06:38.457219Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,27 +54,22 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 124,
+  "raw_candidates_before_job_filter": 88,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 122,
+  "raw_candidates": 86,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 98,
-    "resolved": 64,
-    "text_recovered": 3,
-    "reattributed": 46,
+    "wrappers": 55,
+    "resolved": 42,
+    "text_recovered": 4,
+    "reattributed": 29,
     "images_found": 8
   },
-  "duplicates_merged": 78,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "littleborough-farm-owner-seeks-permission-for-wellness-retreat-with-sauna-and-ho",
-      "source_url": "https://www.rochdaletimes.co.uk/farm-owners-bid-to-keep-countryside-sauna-and-hot-tub-retreat/"
-    }
-  ],
-  "new_articles": 1,
+  "duplicates_merged": 42,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 707,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -91,16 +86,16 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 232,
+    "entries": 231,
     "by_outcome": {
-      "editorial_twin": 18,
+      "editorial_twin": 17,
       "failed": 55,
       "published": 90,
       "rejected": 69
     },
     "held_back_this_run": 36,
-    "held_already_published": 26,
-    "held_rejected": 10,
+    "held_already_published": 27,
+    "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -185,31 +180,18 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-24T12:18:18.674113Z"
-    },
-    {
-      "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
-      "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-20T09:11:18.419993Z"
     }
   ],
-  "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
     "shown": 0,
-    "outcomes": {
-      "writer offered no points": 1
-    },
+    "outcomes": {},
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 113,
-    "website_discovery": 6,
+    "rss_and_google_news": 73,
+    "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -223,6 +205,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -256,14 +239,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -399,40 +374,37 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 45,
-    "Rochdale Times": 21,
-    "rochdaledaily.co.uk": 19,
-    "Rochdale Borough Council": 6,
+    "Rochdaledaily": 28,
+    "Rochdale Times": 13,
+    "rochdaledaily.co.uk": 11,
     "Roch Valley Radio": 5,
+    "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 4,
     "Northampton Chronicle and Echo": 3,
     "Manchester Evening News": 2,
     "Football Lowdown": 2,
-    "Rochdale AFC": 2,
     "Rochdale Hornets": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
     "Oldham Evening Chronicle": 1,
+    "Rochdale AFC": 1,
     "Yorkshire Post": 1,
     "Sport": 1,
-    "Wrexham and Flintshire News, Sport, Events | The Leader": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "environment": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 76,
     "community": 106,
     "crime": 47,
     "education": 36,
-    "environment": 52,
+    "environment": 53,
     "events": 40,
     "health": 24,
-    "news": 105,
+    "news": 104,
     "politics": 21,
     "sport": 62,
     "traffic": 54,
@@ -460,12 +432,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "hard-news-v3-157939d1a0544b9823bd"
-  ],
-  "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/farm-owners-bid-to-keep-countryside-sauna-and-hot-tub-retreat/"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -475,31 +443,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "environment"
-    ],
-    "selected_categories": [
-      "environment"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "environment": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "rochdale times": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -1048,22 +991,21 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMimgFBVV95cUxQRURwN0lVSjlNTHBuNjJOZ29QUG5kQnA2amUzMDNENUtZVUtpNWFDLTd6R1pJTlh1clZPSmZzdklMbUdtUFl0MXlnM0pqeHdvdXM2RE1seUh2MW1vSW1pMnpXeF9NQjI3RWYyeXZvRXh3Y2J4djVIN0duUV9fenVKbVF3LTM4Z3VQTXhTLVQ4ZkhlUm9nN0lyUXpn?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "rochdaleafc.co.uk": 7
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1100,8 +1042,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T20:49:46.776000Z",
-  "frontpage_article_count": 24,
+  "frontpage_generated_at": "2026-11-24T21:07:53.746474Z",
+  "frontpage_article_count": 23,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1168,11 +1110,11 @@
       "business": 2,
       "community": 4,
       "environment": 1,
-      "news": 4,
+      "news": 3,
       "health": 3
     },
     "selected_by_ward": {
-      "borough-wide": 19,
+      "borough-wide": 18,
       "Castleton": 2,
       "Healey": 1,
       "North Middleton": 1,
@@ -1197,7 +1139,7 @@
       "greater manchester police statements (via brit brief, about manchester and others)": 1,
       "find a tender": 1,
       "rochdale hornets": 1,
-      "rochdale daily": 2,
+      "rochdale daily": 1,
       "source": 1,
       "rochdale afc": 1,
       "t&n asbestos trustee company": 1
@@ -1206,11 +1148,11 @@
     "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 24,
+    "frontpage_count": 23,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 24,
-    "short_briefs_selected": 19,
+    "fresh_under_homepage_window": 23,
+    "short_briefs_selected": 18,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1232,10 +1174,8 @@
   "category_archive_count": 11,
   "area_archive_count": 29,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "littleborough-farm-owner-seeks-permission-for-wellness-retreat-with-sauna-and-ho"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
