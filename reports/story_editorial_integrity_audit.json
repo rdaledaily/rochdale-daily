@@ -1,12 +1,36 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 686,
-  "published_count": 686,
+  "article_count": 689,
+  "published_count": 689,
   "category_change_count": 0,
-  "image_change_count": 145,
+  "image_change_count": 148,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "castleton-house-approved-for-eight-bed-care-home",
+      "title": "Castleton house approved for eight-bed care home",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/castleton-house-approved-for-eight-bed-care-home.jpg",
+        "img": "assets/img/cards/castleton-house-approved-for-eight-bed-care-home.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/64194f12266f1afc-commons-photo.jpg"
+    },
+    {
+      "slug": "rochdale-deputy-council-leader-detained-twice-in-pakistan",
+      "title": "Rochdale deputy council leader detained twice in Pakistan",
+      "category": "politics",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-square.jpg",
+        "img": "assets/img/cards/rochdale-town-square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/8c4c259f0ef7-place-generated-card.jpg"
+    },
     {
       "slug": "letchworth-avenue-closed-to-vehicles-for-roadworks-until-14-december",
       "title": "Letchworth Avenue closed to vehicles for roadworks until 14 December",
@@ -18,6 +42,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/8501378fe52a-place-generated-card.jpg"
+    },
+    {
+      "slug": "healey-lane-in-rochdale-to-close-for-roadworks-from-7-december",
+      "title": "Part of Healey Lane in Rochdale closes for roadworks from 7 December",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/93c8417eef5ef0d6-commons-photo.jpg"
     },
     {
       "slug": "rochdale-afc-sack-head-coach-ian-watson",
