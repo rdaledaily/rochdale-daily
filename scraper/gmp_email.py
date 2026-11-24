@@ -31,6 +31,17 @@ from typing import Any
 SOURCE_NAME = "Greater Manchester Police"
 RELEASE_WINDOW = timedelta(days=3)
 GMP_DOMAINS = ("gmp.police.uk", "gmp.pnn.police.uk")
+# Since at least October 2026 GMP's press office sends its releases through
+# Onclusive PR Manager, From gmp@onclusivenews.com. Onclusive mails for many
+# organisations, so its domain alone is not enough: the release must also carry
+# GMP's own newsroom link or press-office sign-off. These mails are the
+# published newsroom item and never say "for immediate release"; an embargo is
+# still honoured.
+ONCLUSIVE_DOMAINS = ("onclusivenews.com",)
+ONCLUSIVE_GMP_MARKER = re.compile(
+    r"gmp-newsroom\.prgloo\.com|Issued by GMP Press Office|News from Greater Manchester Police", re.I
+)
+GMP_NEWSROOM_LINK = re.compile(r"https?://gmp-newsroom\.prgloo\.com/news/[^\s<>\")']+", re.I)
 IMMEDIATE = re.compile(r"\bfor\s+immediate\s+release\b|\bimmediate\s+release\b", re.I)
 EMBARGO = re.compile(r"\bembargo(ed)?\b|\bnot\s+for\s+publication\s+(until|before)\b", re.I)
 GMP_NEWS_LINK = re.compile(r"https?://(?:www\.)?gmp\.police\.uk/news/[^\s<>\")']+", re.I)
@@ -52,9 +63,19 @@ def concerns_borough(text: str) -> bool:
     return bool(BOROUGH_RE.search(text or "") or BOROUGH_POSTCODE.search(text or ""))
 
 
+def _domain_in(domain: str, domains: tuple[str, ...]) -> bool:
+    return any(domain == d or domain.endswith("." + d) for d in domains)
+
+
+def via_onclusive(record: dict[str, Any]) -> bool:
+    domain = str(record.get("sender_domain") or "").lower()
+    text = f"{record.get('subject') or ''}\n{record.get('text') or ''}"
+    return _domain_in(domain, ONCLUSIVE_DOMAINS) and bool(ONCLUSIVE_GMP_MARKER.search(text))
+
+
 def from_gmp(record: dict[str, Any]) -> bool:
     domain = str(record.get("sender_domain") or "").lower()
-    return any(domain == d or domain.endswith("." + d) for d in GMP_DOMAINS)
+    return _domain_in(domain, GMP_DOMAINS) or via_onclusive(record)
 
 
 def is_immediate_release(subject: str, text: str) -> bool:
@@ -66,6 +87,15 @@ def clean_release_text(text: str) -> str:
     text = IMMEDIATE.sub("", text or "")
     text = re.sub(r"(?im)^\s*(press release|news release)\s*:?\s*$", "", text)
     text = re.sub(r"(?is)\n\s*(notes to editors?|ends\s*$).*", "", text)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+def clean_onclusive_text(text: str) -> str:
+    """Drop Onclusive's header, image links and the legal/unsubscribe footer."""
+    text = re.split(r"(?m)^\s*Contact Information\s*$|Issued by GMP Press Office|^\s*LEGAL NOTICE\s*$", text, maxsplit=1)[0]
+    text = re.sub(r"\[Greater Manchester Police News<[^>]*>\]", "", text)
+    text = re.sub(r"(?m)^-{5,}\s*$", "", text)
+    text = re.sub(r"<https?://[^>]+>", "", text)
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
@@ -87,15 +117,21 @@ def find_releases(root: Path, now: datetime) -> list[dict[str, Any]]:
         if not from_gmp(record):
             continue
         subject, text = str(record.get("subject") or ""), str(record.get("text") or "")
-        if not is_immediate_release(subject, text):
+        onclusive = via_onclusive(record)
+        if onclusive:
+            if EMBARGO.search(f"{subject}\n{text[:1500]}"):
+                continue
+        elif not is_immediate_release(subject, text):
             continue
         sent = _parse_time(record.get("date")) or _parse_time(record.get("received_at"))
         if not sent or now - sent > RELEASE_WINDOW or sent > now + timedelta(minutes=30):
             continue
         title = re.sub(r"^\s*((re|fwd?|fw)\s*:\s*)+", "", subject, flags=re.I)
         title = IMMEDIATE.sub("", title).strip(" -:|")
-        link = GMP_NEWS_LINK.search(text)
+        link = GMP_NEWS_LINK.search(text) or GMP_NEWSROOM_LINK.search(text)
         body = clean_release_text(text)
+        if onclusive:
+            body = clean_onclusive_text(body)
         releases.append({
             "id": str(record.get("id") or ""),
             "title": title,
