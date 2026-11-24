@@ -112,7 +112,15 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     slug = _slugify(entry.get("slug") or title)
     source_url = _clean(entry.get("source_url") or entry.get("url") or entry.get("ticket_url"))
     identity = source_url or slug
-    published_at = _parse_dt(entry.get("published_at")) or now
+    # An entry without its own published_at must keep the time it first went
+    # up. Falling back to "now" re-stamped every such event as brand new on
+    # every run, so What's On listings led the front page as NEW for days
+    # (Breakfast with Santa, 21-24 Nov 2026) and buried the real news.
+    published_at = (
+        _parse_dt(entry.get("published_at"))
+        or _parse_dt(_EXISTING_FIRST_PUBLISHED.get(slug))
+        or now
+    )
     image_url = _clean(entry.get("image_url")) or DEFAULT_EVENT_IMAGE
     image_credit = _clean(entry.get("image_credit")) or "Rochdale Daily event artwork"
     location = _clean(entry.get("event_location") or entry.get("location") or "Rochdale")
@@ -152,9 +160,31 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     return record
 
 
+ARTICLES_PATH = Path(os.getenv("ARTICLES_JSON", "articles.json"))
+_EXISTING_FIRST_PUBLISHED: dict[str, str] = {}
+
+
+def _load_existing_first_published() -> dict[str, str]:
+    """slug -> first_published_at of manual events already in the live feed."""
+    try:
+        payload = json.loads(ARTICLES_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    rows = payload if isinstance(payload, list) else (payload.get("articles") or []) if isinstance(payload, dict) else []
+    found: dict[str, str] = {}
+    for row in rows:
+        if isinstance(row, dict) and str(row.get("story_key") or "").startswith("manual-event:"):
+            value = str(row.get("first_published_at") or row.get("published_at") or "")
+            if value:
+                found[str(row.get("slug") or "")] = value
+    return found
+
+
 def load_manual_event_records(now: datetime | None = None) -> list[dict[str, Any]]:
     """Return normalised, still-current editor-curated event records."""
     reference = now or datetime.now(timezone.utc)
+    _EXISTING_FIRST_PUBLISHED.clear()
+    _EXISTING_FIRST_PUBLISHED.update(_load_existing_first_published())
     if not MANUAL_EVENTS_PATH.exists():
         return []
     try:
