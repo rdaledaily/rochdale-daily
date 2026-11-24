@@ -980,6 +980,86 @@ INTEGRITY_ISSUE_MARKERS = (
 )
 
 
+# ---------------------------------------------------------------------------
+# Strip, don't bin (editor, 24 Nov 2026: "stop turning things down unless they
+# aren't Rochdale"). Measured 17-24 Nov: 89 published, 69 rejected, only 5 of
+# them for being outside the borough; 24 for a "name not in source" (mostly
+# false alarms such as "AFC", "Town", "Metropolitan"), 6 for a date or year and
+# 3 for a figure. When a draft's ONLY remaining integrity problems are an
+# unsupported name, date, year, figure or weekday, the sentences carrying them
+# are removed and the story is published. Invented quotations, statements
+# attributed to someone the source does not quote, a changed legal status,
+# copied source text, an ungrounded draft and the advert/out-of-borough gate
+# still stop publication: those are the legal and copyright risks.
+# ---------------------------------------------------------------------------
+STRIPPABLE_ISSUE_PREFIXES = (
+    "Source fidelity: the name(s) ",
+    "Source fidelity: the date(s) ",
+    "Source fidelity: the figure(s) ",
+    "Remove unsupported calendar year(s) ",
+    "Weekday does not match date",
+)
+STRIP_MIN_BODY_WORDS = 50
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[\"'‘“A-Z0-9])")
+
+
+def strippable(issue: str) -> bool:
+    return issue.startswith(STRIPPABLE_ISSUE_PREFIXES)
+
+
+def _strip_terms(issue: str) -> list[str]:
+    """The exact words an issue objects to."""
+    if issue.startswith("Weekday does not match date"):
+        return [m for m in re.findall(r'"([^"]+)"', issue) if m]
+    if issue.startswith("Remove unsupported calendar year(s) "):
+        body = issue[len("Remove unsupported calendar year(s) "):].split(";", 1)[0]
+        return [t.strip() for t in body.split(",") if t.strip()]
+    for prefix in STRIPPABLE_ISSUE_PREFIXES[:3]:
+        if issue.startswith(prefix):
+            body = issue[len(prefix):]
+            body = re.split(r"\s+(?:do not appear|are neither)\b", body, maxsplit=1)[0]
+            return [t.strip() for t in body.split(",") if t.strip()]
+    return []
+
+
+def _contains_term(sentence: str, term: str) -> bool:
+    return re.search(r"(?<![\w])" + re.escape(term) + r"(?![\w])", sentence) is not None
+
+
+def strip_unsupported_details(draft: dict[str, Any], issues: list[str]) -> dict[str, Any] | None:
+    """Remove the sentences carrying unsupported names/dates/figures, or None.
+
+    None means the story cannot be saved this way: a blocking issue remains, or
+    too little survives the cut to stand as a report.
+    """
+    if not issues or not all(strippable(issue) for issue in issues):
+        return None
+    terms = [term for issue in issues for term in _strip_terms(issue)]
+    if not terms:
+        return None
+
+    def keep(sentence: str) -> bool:
+        return not any(_contains_term(sentence, term) for term in terms)
+
+    stripped = dict(draft)
+    paragraphs: list[str] = []
+    removed: list[str] = []
+    for paragraph in draft.get("paragraphs") or []:
+        sentences = _SENTENCE_SPLIT.split(str(paragraph or "").strip())
+        kept = [s for s in sentences if keep(s)]
+        removed.extend(s for s in sentences if not keep(s))
+        if kept:
+            paragraphs.append(" ".join(kept))
+    excerpt_sentences = _SENTENCE_SPLIT.split(str(draft.get("excerpt") or "").strip())
+    excerpt = " ".join(s for s in excerpt_sentences if keep(s)) or (paragraphs[0] if paragraphs else "")
+    stripped["paragraphs"] = paragraphs
+    stripped["excerpt"] = excerpt
+    if len(paragraphs) < 2 or draft_word_count(stripped) < STRIP_MIN_BODY_WORDS:
+        return None
+    stripped["stripped_unsupported_sentences"] = removed
+    return stripped
+
+
 def integrity_issues(issues: list[str]) -> list[str]:
     """Return only the failures that must stop publication."""
     return [
@@ -1682,6 +1762,18 @@ def request_article(
             "; ".join(last_feedback),
         )
         return previous
+    if previous and last_feedback:
+        integrity_left = integrity_issues(last_feedback)
+        rescued = strip_unsupported_details(previous, integrity_left) if integrity_left else None
+        if rescued is not None:
+            rescued["style_issues"] = [i for i in last_feedback if i not in integrity_left]
+            logger.warning(
+                "Publishing %s after removing %d sentence(s) with unsupported details: %s",
+                getattr(candidate, "source_url", ""),
+                len(rescued.get("stripped_unsupported_sentences") or []),
+                "; ".join(integrity_left),
+            )
+            return rescued
     if previous is None:
         # No draft ever came back: every attempt raised inside the API call.
         skip(f"{llm_provider_label()}: all {api_failures} attempts failed ({last_api_error or 'unknown error'})")
