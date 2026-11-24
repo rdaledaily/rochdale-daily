@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T12:21:16.443315Z",
+  "updated_at": "2026-11-24T12:44:06.107517Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 231,
+  "count": 236,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -163,13 +163,14 @@
       "attempts": 1,
       "urls": [
         "https://investinrochdale.co.uk/news/post/driving-stem-education-with-the-primary-engineer-vehicle-programme",
-        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPcTdBYUt0RjlOTVlWenM3cE42ZG1ES0FLQ2JzSmZQandBaG00QWtBY0FqR0MtMDR0Skk5UHJ4d1pPa2JDZnZlQ0k2R0V6TDhJajdPV0NfNWF6VVhfbjdTQXdOTHA3cUYycjhsN0s5SjhGWldCUUwzY0FsWlpQQ3gyZVVxejF4c0tnakN2cUhBdU02UmJqMnQyWWV3aXV0TjFXSEpEMVFMWlZLUGIxTHJWd1laZ3llOWp1?oc=5"
+        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPcTdBYUt0RjlOTVlWenM3cE42ZG1ES0FLQ2JzSmZQandBaG00QWtBY0FqR0MtMDR0Skk5UHJ4d1pPa2JDZnZlQ0k2R0V6TDhJajdPV0NfNWF6VVhfbjdTQXdOTHA3cUYycjhsN0s5SjhGWldCUUwzY0FsWlpQQ3gyZVVxejF4c0tnakN2cUhBdU02UmJqMnQyWWV3aXV0TjFXSEpEMVFMWlZLUGIxTHJWd1laZ3llOWp1?oc=5",
+        "https://rochdaledaily.co.uk/articles/rochdale-schools-participate-in-primary-engineer-vehicle-programme-to-boost-stem"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T12:21:16.443165Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-24T12:40:34.033316Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Driving STEM education with the Primary Engineer Vehicle Programme",
       "source_name": "Rochdale Development Agency",
       "category": "education",
@@ -435,20 +436,20 @@
     },
     "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy": {
       "first_attempt_at": "2026-11-23T11:09:29.000389Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T23:17:13.067868Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "last_attempt_at": "2026-11-24T12:44:06.106995Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Dale Face Bolton In Midweek Cup Tie - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "f6a749613674b158",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
     "https://rochdaleafc.co.uk/watson-departs-221126": {
       "first_attempt_at": "2026-11-23T23:36:44.738882Z",
@@ -635,6 +636,23 @@
       "category": "environment",
       "text_fingerprint": "636a2aa25e02bc47"
     },
+    "https://rochdaledaily.co.uk/articles/police-advice-rochdale-fans-co-op-live-evacuation-don-toliver": {
+      "first_attempt_at": "2026-11-24T12:44:06.105988Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/police-advice-rochdale-fans-co-op-live-evacuation-don-toliver"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.105988Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Police advice for Rochdale fans after substance forced Co-op Live evacuation at Don Toliver gig - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "traffic",
+      "text_fingerprint": "2425b38eec3c67b6"
+    },
     "https://rochdaledaily.co.uk/articles/rochdale-afc-launches-christmas-toy-appeal-for-local-families-in-need": {
       "first_attempt_at": "2026-11-19T22:27:22.337640Z",
       "attempts": 3,
@@ -667,6 +685,23 @@
       "source_name": "Rochdaledaily",
       "category": "sport",
       "text_fingerprint": "2aa4a10d0d1f2484"
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-afc-supports-efl-s-power-of-72-campaign": {
+      "first_attempt_at": "2026-11-24T12:44:06.106080Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-afc-supports-efl-s-power-of-72-campaign"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.106080Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale AFC supports EFL's Power of 72 campaign - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "sport",
+      "text_fingerprint": "b50d4d3ce2cd0d41"
     },
     "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board": {
       "first_attempt_at": "2026-11-20T10:16:49.107220Z",
@@ -798,8 +833,8 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T12:21:16.443279Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Thinking about fostering? Free advice stall at Rochdale Riverside on Wednesday - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
@@ -898,9 +933,10 @@
     },
     "https://suaragarut.id/en/rochdale-sack-ian-watson": {
       "first_attempt_at": "2026-11-23T19:55:21.796524Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://dave.sport/news/rochdale-ian-watson-successor",
+        "https://footballlowdown.com/the-step-up-was-too-big-rochdale-backed-over-ian-watson-sacking",
         "https://rochdaleafc.co.uk/watson-on-northampton-defeat",
         "https://suaragarut.id/en/rochdale-sack-ian-watson",
         "https://the72.co.uk/2026/11/22/rochdale-managers-to-target-ian-watson-sacking",
@@ -914,14 +950,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T02:40:08.638768Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "last_attempt_at": "2026-11-24T12:44:06.107207Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Sack Ian Watson After Five Months in Charge - SuaraGarut.ID",
       "source_name": "Id",
       "category": "sport",
       "text_fingerprint": "910efd1c56951731",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-05503a1a42fec0ea92": {
       "first_attempt_at": "2026-11-17T15:30:03.672423Z",
@@ -1765,15 +1801,16 @@
       "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPZVRKZ3k1TDlVLXZoaG1jY2NJLW04S29vVWlESlR5UHVuZkNiRWVBZURWbmcxSG1sUS1tQVlScVBUTHk5VlZlNi1uSmdYek5zbVZrY01Pd2JoR2R1RXRLR2E4MnpNMUYxVnd1d1hveGVqaUNWaVZ1ZV9XNmNZZHJ0aFRQM0lfRF8xSGNKMjhyRWVtU2Z1NVRST1pDblhYdmJNa3c1SG9mQTRHNlJobWdrOGdINEp1OGRV?oc=5",
+        "https://rochdaledaily.co.uk/articles/rochdale-borough-council-awards-152-500-contract-for-lowerplace-primary-school-w",
         "https://www.find-tender.service.gov.uk/Notice/110514-2026",
         "https://www.find-tender.service.gov.uk/Notice/110533-2026",
         "https://www.find-tender.service.gov.uk/Notice/110544-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T12:18:18.230829Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This project is e",
+      "last_attempt_at": "2026-11-24T12:44:06.106118Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Borough Council awards contract: Lowerplace Primary School Hot and Cold Water Pipework (Infants) Phase 1 of 2",
       "source_name": "Find a Tender",
       "category": "business",
@@ -2011,18 +2048,35 @@
       "category": "transport",
       "text_fingerprint": "690cee7b7a08080f"
     },
+    "https://www.leaderlive.co.uk/sport/26754223.wrexham-u18s-win-preston-mctweed-stoppage-time-goal": {
+      "first_attempt_at": "2026-11-24T12:44:06.106792Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.leaderlive.co.uk/sport/26754223.wrexham-u18s-win-preston-mctweed-stoppage-time-goal"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.106792Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Wrexham u18's pick up late win at Preston before Rochdale clash this afternoon - Leader Live",
+      "source_name": "Leader Live",
+      "category": "environment",
+      "text_fingerprint": "d2de18b18bc9a5af"
+    },
     "https://www.manchestereveningnews.co.uk/all-about/rochdale-council?service=responsive&pageNumber=134": {
       "first_attempt_at": "2026-11-24T01:58:30.976115Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://www.manchestereveningnews.co.uk/all-about/rochdale-council?service=responsive&pageNumber=134"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T02:40:04.566410Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.106724Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Council - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2043,6 +2097,23 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "47b54b5e61fdee80"
+    },
+    "https://www.manchestereveningnews.co.uk/news/active-travel-scheme-designed-improve-34955765.amp": {
+      "first_attempt_at": "2026-11-24T12:44:06.106326Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/active-travel-scheme-designed-improve-34955765.amp"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.106326Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Active travel scheme designed to improve Heywood could actually 'destroy it'",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "007fb16eda6dd1a2"
     },
     "https://www.manchestereveningnews.co.uk/news/cgi-images-show-how-site-34937999": {
       "first_attempt_at": "2026-11-19T22:31:44.949875Z",
@@ -2426,20 +2497,20 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627": {
       "first_attempt_at": "2026-11-23T18:40:37.239860Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-23T21:15:23.071293Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_NEWS",
-      "title": "'This is how people go missing': How one man got trapped in Pakistan",
+      "last_attempt_at": "2026-11-24T12:44:06.106419Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "'This is how people go missing': How one Rochdale man got trapped in Pakistan",
       "source_name": "Manchester Evening News",
-      "category": "events",
-      "text_fingerprint": "508cf6ff19bf3504",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "category": "news",
+      "text_fingerprint": "7ab2779fcabc319c",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/todmorden-station-emergency-incident-live-34936182": {
       "first_attempt_at": "2026-11-19T13:47:38.661027Z",
@@ -2526,6 +2597,23 @@
       "text_fingerprint": "281c78482079658c",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "recovery_attempts": 1
+    },
+    "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp": {
+      "first_attempt_at": "2026-11-24T12:44:06.106243Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:44:06.106243Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "281e320946a23878"
     },
     "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/family-friendly-greater-manchester-winter-34926796.amp": {
       "first_attempt_at": "2026-11-18T10:32:20.739400Z",
@@ -2668,7 +2756,7 @@
     },
     "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744": {
       "first_attempt_at": "2026-11-23T18:41:15.252226Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSngyUG81aVJucHN5SlpQczUzbDF4WHRMT0FWS2x5YU0wN0FmYVl0REM5akxSLUlqdnM0MExTZk04S0NpUGNpcWpmMnptTlo1QWZob2VNamRRZHFXc0lBTVFGSTdHSUZKTEoxejY3cExaNFo5cFl2OWwwUnd1RV9USWVEYTZRbmU2OExKS045R2lfSUJoQmJUaExnRWM3WGFsUFdlbV9LdmtMbVZQRExDN1cxakY3T2F2QktHcw?oc=5",
         "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744",
@@ -2676,14 +2764,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T05:13:33.503387Z",
+      "last_attempt_at": "2026-11-24T12:41:05.656689Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Newport, County, Northampton's, Danny, Northampton, League, T",
       "title": "Dale ‘really enjoys’ playing for Cobblers after standout display",
       "source_name": "Northampton Chronicle and Echo",
-      "category": "crime",
+      "category": "sport",
       "text_fingerprint": "64144bfc4235cd06",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
     "https://www.northamptonchron.co.uk/sport/football/hogg-on-donacien-and-dyche-absences-against-rochdale-and-why-evans-took-crucial-penalty-9366065": {
       "first_attempt_at": "2026-11-22T11:22:06.253810Z",
@@ -3131,12 +3219,13 @@
       "first_attempt_at": "2026-11-24T00:48:36.539405Z",
       "attempts": 1,
       "urls": [
+        "https://rochdaledaily.co.uk/articles/free-health-checks-in-rochdale-identify-1-000-undiagnosed-conditions",
         "https://www.rochdaletimes.co.uk/free-health-checks-identify-1000-undiagnosed-conditions"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T12:21:16.442847Z",
+      "last_attempt_at": "2026-11-24T12:44:06.106869Z",
       "outcome": "published",
       "reason": "",
       "title": "Free health checks identify 1,000 undiagnosed conditions - Rochdale Times",
@@ -3507,16 +3596,16 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 23,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T09:32:08.196351Z",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T12:40:51.471708Z",
       "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
       "source_name": "Roch Valley Radio",
       "category": "sport",
@@ -3741,7 +3830,7 @@
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan": {
       "first_attempt_at": "2026-11-23T17:05:02.708490Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMiygFBVV95cUxNUXUzU2hwMllfWVR4ZTREbXVoUVpaZGR3dElpZ25USHotMTVzODYyamo2MDhtVV90d2FxVWFQaGpvVEtvUUxlNjhEemdwYktoY001V0hHMVBVNGZ5WWZKMnIwTGtzZUJiSDZ4ZEZ6SzJDMWhEUHF3QTUzekM2cmRlczF5N1U2LU93dVFKM2taLTVUN3VBTXpnRERUQmJ6V3BFRDZMU0F4eFhoVUtxX3dmU0tEMlhIWXpyRlRTcEtSdHZZRVlEYlNLaFRR?oc=5",
         "https://www.oldham-chronicle.co.uk/news-features/3/politics/552/rochdale-councillor-shares-scary-detainment-experience-in-pakistan?__cf_chl_rt_tk=CTcIAN4N.oHvU7x3WHvDk2DbbX3GjMO4HNipR22ahSk-1795485426-1.0.1.1-UEd1Xe9_NBfGH0HRWhSQx8Rwo0YJN3a04FBM0Ki4_fQ",
@@ -3749,14 +3838,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T02:40:26.043702Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "last_attempt_at": "2026-11-24T12:44:06.107044Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale councillor shares ‘scary’ detainment experience in Pakistan",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
       "text_fingerprint": "5bd8eec9ebcc24f3",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell": {
       "first_attempt_at": "2026-11-18T14:24:52.932442Z",
@@ -3953,14 +4042,14 @@
     },
     "https://www.theoldhamtimes.co.uk/news/26755401.rochdale-councillor-daalat-ali-detained-twice-pakistan": {
       "first_attempt_at": "2026-11-24T01:58:45.912635Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.theoldhamtimes.co.uk/news/26755401.rochdale-councillor-daalat-ali-detained-twice-pakistan"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T12:18:21.141016Z",
+      "last_attempt_at": "2026-11-24T12:40:29.859506Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Pakistani do not appear in the source. Name only people, plac",
       "title": "'I worried I wasn't going to come back' - Rochdale councillor on Pakistan ordeal - Oldham Times",
