@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T14:08:54.216831Z",
+  "updated_at": "2026-11-24T14:28:10.980465Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 236,
@@ -853,14 +853,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T14:08:54.216741Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-24T14:25:13.961674Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Town, Hall do not appear in the source. Name only people, pla",
       "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "health",
       "text_fingerprint": "03d2884e72e560cf",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026": {
       "first_attempt_at": "2026-11-20T10:35:28.724572Z",
@@ -3381,14 +3381,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T13:49:05.613611Z",
+      "last_attempt_at": "2026-11-24T14:25:23.377779Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: The areas of stro",
       "title": "‘No ceiling on what pupils can achieve’, says Ofsted - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "education",
       "text_fingerprint": "0e01cca0cd18463e",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
       "first_attempt_at": "2026-11-11T15:15:29.480989Z",
@@ -3621,14 +3622,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 5,
+      "attempts": 6,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T14:05:57.085751Z",
+      "last_attempt_at": "2026-11-24T14:25:14.798844Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
