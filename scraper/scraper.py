@@ -2644,6 +2644,48 @@ def _food_hygiene_area(address: str) -> str:
         return area
     return postcode_area(address) or 'rochdale'
 
+FOOD_HYGIENE_FIVE_STATE_FILE = ROOT / 'reports' / 'food_hygiene_5star_state.json'
+
+
+def _five_star_candidates(records: list[dict[str, Any]], now: datetime) -> list[Candidate]:
+    """New 5-out-of-5 ratings as good-news stories, a few per run."""
+    import food_hygiene as _fh
+    per_run = max(0, int(os.getenv('FOOD_HYGIENE_FIVE_STAR_PER_RUN', '3')))
+    try:
+        state = json.loads(FOOD_HYGIENE_FIVE_STATE_FILE.read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        state = food_hygiene_empty_state()
+    except Exception as exc:
+        FOOD_HYGIENE_REPORT['five_star'] = {'status': f'state unreadable: {exc}'[:300]}
+        return []
+    offer, report = plan_single_ratings(records, state, _food_hygiene_published_urls(), now)
+    offer.sort(key=lambda r: -r['rating_date'].timestamp())
+    report['current_five_star'] = report.pop('current_low', len(records))
+    report['offered_this_run'] = min(per_run, len(offer))
+    FOOD_HYGIENE_REPORT['five_star'] = report
+    try:
+        FOOD_HYGIENE_FIVE_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        FOOD_HYGIENE_FIVE_STATE_FILE.write_text(json.dumps(state, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    except Exception as exc:
+        log.warning('food hygiene 5-star state could not be saved: %s', exc)
+    out: list[Candidate] = []
+    for record in offer[:per_run]:
+        story = _fh.five_star_story(record, checked_at=now)
+        out.append(Candidate(
+            source_name='Food Standards Agency',
+            source_url=rating_source_url(record),
+            source_title=story['title'],
+            source_summary=story['excerpt'][:900],
+            source_published_at=iso_utc(now),
+            area=_food_hygiene_area(record['address']),
+            category='business',
+            source_body_excerpt=story['excerpt'][:900],
+            source_kind='food_hygiene_rating',
+            deterministic_draft=story,
+        ))
+    return out
+
+
 def collect_food_hygiene_candidates() -> list[Candidate]:
     """FSA food hygiene: one story per NEW low rating, plus the monthly roundup.
 
@@ -2665,7 +2707,10 @@ def collect_food_hygiene_candidates() -> list[Candidate]:
     single_max = int(os.getenv('FOOD_HYGIENE_SINGLE_MAX_RATING', '1'))
     singles_on = os.getenv('FOOD_HYGIENE_SINGLE_ENABLED', 'true').lower() == 'true'
     try:
-        records = fetch_current_low_ratings(SESSION.get, max_rating=max(roundup_max, single_max))
+        five_on = os.getenv('FOOD_HYGIENE_FIVE_STAR_ENABLED', 'true').lower() == 'true'
+        records = fetch_current_low_ratings(
+            SESSION.get, max_rating=max(roundup_max, single_max),
+            include_ratings=frozenset({5}) if five_on else frozenset())
     except Exception as exc:
         log.warning('FSA food hygiene API unavailable: %s', exc)
         FOOD_HYGIENE_REPORT['status'] = f'FSA API unavailable: {exc}'[:300]
@@ -2678,6 +2723,8 @@ def collect_food_hygiene_candidates() -> list[Candidate]:
 
     now = datetime.now(timezone.utc)
     candidates: list[Candidate] = []
+    five_star_records = [r for r in records if r['rating'] == 5]
+    records = [r for r in records if r['rating'] <= max(roundup_max, single_max)]
     roundup_records = [r for r in records if r['rating'] <= roundup_max]
     borough_low_count = sum(1 for r in records if r['rating'] <= 1)
 
@@ -2718,6 +2765,9 @@ def collect_food_hygiene_candidates() -> list[Candidate]:
                     source_kind='food_hygiene_rating',
                     deterministic_draft=story,
                 ))
+
+    if five_star_records:
+        candidates.extend(_five_star_candidates(five_star_records, now))
 
     if roundup_records:
         detailed = roundup_paragraphs(roundup_records, now=now)
