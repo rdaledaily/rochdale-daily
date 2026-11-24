@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-24T13:14:18.210545Z",
+  "generated_at": "2026-11-24T13:31:46.419994Z",
   "category": "sport",
-  "count": 66,
+  "count": 67,
   "articles": [
     {
       "id": "9a9fc76e5818a96623",
@@ -85,8 +85,8 @@
         "source_sha": {
           "https://www.leaderlive.co.uk/sport/26754223.wrexham-u18s-win-preston-mctweed-stoppage-time-goal/": "fbc0edd276284c9a"
         },
-        "checked_at": "2026-11-24T12:44:47.847702Z",
-        "attempts": 1
+        "checked_at": "2026-11-24T13:31:06.954318Z",
+        "attempts": 2
       },
       "ingested_at": "2026-11-24T12:45:04Z",
       "first_published_at": "2026-11-24T08:00:00Z",
@@ -191,12 +191,11 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://rochdaledaily.co.uk/articles/rochdale-afc-supports-efl-s-power-of-72-campaign: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/rochda)",
-        "source_sha": {
-          "https://rochdaleafc.co.uk/dale-support-power-of-72/": "19cb8351597dbb3e"
-        },
-        "checked_at": "2026-11-24T12:44:47.847702Z",
-        "attempts": 4
+        "reason": "https://rochdaleafc.co.uk/dale-support-power-of-72/: capture failed (ConnectTimeout: HTTPSConnectionPool(host='rochdaleafc.co.uk', port=443): Max retries exceeded wi); https://rochdaledaily.co.uk/articles/rochdale-afc-supports-efl-s-power-of-72-campaign: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/rochda)",
+        "source_sha": {},
+        "source_changed_at": "2026-11-24T13:31:06.954318Z",
+        "checked_at": "2026-11-24T13:31:06.954318Z",
+        "attempts": 5
       },
       "ingested_at": "2026-11-24T11:17:07Z",
       "first_published_at": "2026-11-23T15:45:24Z",
@@ -296,14 +295,14 @@
       "image_match_title": "rochdale_hornets.jpg",
       "image_match_score": 15256,
       "core_fact_check": {
-        "status": "passed",
+        "status": "unchecked",
         "issues": [],
-        "reason": "",
+        "reason": "https://rochdaledaily.co.uk/articles/rochdale-hornets-partner-with-10x-athletic-for-2027-season: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/rochda)",
         "source_sha": {
           "https://www.hornetsrugbyleague.co.uk/article/1930/rochdale-hornets-partner-with-10x-athletic": "b3bb154be7f33b88"
         },
-        "checked_at": "2026-11-24T12:51:56.668876Z",
-        "attempts": 2
+        "checked_at": "2026-11-24T13:31:06.954318Z",
+        "attempts": 3
       },
       "ingested_at": "2026-11-24T12:21:59Z",
       "first_published_at": "2026-11-23T15:30:31Z",
@@ -415,8 +414,8 @@
         "source_sha": {
           "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale": "4d6b1122b1de438f"
         },
-        "checked_at": "2026-11-24T12:44:47.847702Z",
-        "attempts": 23
+        "checked_at": "2026-11-24T13:31:06.954318Z",
+        "attempts": 24
       },
       "ingested_at": "2026-11-23T21:20:56Z",
       "first_published_at": "2026-11-23T00:00:00Z",
@@ -461,6 +460,109 @@
       ],
       "source_review_verified": false,
       "primary_source_verified": false
+    },
+    {
+      "id": "d53919f0882ebbb0e4",
+      "story_key": "sport-v3-ae130f83cc769fb7dee5",
+      "title": "Rochdale AFC to host York City on 14 November",
+      "slug": "rochdale-afc-to-host-york-city-on-14-november",
+      "excerpt": "Rochdale AFC will welcome York City to the Crown Oil Arena for a League Two match on Saturday 14 November, with tickets now available.",
+      "content_html": "<p>Rochdale AFC will host York City at the Crown Oil Arena on Saturday 14 November in a Sky Bet League Two match. Tickets for the game are currently on sale.</p><p>Fans are encouraged to support the team as they face York City, a club with a strong following. Tickets can be purchased through the Rochdale AFC website.</p><p>The fixture is significant for both teams as they compete for crucial points in the league, and the club is looking forward to a strong turnout from home fans.</p><p>Rochdale AFC hopes to build momentum with a home advantage against York City.</p>",
+      "social_headline": "Rochdale AFC welcomes York City for a League Two clash on 14 November",
+      "area": "rochdale",
+      "category": "sport",
+      "types": [
+        "sport"
+      ],
+      "published_at": "2026-11-22T17:30:45Z",
+      "scraped_at": "2026-11-24T13:27:58Z",
+      "image_url": "assets/img/cards/rochdale-afc-to-host-york-city-on-14-november.jpg",
+      "image_credit": "Rochdale AFC / Used with permission",
+      "image_credit_url": "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
+      "source_image_candidate_url": "https://rochdaleafc.co.uk/wp-content/uploads/2026/11/MainStandAccyHome_16x9.jpg",
+      "source_image_reuse_status": "verified-source-image-license",
+      "event_start_at": "",
+      "event_end_at": "",
+      "event_location": "",
+      "source_kind": "article",
+      "source_name": "Rochdale AFC",
+      "source_url": "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
+      "source_names": [
+        "Rochdale AFC"
+      ],
+      "source_urls": [
+        "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/"
+      ],
+      "source_count": 1,
+      "locality_evidence": [
+        "Rochdale"
+      ],
+      "context_research": [
+        {
+          "question": "Dale Welcome York City rochdale",
+          "role": "same_incident",
+          "status": "no-additional-verified-source",
+          "sources_added": 0
+        },
+        {
+          "question": "\"Dale Welcome York City\" rochdale public role background",
+          "role": "public_background",
+          "status": "no-additional-verified-source",
+          "sources_added": 0
+        }
+      ],
+      "social_context_used": false,
+      "social_reaction_count": 0,
+      "official_social_update_count": 0,
+      "social_platforms": [],
+      "social_context_note": "",
+      "sensitive_story": false,
+      "police_matter": false,
+      "requires_approval": false,
+      "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
+      "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
+      "byline": "Rochdale Daily Newsdesk",
+      "status": "published",
+      "publication_route": "ai-grounded-rewrite",
+      "rewrite_quality_checked": true,
+      "editorial_style_version": "rochdale-human-newsroom-v15",
+      "style_rewrite_status": "generated-in-house-style",
+      "discovery_query_label": "priority:planning-rochdale",
+      "searched_location_slug": "",
+      "searched_location_name": "",
+      "img": "assets/img/cards/rochdale-afc-to-host-york-city-on-14-november.jpg",
+      "image_replaced": "/home/runner/work/rochdale-daily/rochdale-daily/assets/img/cards/fixtures.jpg",
+      "image_license_url": "",
+      "image_license": "Used with permission",
+      "image_permission_ref": "Written permission from Press office, Rochdale AFC, 2026-10-20",
+      "image_alt": "Rochdale AFC to host York City on 14 November",
+      "image_status": "source-photo-cached",
+      "image_backfill_method": "verified-original-source-photo",
+      "core_fact_check": {
+        "status": "unchecked",
+        "issues": [],
+        "reason": "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/: capture is not the story",
+        "source_sha": {
+          "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/": "a22d33fd1454ac7a"
+        },
+        "checked_at": "2026-11-24T13:31:06.954318Z",
+        "attempts": 1
+      },
+      "ingested_at": "2026-11-24T13:31:30Z",
+      "first_published_at": "2026-11-22T17:30:45Z",
+      "last_updated_at": "2026-11-22T17:30:45Z",
+      "wards": [],
+      "ward_verification": {
+        "wards": [],
+        "status": "borough-or-location-unresolved",
+        "evidence": ""
+      },
+      "related_article_slugs": [
+        "girls-waiting-for-camhs-support-get-free-football-programme",
+        "rochdale-afc-to-host-york-city-in-league-two-clash-this-saturday",
+        "rochdale-hosts-york-city-in-league-two-match-expected-to-feature-goals"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card"
     },
     {
       "id": "c1e481f951ce93c0c8",
@@ -576,7 +678,7 @@
         "evidence": ""
       },
       "related_article_slugs": [
-        "girls-waiting-for-camhs-support-get-free-football-programme",
+        "rochdale-afc-to-host-york-city-on-14-november",
         "ian-holloway-discusses-fitness-and-away-form-ahead-of-rochdale-afc-match",
         "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde"
       ],
@@ -1431,7 +1533,7 @@
       "related_article_slugs": [
         "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup",
         "rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider",
-        "york-city-to-face-rochdale-at-crown-oil-arena-this-saturday"
+        "rochdale-afc-to-host-york-city-on-14-november"
       ],
       "image_alt": "Illustration: Rochdale, sport. Not a photograph of the event.",
       "commons_image_search": "searched",
@@ -1867,7 +1969,7 @@
       "published_at": "2026-11-09T18:55:23Z",
       "first_published_at": "2026-11-09T18:55:23Z",
       "last_updated_at": "2026-11-09T18:55:23Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Owen Webster",
       "source_url": "https://www.fightmag.com/bkfc-96-glasgow-weir-vs-cohoon-live-results/",
       "source_names": [
@@ -3843,7 +3945,7 @@
       "published_at": "2026-10-24T22:33:36Z",
       "first_published_at": "2026-10-24T22:33:36Z",
       "last_updated_at": "2026-10-24T22:33:36Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale AFC",
       "source_url": "",
       "source_names": [
@@ -3865,7 +3967,6 @@
       "image_backfill_method": "manual-editorial-photo",
       "source_image_reuse_status": "cards-only",
       "image_match_title": "rochdale_fc.jpg",
-      "image_match_score": -1,
       "police_matter": false,
       "wards": [],
       "ward_verification": {
@@ -5759,7 +5860,7 @@
       "published_at": "2026-10-15T19:20:34Z",
       "first_published_at": "2026-10-15T19:20:34Z",
       "last_updated_at": "2026-10-15T19:20:34Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "BKFC / Owen Webster",
       "source_url": "https://www.bkfc.com/events/bkfc-glasgow",
       "source_names": [
@@ -6545,7 +6646,7 @@
       "published_at": "2026-10-08T20:40:00Z",
       "first_published_at": "2026-10-08T20:40:00Z",
       "last_updated_at": "2026-10-08T20:40:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale Boroughwide Housing",
       "source_url": "",
       "source_names": [
@@ -6568,7 +6669,6 @@
       "image_backfill_method": "manual-editorial-photo",
       "source_image_reuse_status": "cards-only",
       "image_match_title": "RBH.jpg",
-      "image_match_score": 15123,
       "police_matter": false,
       "wards": [],
       "ward_verification": {
@@ -6601,7 +6701,7 @@
       "published_at": "2026-10-08T20:30:00Z",
       "first_published_at": "2026-10-08T20:30:00Z",
       "last_updated_at": "2026-10-08T20:30:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale Golf Club; Woodhall Spa Golf Club",
       "source_url": "https://www.woodhallspagolf.com/visitors/central-england-foursomes/",
       "source_names": [
@@ -6659,7 +6759,7 @@
       "published_at": "2026-08-31T09:30:00Z",
       "first_published_at": "2026-08-31T09:30:00Z",
       "last_updated_at": "2026-08-31T09:30:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale AFC, Prostate Cancer UK and phs Group",
       "source_url": "https://rochdaleafc.co.uk/dale-launch-back-in-the-game/",
       "source_names": [
@@ -6718,7 +6818,7 @@
       "published_at": "2026-08-15T16:29:00Z",
       "first_published_at": "2026-08-15T16:29:00Z",
       "last_updated_at": "2026-08-15T16:29:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Norden Cricket Club",
       "source_url": "",
       "source_names": [
@@ -6741,7 +6841,6 @@
       "image_backfill_method": "manual-editorial-photo",
       "source_image_reuse_status": "cards-only",
       "image_match_title": "cricket.jpg",
-      "image_match_score": 15127,
       "police_matter": false,
       "wards": [
         "Norden"
@@ -6778,7 +6877,7 @@
       "published_at": "2026-08-13T20:02:00Z",
       "first_published_at": "2026-08-13T20:02:00Z",
       "last_updated_at": "2026-08-13T20:02:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale AFC Community Trust",
       "source_url": "https://www.rochdaleafccommunity.org/rochdale-afc-netball-launched-as-rochdale-netball-club-joins-the-rochdale-afc-family/",
       "source_names": [
@@ -6832,7 +6931,7 @@
       "published_at": "2026-08-10T15:00:00Z",
       "first_published_at": "2026-08-10T15:00:00Z",
       "last_updated_at": "2026-08-10T15:00:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Councillor Daniel Meredith",
       "source_url": "",
       "source_names": [
@@ -6854,7 +6953,6 @@
       "image_backfill_method": "manual-editorial-photo",
       "source_image_reuse_status": "cards-only",
       "image_match_title": "rochdale_hornets.jpg",
-      "image_match_score": 14256,
       "police_matter": false,
       "wards": [
         "Balderstone and Kirkholt"
@@ -6890,7 +6988,7 @@
       "published_at": "2026-08-06T22:10:00Z",
       "first_published_at": "2026-08-06T22:10:00Z",
       "last_updated_at": "2026-08-06T22:10:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale AFC",
       "source_url": "https://rochdaleafc.co.uk/job-vacancies-040826/",
       "source_names": [
@@ -6946,7 +7044,7 @@
       "published_at": "2026-08-06T22:00:00Z",
       "first_published_at": "2026-08-06T22:00:00Z",
       "last_updated_at": "2026-08-06T22:00:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Heywood Hurricanes FC",
       "source_url": "",
       "source_names": [
@@ -6965,9 +7063,10 @@
       "legal_disclaimer": "This article is based on an appeal published by Heywood Hurricanes FC. Rochdale Daily has no involvement in the raffle; anyone wishing to donate should contact the club directly.",
       "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
       "img": "assets/img/cards/heywood-hurricanes-fc-raffle-prize-appeal-grassroots-football.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "editorial-photo",
+      "image_backfill_method": "manual-editorial-photo",
       "source_image_reuse_status": "cards-only",
+      "image_match_title": "heywood-hurricanes-fc-raffle-prize-appeal-grassroots-football.jpg",
       "police_matter": false,
       "wards": [],
       "ward_verification": {
@@ -6980,9 +7079,7 @@
         "heywood-sports-village-hosts-annual-white-ribbon-football-tournament",
         "heywood-foster-family-uses-football-to-build-bonds-with-young-people-in-their-ca"
       ],
-      "image_alt": "Rochdale Daily headline card: New grassroots club Heywood Hurricanes FC appeals for raffle prizes to keep football free for every child",
-      "image_match_title": "heywood-hurricanes-fc-raffle-prize-appeal-grassroots-football.jpg",
-      "image_match_score": 20261,
+      "image_alt": "New grassroots club Heywood Hurricanes FC appeals for raffle prizes to keep football free for every child",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card"
     },
     {
@@ -7002,7 +7099,7 @@
       "published_at": "2026-08-02T22:45:00Z",
       "first_published_at": "2026-08-02T22:45:00Z",
       "last_updated_at": "2026-08-02T22:45:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Littleborough RUFC",
       "source_url": "https://www.facebook.com/",
       "source_names": [
@@ -7069,7 +7166,7 @@
       "published_at": "2026-08-01T14:15:00Z",
       "first_published_at": "2026-08-01T14:15:00Z",
       "last_updated_at": "2026-08-01T14:15:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "",
       "source_names": [
@@ -7121,7 +7218,7 @@
       "published_at": "2026-08-01T11:55:00Z",
       "first_published_at": "2026-08-01T11:55:00Z",
       "last_updated_at": "2026-08-01T11:55:00Z",
-      "scraped_at": "2026-11-24T13:14:18Z",
+      "scraped_at": "2026-11-24T13:31:46Z",
       "source_name": "Syke Bowling Club",
       "source_url": "https://www.facebook.com/",
       "source_names": [
