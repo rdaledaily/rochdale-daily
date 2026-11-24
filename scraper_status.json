@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-23T23:39:45.047435Z",
+  "last_run_at": "2026-11-24T00:03:28.462095Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,19 +54,19 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 131,
-  "job_or_career_posts_rejected": 3,
-  "raw_candidates": 128,
-  "candidate_clusters": 56,
+  "raw_candidates_before_job_filter": 16,
+  "job_or_career_posts_rejected": 0,
+  "raw_candidates": 16,
+  "candidate_clusters": 55,
   "google_news_resolution": {
-    "wrappers": 70,
-    "resolved": 30,
-    "text_recovered": 7,
-    "reattributed": 4,
-    "images_found": 18
+    "wrappers": 0,
+    "resolved": 0,
+    "text_recovered": 0,
+    "reattributed": 0,
+    "images_found": 0
   },
-  "duplicates_merged": 72,
-  "attempted_rewrites": 9,
+  "duplicates_merged": 0,
+  "attempted_rewrites": 6,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
@@ -74,16 +74,14 @@
       "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 688,
-  "skipped": 8,
+  "new_articles": 1,
+  "live_articles": 689,
+  "skipped": 5,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 2,
     "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 2,
-    "quality gate after 4 repairs: Source fidelity: the figure(s) two do not appear in the source. Use only figures the sourc": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) AFC, Metropolitan, EFL do not appear in the source. Name only": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Westminster do not appear in the source. Name only people, pl": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) Google, News do not appear in the source. Name only people, p": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) AFC, Metropolitan, Football do not appear in the source. Name": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -105,13 +103,40 @@
       "published": 72,
       "rejected": 68
     },
-    "held_back_this_run": 31,
+    "held_back_this_run": 33,
     "held_already_published": 13,
-    "held_rejected": 18,
+    "held_rejected": 20,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy",
+      "title": "Pensioner jailed for abusing schoolboy - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Westminster do not appear in the source. Name only people, pl",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:36:53.803848Z"
+    },
+    {
+      "url": "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas",
+      "title": "Lighting up the town for Christmas - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:36:50.452150Z"
+    },
+    {
+      "url": "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026",
+      "title": "Norden Christmas Lights, road closures in Rochdale on 22 November 2026 - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-23T23:36:34.548279Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy",
       "title": "Dale Face Bolton In Midweek Cup Tie - Rochdale AFC",
@@ -183,15 +208,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-23T21:15:32.109030Z"
-    },
-    {
-      "url": "https://www.thenonleaguefootballpaper.com/latest-news/non-league-paper/633090/boateng-denies-dale-fan-charge",
-      "title": "BOATENG DENIES DALE FAN CHARGE - The Non-League Football Paper",
-      "source_name": "Thenonleaguefootballpaper",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-23T21:15:23.103061Z"
     },
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-how-people-go-missing-34955627",
@@ -276,7 +292,7 @@
     }
   ],
   "published_with_style_issues": {
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+    "Write at least 159 body words using only facts already present in the sources; the draft currently has 146.": 1
   },
   "local_impact": {
     "shown": 1,
@@ -287,8 +303,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 117,
-    "website_discovery": 9,
+    "rss_and_google_news": 5,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -302,7 +318,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -336,6 +351,14 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
+      "feed_title": ""
+    },
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -472,39 +495,19 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 22,
-    "rochdaledaily.co.uk": 22,
-    "Rochdale AFC": 20,
-    "Rochdale Borough Council": 10,
-    "Manchester Evening News": 9,
-    "Roch Valley Radio": 7,
-    "Northampton Chronicle and Echo": 5,
-    "Id": 4,
     "Bee Network live travel alerts": 4,
-    "About Manchester": 3,
     "Roch Valley Radio Local News": 3,
-    "Oldham Evening Chronicle": 2,
+    "Roch Valley Radio": 2,
     "BBC Manchester": 1,
     "Falinge Park High School": 1,
     "Rochdale Borough Council RSS": 1,
-    "Yorkshire Post": 1,
-    "Dave.Sport": 1,
-    "Sky Sports": 1,
-    "The Sun": 1,
-    "Yahoo Sports": 1,
-    "Transfermarkt": 1,
-    "The72": 1,
-    "Facebook": 1,
-    "Oldham Times": 1,
-    "Rochdale Hornets": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 2,
-    "environment": 2,
+    "crime": 1,
     "news": 1,
     "sport": 4
   },
@@ -547,24 +550,18 @@
   "selected_story_keys": [
     "hard-news-v3-ff69d09750d0c01cca06",
     "sport-v3-e52881b765369ebe30e5",
-    "environment-v3-b13390608b5cfcf8d664",
     "hard-news-v3-b6d2eee3c58500533c65",
     "sport-v3-0625f6f3bc7926277aba",
-    "environment-v3-6080866864cd762881af",
     "sport-v3-397b593ec62eb38400b3",
-    "sport-v3-a932916ef1af6dea88fc",
-    "hard-news-v3-c51760d73c547e0a4e25"
+    "sport-v3-a932916ef1af6dea88fc"
   ],
   "selected_candidate_urls": [
     "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
     "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
-    "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas/",
     "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home",
     "https://cwibc.co.id/en/rochdale-sack-ian-watson",
-    "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026",
     "https://sports.yahoo.com/articles/rochdale-sack-boss-watson-northampton-105509802.html?guccounter=1",
-    "https://rochdaleafc.co.uk/watson-departs-221126/",
-    "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy/"
+    "https://rochdaleafc.co.uk/watson-departs-221126/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -577,13 +574,11 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "environment",
       "news",
       "sport"
     ],
     "selected_categories": [
       "crime",
-      "environment",
       "news",
       "sport"
     ],
@@ -604,8 +599,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 2,
-      "environment": 2,
+      "crime": 1,
       "news": 1,
       "sport": 4
     },
@@ -614,15 +608,13 @@
     },
     "selected_by_area": {
       "castleton": 1,
-      "rochdale": 8
+      "rochdale": 5
     },
     "selected_by_source": {
       "facebook": 1,
       "id": 1,
       "roch valley radio local news": 1,
       "rochdale afc": 2,
-      "rochdale borough council": 1,
-      "rochdale times": 2,
       "yahoo sports": 1
     },
     "must_cover_selected": 0
@@ -1173,26 +1165,20 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 10,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
-    "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
     "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
     "https://news.google.com/rss/articles/CBMimgFBVV95cUxPQU9VbENXd1RUNktCSmNWR3NZUjA3cW5qR2FGazBERlM5ZWhPVV9FNl9QVmU3cnpmTzVDX05yNTlSSTZKbGd0OTIyMDNRaElkNWNtVEFlaFVqY2tkSTJXRUxFUDhNWGZ4eVljUVdVeG5oalQ0VnVISnhScExBTW5Vbk9SeE9ITEJBcFJHWG1DdnFYQmxndW5fa3RR?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1228,8 +1214,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-23T23:40:46.478876Z",
-  "frontpage_article_count": 13,
+  "frontpage_generated_at": "2026-11-24T00:05:16.750914Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1283,22 +1269,23 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "health": 2,
+      "news": 2,
       "crime": 1,
       "traffic": 3,
       "transport": 1,
       "politics": 1,
       "education": 1,
       "community": 3,
-      "news": 1
+      "health": 2
     },
     "selected_by_ward": {
-      "Spotland and Falinge": 1,
+      "Castleton": 1,
       "borough-wide": 11,
+      "Spotland and Falinge": 1,
       "North Middleton": 1
     },
     "selected_by_area": {
-      "castleton": 1,
+      "castleton": 2,
       "healey": 1,
       "heywood": 1,
       "middleton": 2,
@@ -1306,24 +1293,24 @@
       "spotland": 1
     },
     "selected_by_source": {
-      "t&n asbestos trustee company": 1,
+      "source": 2,
       "manchester evening news": 1,
       "rochdale borough council": 6,
       "rochdale times": 1,
-      "source": 1,
       "rochdale borough council news": 1,
-      "pennine care nhs": 1,
-      "rochdale daily": 1
+      "t&n asbestos trustee company": 1,
+      "rochdale daily": 1,
+      "pennine care nhs": 1
     },
-    "pool_size": 16,
-    "primary_pool_size": 16,
+    "pool_size": 17,
+    "primary_pool_size": 17,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 13,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 12,
-    "fresh_under_homepage_window": 13,
-    "short_briefs_selected": 10,
+    "fresh_under_24h": 11,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1334,7 +1321,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 688,
+  "duplicate_articles_after_postprocessing": 689,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1345,9 +1332,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "castleton-house-approved-for-eight-bed-care-home"
+  ],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
