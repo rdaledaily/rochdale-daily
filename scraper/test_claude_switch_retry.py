@@ -31,6 +31,8 @@ class ClaudeSwitchRetryTests(unittest.TestCase):
     def test_rejections_outside_window_untouched(self):
         self.assertFalse(core._claude_switch_retry(entry(last_attempt_at="2026-11-22T10:00:00Z")))
         self.assertFalse(core._claude_switch_retry(entry(last_attempt_at="2026-11-24T10:00:00Z")))
+        self.assertTrue(core._claude_switch_retry(entry(last_attempt_at="2026-11-24T05:13:00Z")))
+        self.assertTrue(core._claude_switch_retry(entry(claude_switch_epoch="2026-11-23-claude-switch-v1")))
 
     def test_published_and_failed_untouched(self):
         self.assertFalse(core._claude_switch_retry(entry(outcome="published")))
