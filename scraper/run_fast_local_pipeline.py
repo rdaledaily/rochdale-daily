@@ -359,7 +359,16 @@ def configure_searches(now: datetime | None = None) -> None:
         len(CATEGORY_QUERIES) + len(SEARCH_WARDS) + len(TRUSTED_NEWS_DESK_SEARCHES)
     )
     search_limit = min(68, max(guaranteed_slots, core.GOOGLE_SEARCH_QUERY_LIMIT))
-    core.SEARCH_QUERY_SPECS = combined[:search_limit]
+    combined = combined[:search_limit]
+    # Merge the never-matching single-ward / single-site searches and rotate
+    # the rest, so Google stops answering with block pages (search_plan.py).
+    import search_plan
+    combined = search_plan.plan(
+        combined,
+        lambda label, query, category: SearchQuery(label, query, category),
+        current,
+    )
+    core.SEARCH_QUERY_SPECS = combined
     core.SEARCH_GROUPS = [spec.query for spec in core.SEARCH_QUERY_SPECS]
     core.log.info(
         "Borough search plan: %d queries; guaranteed categories=%d wards=%d; priority=%d",

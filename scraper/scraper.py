@@ -134,6 +134,7 @@ GOOGLE_NEWS_REQUEST_DELAY_SECONDS = float(os.getenv('GOOGLE_NEWS_REQUEST_DELAY_S
 DISCOVERY_LINKS_PER_SOURCE = int(os.getenv('DISCOVERY_LINKS_PER_SOURCE', '40'))
 RSS_ITEMS_PER_SOURCE = int(os.getenv('RSS_ITEMS_PER_SOURCE', '100'))
 GOOGLE_SEARCH_QUERY_LIMIT = int(os.getenv('GOOGLE_SEARCH_QUERY_LIMIT', '128'))
+GOOGLE_NEWS_BLOCK_LIMIT = int(os.getenv('GOOGLE_NEWS_BLOCK_LIMIT', '3'))
 DISCOVERY_PAGE_LIMIT = int(os.getenv('DISCOVERY_PAGE_LIMIT', '3'))
 DISCOVERY_WORKERS = int(os.getenv('DISCOVERY_WORKERS', '16'))
 # Threads used to fetch the listing pages themselves. Kept separate from
@@ -1698,7 +1699,15 @@ def collect_rss_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
     RSS_FEED_FAILURES.clear()
     RSS_FEED_EMPTY.clear()
+    google_blocks = 0
+    google_skipped = 0
     for source in RSS_SOURCES + google_news_sources():
+        if source.get('aggregator') == 'google' and google_blocks >= GOOGLE_NEWS_BLOCK_LIMIT:
+            # Google has started answering with block pages. Every further
+            # request only deepens the block, so stop for this run and report
+            # the shortfall (24 Nov 2026: up to 14 of 60 searches a run blocked).
+            google_skipped += 1
+            continue
         log.info('Reading RSS: %s', source['name'])
         if source.get('aggregator') == 'google':
             time.sleep(GOOGLE_NEWS_REQUEST_DELAY_SECONDS)
@@ -1719,6 +1728,9 @@ def collect_rss_candidates() -> list[Candidate]:
         if getattr(feed, 'bozo', False):
             log.warning('RSS warning for %s: %s', source['name'], getattr(feed, 'bozo_exception', 'unknown'))
         raw_entry_count = len(feed.entries)
+        if source.get('aggregator') == 'google' and getattr(feed, 'bozo', False) and raw_entry_count == 0:
+            google_blocks += 1
+            RSS_FEED_FAILURES[str(source['name'])] = 'google news block page (not RSS)'
         log.info('Raw entries for %s: %d', source['name'], raw_entry_count)
         if raw_entry_count == 0 and source.get('aggregator') != 'google':
             headers = getattr(feed, 'headers', None) or {}
@@ -1826,6 +1838,9 @@ def collect_rss_candidates() -> list[Candidate]:
                     )
                     continue
             candidates.append(candidate)
+    if google_skipped:
+        RSS_FEED_FAILURES['Google News'] = f'blocked after {google_blocks} block pages; {google_skipped} searches skipped this run'
+        log.warning('Google News blocked this run: %d searches skipped after %d block pages', google_skipped, google_blocks)
     return candidates
 
 def discovery_listing_urls(source: dict[str, Any]) -> list[str]:
