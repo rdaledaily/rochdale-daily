@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,7 +13,7 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 1,
+  "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "gmp_release_matches": {
     "mode": "report",
@@ -22,12 +22,6 @@
     "matches": []
   },
   "items": [
-    {
-      "slug": "rochdale-afc-to-host-york-city-on-14-november",
-      "result": "licensed-source-photo",
-      "source": "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
-      "after": "assets/img/cards/rochdale-afc-to-host-york-city-on-14-november.jpg"
-    },
     {
       "slug": "rochdale-borough-council-establishes-integrated-commissioning-board",
       "result": "no-cleared-source-image",
@@ -84,6 +78,24 @@
       "why": {
         "page": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries",
+      "after": "assets/img/cards/rochdale-town-hall.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/contactcentre",
+        "final_url": "https://www.rochdale.gov.uk/contactcentre",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     }
   ]
