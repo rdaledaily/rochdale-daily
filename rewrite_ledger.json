@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T11:16:02.136287Z",
+  "updated_at": "2026-11-24T11:52:32.364474Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 231,
@@ -24,16 +24,16 @@
     },
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T11:12:16.939554Z",
+      "last_attempt_at": "2026-11-24T11:48:47.934819Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We urge parents t",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We encourage pare",
       "title": "Parents please speak to your children say police in Heywood - About Manchester",
       "source_name": "About Manchester",
       "category": "crime",
@@ -93,15 +93,15 @@
     },
     "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf": {
       "first_attempt_at": "2026-11-23T11:09:26.204267Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://democracy.rochdale.gov.uk/documents/s125996/Calculation%20of%20the%20202728%20Tax%20Base.pdf"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T11:12:14.307186Z",
+      "last_attempt_at": "2026-11-24T11:48:44.534324Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2028; source publication timestamps are not event date",
       "title": "Committee Report - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "environment",
@@ -166,9 +166,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T11:12:07.605341Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Science, Technology, Mathematics do not appear in the source.",
+      "last_attempt_at": "2026-11-24T11:52:32.364187Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Driving STEM education with the Primary Engineer Vehicle Programme",
       "source_name": "Rochdale Development Agency",
       "category": "education",
@@ -696,12 +696,13 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1",
       "last_attempt_at": "2026-11-24T02:59:07.406722Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale deputy council leader detained twice in Pakistan - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
-      "text_fingerprint": "a57fc21cffc63b14"
+      "text_fingerprint": "a57fc21cffc63b14",
+      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-house-prices-rise-by-4-1-over-the-past-year": {
       "first_attempt_at": "2026-11-19T22:57:40.749288Z",
@@ -795,13 +796,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T11:16:02.136238Z",
+      "last_attempt_at": "2026-11-24T11:52:32.364421Z",
       "outcome": "published",
       "reason": "",
       "title": "Thinking about fostering? Free advice stall at Rochdale Riverside on Wednesday - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
-      "text_fingerprint": "9480dbfe8759d1f9"
+      "text_fingerprint": "9480dbfe8759d1f9",
+      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026": {
       "first_attempt_at": "2026-11-24T02:56:38.925528Z",
@@ -1179,14 +1181,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T03:37:19.503205Z",
-      "outcome": "published",
-      "reason": "",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T11:48:19.704509Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Pakistani do not appear in the source. Name only people, plac",
       "title": "'This is how people go missing': How one Rochdale man got trapped in Pakistan - Yahoo News UK",
       "source_name": "Yahoo News UK",
       "category": "events",
-      "text_fingerprint": "2bafea33ef3c8dc8"
+      "text_fingerprint": "0885d8126647ec20",
+      "recovery_attempts": 1
     },
     "https://uk.sports.yahoo.com/news/pictures-york-city-supporters-rochdale-120000827.html": {
       "first_attempt_at": "2026-11-18T16:20:13.327417Z",
@@ -1692,13 +1695,13 @@
     },
     "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026": {
       "first_attempt_at": "2026-11-23T12:12:48.332555Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T11:11:55.662811Z",
+      "last_attempt_at": "2026-11-24T11:48:48.141536Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Park, High, School, Falinge do not appear in the source. Name",
       "title": "Ignite Fire Festival 2026",
@@ -1766,9 +1769,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T11:12:19.662295Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 23 November are neither stated nor implied by the source. Use",
+      "last_attempt_at": "2026-11-24T11:52:32.363953Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Borough Council awards contract: Lowerplace Primary School Hot and Cold Water Pipework (Infants) Phase 1 of 2",
       "source_name": "Find a Tender",
       "category": "business",
@@ -1812,16 +1815,16 @@
     },
     "https://www.hornetsrugbyleague.co.uk/article/1930/rochdale-hornets-partner-with-10x-athletic": {
       "first_attempt_at": "2026-11-24T01:58:34.860512Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://www.hornetsrugbyleague.co.uk/article/1930/rochdale-hornets-partner-with-10x-athletic"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T02:40:09.255918Z",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T11:48:25.903226Z",
       "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Nutrition is vita",
       "title": "Rochdale Hornets partner with 10X Athletic - Rochdale Hornets",
       "source_name": "Rochdale Hornets",
       "category": "sport",
@@ -2513,13 +2516,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-24T11:16:02.135928Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "281c78482079658c",
-      "claude_switch_epoch": "2026-11-24-claude-era-v2"
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/family-friendly-greater-manchester-winter-34926796.amp": {
       "first_attempt_at": "2026-11-18T10:32:20.739400Z",
@@ -2718,7 +2722,7 @@
     },
     "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306": {
       "first_attempt_at": "2026-11-23T11:54:30.518486Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5",
         "https://www.expressandstar.com/uk-sports/chris-hogg-hails-northampton-reaction-against-rochdale-9365864",
@@ -2731,9 +2735,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-24T11:12:31.296306Z",
+      "last_attempt_at": "2026-11-24T11:48:30.806098Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Jon do not appear in the source. Name only people, places and",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Town, Jon, Brady, Stadium do not appear in the source. Name o",
       "title": "Hogg reveals ‘angriness’ in Cobblers dressing room despite Rochdale win",
       "source_name": "Northampton Chronicle and Echo",
       "category": "community",
@@ -3123,16 +3127,16 @@
     },
     "https://www.rochdaletimes.co.uk/free-health-checks-identify-1000-undiagnosed-conditions": {
       "first_attempt_at": "2026-11-24T00:48:36.539405Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochdaletimes.co.uk/free-health-checks-identify-1000-undiagnosed-conditions"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T11:12:18.340606Z",
+      "last_attempt_at": "2026-11-24T11:48:28.493667Z",
       "outcome": "rejected",
-      "reason": "quality gate: fact-note rebuild unavailable after source overlap",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: Local",
       "title": "Free health checks identify 1,000 undiagnosed conditions - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "health",
@@ -3310,7 +3314,7 @@
     },
     "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy": {
       "first_attempt_at": "2026-11-23T22:33:27.542502Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMie0FVX3lxTE5Nd1pRZkxJM1F0UjJWT2I2OFgyZUlzUTBYMUZuS2VJMFFrbW9wTlRvTHY3bXI1aTU4SHZKc3FmMnBoQ0gxZDJQazRjdkdwbU9qeVVVTDBqWFppRlFRTFYxZlZ4aEZXOGthZTA2YkdoWTY1QjJteHlMSl9MUQ?oc=5",
         "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy"
@@ -3318,9 +3322,9 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T11:12:04.980582Z",
+      "last_attempt_at": "2026-11-24T11:48:31.062261Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: The p",
+      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 70 do not appear in the source. Use only figures the source",
       "title": "Pensioner jailed for abusing schoolboy - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -3954,13 +3958,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T11:16:02.135975Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-24T11:48:20.287527Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Pakistani do not appear in the source. Name only people, plac",
       "title": "'I worried I wasn't going to come back' - Rochdale councillor on Pakistan ordeal - Oldham Times",
       "source_name": "Oldham Times",
       "category": "traffic",
-      "text_fingerprint": "81daacc686918224"
+      "text_fingerprint": "81daacc686918224",
+      "recovery_attempts": 1
     },
     "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson": {
       "first_attempt_at": "2026-11-23T21:37:03.296264Z",
