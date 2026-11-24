@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T14:28:10.985648Z",
+  "last_run_at": "2026-11-24T14:50:18.975507Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,52 +54,64 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 150,
+  "raw_candidates_before_job_filter": 138,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 146,
-  "candidate_clusters": 52,
+  "raw_candidates": 134,
+  "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 99,
-    "resolved": 79,
-    "text_recovered": 9,
-    "reattributed": 54,
-    "images_found": 15
+    "wrappers": 91,
+    "resolved": 72,
+    "text_recovered": 13,
+    "reattributed": 50,
+    "images_found": 16
   },
-  "duplicates_merged": 94,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "duplicates_merged": 83,
+  "attempted_rewrites": 5,
+  "draft_rewrites_created": 3,
+  "drafted_articles": [
+    {
+      "slug": "redwood-school-praised-by-ofsted-for-inclusive-education-approach",
+      "source_url": "https://www.rochdaletimes.co.uk/no-ceiling-on-what-pupils-can-achieve-says-ofsted/"
+    },
+    {
+      "slug": "rochdale-white-ribbon-vigil-walk-set-for-25-november-2026",
+      "source_url": "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026"
+    },
+    {
+      "slug": "plans-to-demolish-seven-sisters-tower-blocks-in-rochdale-revealed",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp"
+    }
+  ],
   "new_articles": 0,
   "live_articles": 703,
-  "skipped": 3,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the name(s) Town, Hall do not appear in the source. Name only people, pla": 1,
     "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use": 1,
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: The areas of stro": 1
+    "quality gate after 4 repairs: Source fidelity: the name(s) AFC do not appear in the source. Name only people, places and": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
-    "queued_for_retry": 1,
+    "missing_from_feed": 0,
+    "queued_for_retry": 0,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 236,
+    "entries": 237,
     "by_outcome": {
       "editorial_twin": 21,
-      "failed": 57,
-      "published": 88,
-      "rejected": 70
+      "failed": 56,
+      "published": 91,
+      "rejected": 69
     },
-    "held_back_this_run": 42,
+    "held_back_this_run": 40,
     "held_already_published": 27,
-    "held_rejected": 15,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -121,15 +133,6 @@
       "outcome": "rejected",
       "attempts": 1,
       "last_attempt_at": "2026-11-24T13:49:05.613466Z"
-    },
-    {
-      "url": "https://cwibc.co.id/en/rochdale-sack-ian-watson",
-      "title": "Rochdale Sack Ian Watson After Four Straight League Two Defeats - cwibc.co.id",
-      "source_name": "Id",
-      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) AFC do not appear in the source. Name only people, places and",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-24T13:46:13.570833Z"
     },
     {
       "url": "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744",
@@ -229,26 +232,27 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-17T23:23:53.066637Z"
-    },
-    {
-      "url": "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs",
-      "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-17T11:40:32.129524Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write a social_headline for Facebook.": 1,
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "local_impact": {
     "shown": 0,
-    "outcomes": {},
-    "points": {}
+    "outcomes": {
+      "writer offered no points": 2,
+      "no box: fewer than two points survived": 1
+    },
+    "points": {
+      "dropped: no story sentence to correct it to": 2,
+      "corrected to the story's own sentence": 1
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 132,
+    "rss_and_google_news": 120,
     "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -259,7 +263,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 5
+    "men_newsletter": 6
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -354,15 +358,15 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 20,
-    "covered": 13,
-    "outstanding": 7,
+    "covered": 14,
+    "outstanding": 6,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 6,
       "held": 3,
       "held_for_editor": 2,
-      "not_found": 2,
-      "published": 7
+      "not_found": 1,
+      "published": 8
     },
     "outstanding_stories": [
       {
@@ -418,38 +422,29 @@
         "reason": "already rejected: missing from feed after repeated publication attempts; review required",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/kyle-howard-keeley-aspinall-murder-34931714",
         "resolved_title": "She worried about her daughter’s controlling relationship, then came the call no mother should get"
-      },
-      {
-        "id": "7fc1b0a449cd97da",
-        "headline": "Two iconic landmarks set to go in major developments for Greater Manchester",
-        "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "not_found",
-        "reason": "its article plans-revealed-for-demolition-of-seven-sisters-tower-blocks-in-rochdale is no longer live; searching again",
-        "resolved_url": "",
-        "resolved_title": "Two iconic landmarks set to go in major developments for Greater Manchester"
       }
     ]
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 51,
-    "Rochdale Times": 23,
-    "rochdaledaily.co.uk": 16,
+    "Rochdaledaily": 48,
+    "Rochdale Times": 21,
+    "rochdaledaily.co.uk": 15,
     "Rochdale Borough Council": 9,
-    "Manchester Evening News": 8,
-    "Roch Valley Radio": 7,
-    "Northampton Chronicle and Echo": 5,
+    "Roch Valley Radio": 6,
+    "Manchester Evening News": 6,
     "Bee Network live travel alerts": 5,
+    "Northampton Chronicle and Echo": 3,
     "Roch Valley Radio Local News": 3,
     "Oldham Evening Chronicle": 2,
     "Football Lowdown": 2,
     "Rochdale AFC": 2,
-    "Id": 2,
     "About Manchester": 2,
     "Rochdale Hornets": 2,
     "Rochdale Borough Council RSS": 1,
     "Yorkshire Post": 1,
     "Sport": 1,
+    "Id": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
@@ -458,7 +453,8 @@
   "selected_by_category": {
     "education": 1,
     "health": 1,
-    "sport": 1
+    "news": 1,
+    "sport": 2
   },
   "published_by_category": {
     "business": 75,
@@ -497,14 +493,18 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "hard-news-v3-701d8f5caef6ff0e8c16",
     "education-v3-bf825d98e70659c2f82a",
     "sport-v3-b2c252a580cae5d8755a",
-    "health-v3-0b0cbd05dac30e392fc4"
+    "health-v3-0b0cbd05dac30e392fc4",
+    "sport-v3-ec36332cdf4d2e8fb5db"
   ],
   "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp",
     "https://www.rochdaletimes.co.uk/no-ceiling-on-what-pupils-can-achieve-says-ofsted/",
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on",
-    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026"
+    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026",
+    "https://demokratis.co.id/en/rochdale-sack-ian-watson"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -537,18 +537,19 @@
     "selected_by_category": {
       "education": 1,
       "health": 1,
-      "sport": 1
+      "sport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 4
     },
     "selected_by_source": {
+      "id": 1,
       "roch valley radio": 1,
       "rochdale times": 1,
       "rochdaledaily": 1
     },
-    "must_cover_selected": 0
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1109,11 +1110,11 @@
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafc.co.uk",
-    "visitrochdale.com"
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "visitrochdale.com": 2,
-    "rochdaleafc.co.uk": 1
+    "yourtrustrochdale.co.uk": 9,
+    "rochdaleafc.co.uk": 2
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1124,9 +1125,9 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-11-24T13:49:05.780860Z",
+  "evergreen_fallback_attempt_at": "2026-11-24T14:50:19.226234Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
-  "evergreen_fallback_attempt_count": 5,
+  "evergreen_fallback_attempt_count": 4,
   "evergreen_fallback": {
     "enabled": true,
     "thin_threshold": 6,
@@ -1134,10 +1135,10 @@
     "cooldown_hours": 24,
     "publishing_window": "09:00-20:00 Europe/London",
     "last_trigger_reason": "thin_news_supply",
-    "qualifying_count": 5,
+    "qualifying_count": 4,
     "last_topic_id": "healey-dwarf",
     "last_article_slug": "who-or-what-is-the-healey-dwarf",
-    "last_published_at": "2026-11-24T13:49:05Z"
+    "last_published_at": "2026-11-24T14:50:19Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -1150,7 +1151,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T14:29:21.830789Z",
+  "frontpage_generated_at": "2026-11-24T14:53:12.809927Z",
   "frontpage_article_count": 22,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1280,7 +1281,7 @@
   "whats_on_event_count": 15,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 3,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
