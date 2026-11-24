@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T16:01:00.147526Z",
+  "last_run_at": "2026-11-24T16:21:02.083697Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 129,
-  "job_or_career_posts_rejected": 5,
-  "raw_candidates": 124,
+  "raw_candidates_before_job_filter": 124,
+  "job_or_career_posts_rejected": 2,
+  "raw_candidates": 122,
   "candidate_clusters": 52,
   "google_news_resolution": {
-    "wrappers": 83,
-    "resolved": 64,
-    "text_recovered": 11,
-    "reattributed": 44,
-    "images_found": 14
+    "wrappers": 91,
+    "resolved": 65,
+    "text_recovered": 2,
+    "reattributed": 43,
+    "images_found": 5
   },
-  "duplicates_merged": 72,
+  "duplicates_merged": 70,
   "attempted_rewrites": 2,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -74,7 +74,7 @@
   "skipped": 2,
   "rewrite_skip_reasons": {
     "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Town, Hall, International, Day, Elimination, Violence, Agains": 1
+    "quality gate after 4 repairs: Source fidelity: the figure(s) 6 do not appear in the source. Use only figures the source": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -229,10 +229,10 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 111,
-    "website_discovery": 12,
+    "rss_and_google_news": 113,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -244,7 +244,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -280,6 +279,14 @@
       "bozo": false,
       "feed_title": ""
     },
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
+      "feed_title": ""
+    },
     "Falinge Park High School": {
       "url": "https://www.falingepark.com/feed/",
       "http_status": 403,
@@ -288,12 +295,28 @@
       "bozo": false,
       "feed_title": ""
     },
+    "St Cuthbert's RC High School": {
+      "url": "https://stcuthberts.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html",
+      "final_url": "https://stcuthberts.com/feed/",
+      "bozo": true,
+      "feed_title": ""
+    },
     "Rochdale AFC Community Trust": {
       "url": "https://www.rochdaleafccommunity.org/feed/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
+      "feed_title": ""
+    },
+    "Hopwood Hall College": {
+      "url": "https://www.hopwood.ac.uk/feed/",
+      "http_status": 403,
+      "content_type": "text/html",
+      "final_url": "https://www.hopwood.ac.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -413,23 +436,23 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 43,
-    "Rochdale Times": 16,
-    "rochdaledaily.co.uk": 16,
+    "Rochdaledaily": 42,
+    "Rochdale Times": 17,
+    "rochdaledaily.co.uk": 17,
+    "Manchester Evening News": 8,
     "Rochdale Borough Council": 7,
-    "Manchester Evening News": 7,
     "Roch Valley Radio": 6,
-    "Bee Network live travel alerts": 5,
     "Northampton Chronicle and Echo": 4,
-    "Roch Valley Radio Local News": 3,
-    "Oldham Evening Chronicle": 2,
+    "Bee Network live travel alerts": 4,
     "Football Lowdown": 2,
-    "Rochdale AFC": 2,
     "About Manchester": 2,
     "Rochdale Hornets": 2,
+    "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
+    "Oldham Evening Chronicle": 1,
     "Yorkshire Post": 1,
     "Sport": 1,
+    "Rochdale AFC": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
@@ -1117,7 +1140,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T16:02:45.348972Z",
+  "frontpage_generated_at": "2026-11-24T16:22:08.143232Z",
   "frontpage_article_count": 24,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
