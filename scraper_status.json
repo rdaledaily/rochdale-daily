@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T16:21:02.083697Z",
+  "last_run_at": "2026-11-24T16:42:24.077174Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,27 +54,26 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 124,
-  "job_or_career_posts_rejected": 2,
-  "raw_candidates": 122,
-  "candidate_clusters": 52,
+  "raw_candidates_before_job_filter": 131,
+  "job_or_career_posts_rejected": 4,
+  "raw_candidates": 127,
+  "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 91,
-    "resolved": 65,
-    "text_recovered": 2,
-    "reattributed": 43,
-    "images_found": 5
+    "wrappers": 88,
+    "resolved": 66,
+    "text_recovered": 14,
+    "reattributed": 45,
+    "images_found": 17
   },
-  "duplicates_merged": 70,
-  "attempted_rewrites": 2,
+  "duplicates_merged": 76,
+  "attempted_rewrites": 1,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 705,
-  "skipped": 2,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use": 1,
-    "quality gate after 4 repairs: Source fidelity: the figure(s) 6 do not appear in the source. Use only figures the source": 1
+    "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -103,6 +102,15 @@
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026",
+      "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the figure(s) 6 do not appear in the source. Use only figures the source",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T16:18:14.050888Z"
+    },
     {
       "url": "https://rochdaledaily.co.uk/articles/police-advice-rochdale-fans-co-op-live-evacuation-don-toliver",
       "title": "Police advice for Rochdale fans after substance forced Co-op Live evacuation during Don Toliver show - rochdaledaily.co.uk",
@@ -194,15 +202,6 @@
       "last_attempt_at": "2026-11-24T12:18:18.674113Z"
     },
     {
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/sun-sets-rochdales-seven-sisters-34938545",
-      "title": "The sun sets on Rochdale's Seven Sisters",
-      "source_name": "Manchester Evening News",
-      "held_because": "already covered by the editor: covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
-      "outcome": "editorial_twin",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-23T21:39:56.575120Z"
-    },
-    {
       "url": "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life",
       "title": "Killer who hid wife’s body under bed is jailed for life - Rochdale Times",
       "source_name": "Rochdale Times",
@@ -229,8 +228,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 113,
-    "website_discovery": 6,
+    "rss_and_google_news": 115,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -244,6 +243,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -279,14 +279,6 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
-      "feed_title": ""
-    },
     "Falinge Park High School": {
       "url": "https://www.falingepark.com/feed/",
       "http_status": 403,
@@ -295,28 +287,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "St Cuthbert's RC High School": {
-      "url": "https://stcuthberts.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://stcuthberts.com/feed/",
-      "bozo": true,
-      "feed_title": ""
-    },
     "Rochdale AFC Community Trust": {
       "url": "https://www.rochdaleafccommunity.org/feed/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Hopwood Hall College": {
-      "url": "https://www.hopwood.ac.uk/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://www.hopwood.ac.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -436,13 +412,13 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 42,
+    "Rochdaledaily": 44,
+    "rochdaledaily.co.uk": 19,
     "Rochdale Times": 17,
-    "rochdaledaily.co.uk": 17,
-    "Manchester Evening News": 8,
+    "Manchester Evening News": 7,
     "Rochdale Borough Council": 7,
     "Roch Valley Radio": 6,
-    "Northampton Chronicle and Echo": 4,
+    "Northampton Chronicle and Echo": 5,
     "Bee Network live travel alerts": 4,
     "Football Lowdown": 2,
     "About Manchester": 2,
@@ -453,13 +429,13 @@
     "Yorkshire Post": 1,
     "Sport": 1,
     "Rochdale AFC": 1,
+    "Wrexham and Flintshire News, Sport, Events | The Leader": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "health": 1,
     "sport": 1
   },
   "published_by_category": {
@@ -499,12 +475,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-b2c252a580cae5d8755a",
-    "health-v3-0b0cbd05dac30e392fc4"
+    "sport-v3-b2c252a580cae5d8755a"
   ],
   "selected_candidate_urls": [
-    "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on",
-    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026"
+    "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -516,11 +490,9 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "health",
       "sport"
     ],
     "selected_categories": [
-      "health",
       "sport"
     ],
     "available_wards": [],
@@ -533,16 +505,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "health": 1,
       "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "roch valley radio": 1,
-      "rochdaledaily": 1
+      "roch valley radio": 1
     },
     "must_cover_selected": 0
   },
@@ -1140,7 +1110,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T16:38:21.049632Z",
+  "frontpage_generated_at": "2026-11-24T16:52:35.866859Z",
   "frontpage_article_count": 24,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
