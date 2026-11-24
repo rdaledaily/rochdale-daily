@@ -176,9 +176,11 @@ def test_ack_deletes_only_collected_keys(tmp_path, monkeypatch):
     assert not (tmp_path / email_intake.ACK_FILE).exists()
 
 
-def test_missing_token_is_a_visible_warning_not_a_failure(tmp_path, monkeypatch, capsys):
+def test_missing_token_fails_the_run(tmp_path, monkeypatch, capsys):
+    # A warning on a green run hid a dead intake from 6 to 24 Nov 2026: no
+    # email reached the paper. A missing token must turn the run red.
     monkeypatch.delenv("EVENTS_ADMIN_TOKEN", raising=False)
-    assert email_intake.collect(tmp_path) == 0
-    assert "::warning title=Email intake not connected::" in capsys.readouterr().out
+    assert email_intake.collect(tmp_path) == 1
+    assert "::error title=Email intake not connected::" in capsys.readouterr().out
     assert json.loads((tmp_path / email_intake.ACK_FILE).read_text()) == []
     assert email_intake.acknowledge(tmp_path) == 0
