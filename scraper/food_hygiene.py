@@ -228,8 +228,12 @@ def fetch_current_low_ratings(
     max_rating: int = 1,
     authority_id: int | None = None,
     overall_timeout: float | None = OVERALL_DEADLINE_SECONDS,
+    include_ratings: frozenset[int] = frozenset(),
 ) -> list[dict[str, Any]]:
     """Every establishment in the borough currently holding a low rating.
+
+    ``include_ratings`` adds other exact scores to the same single fetch (the
+    5-star good-news stories use {5}), so the register is read once per run.
 
     Unlike fetch_recent_low_ratings this applies no date cutoff. A rating stands
     until the business is re-inspected, so a 0 published last December is still
@@ -270,7 +274,7 @@ def fetch_current_low_ratings(
                 if not raw_rating.isdigit():
                     continue
                 rating = int(raw_rating)
-                if rating > max_rating:
+                if rating > max_rating and rating not in include_ratings:
                     continue
                 rating_date = _parse_rating_date(establishment.get("RatingDate"))
                 if rating_date is None:
@@ -752,3 +756,47 @@ def single_rating_story(
         "excerpt": excerpt,
         "paragraphs": [p for p in paragraphs if p],
     }
+
+
+# ---------------------------------------------------------------------------
+# 5-star good-news stories (editor, 24 Nov 2026).
+#
+# Same lifecycle as the low ratings (plan_single_ratings), on its own state
+# file so the two baselines never mix: the first run records every 5 already
+# on the register and publishes nothing; after that each NEW 5 is a story.
+# Written only from FSA facts, like the low-rating stories.
+# ---------------------------------------------------------------------------
+
+FIVE_STAR = 5
+
+
+def five_star_story(record: dict[str, Any], *, checked_at: datetime) -> dict[str, Any]:
+    name = record["name"]
+    business_type = _type_prose(record.get("business_type"))
+    inspected = record["rating_date"].strftime("%-d %B %Y")
+    checked = checked_at.strftime("%-d %B %Y")
+    address = record["address"]
+    title = f"{name} awarded 5 out of 5 food hygiene rating"
+    excerpt = (
+        f"{name}, a {business_type} at {address}, has been given the top food "
+        f"hygiene rating of 5 out of 5, meaning hygiene standards are very good, "
+        f"after an inspection on {inspected}."
+    )
+    paragraphs = [
+        excerpt,
+        (
+            f"The rating appears on the Food Standards Agency's public register for "
+            f"the Rochdale borough, checked by Rochdale Daily on {checked}."
+        ),
+        (
+            "Under the national Food Hygiene Rating Scheme, councils score businesses "
+            "from 0, where urgent improvement is necessary, to 5, where hygiene "
+            "standards are very good. The score reflects how food was handled, the "
+            "condition of the premises and how food safety was managed on the day of "
+            "the inspection. It is not a judgement of the quality of the food."
+        ),
+        (
+            f"The current rating is at {rating_source_url(record).split('#')[0]}."
+        ),
+    ]
+    return {"title": title[:160], "excerpt": excerpt, "paragraphs": paragraphs}
