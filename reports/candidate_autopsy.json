@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-11-23T18:44:09.187580Z",
+  "examined_at": "2026-11-24T18:18:22.859209Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 146,
+  "candidates_examined": 145,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 114,
-    "would publish": 28,
-    "duplicate of published story": 4
+    "age": 129,
+    "would publish": 8,
+    "duplicate of published story": 8
   },
-  "would_publish": 28,
+  "would_publish": 8,
   "age_gate_sensitivity": {
-    "6h": 11,
-    "14h": 25,
-    "24h": 32,
-    "48h": 68,
-    "72h": 112,
-    "168h": 146
+    "6h": 4,
+    "14h": 11,
+    "24h": 16,
+    "48h": 61,
+    "72h": 100,
+    "168h": 145
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Roch Valley Radio Local News: Rochdale councillor shares ‘scary’ detainment experience in Pakistan",
-      "Oldham Evening Chronicle: Rochdale councillor shares ‘scary’ detainment experience in Pakistan -"
+      "rochdaledaily.co.uk: Middleton Road roadworks in Heywood to begin on 23 November 2026 - roc",
+      "Football Lowdown: “The Step Up Was Too Big” – Rochdale Backed Over Ian Watson Sacking - "
     ],
     "duplicate of published story": [
-      "rochdaledaily.co.uk: Thinking about fostering? Free advice stall at Rochdale Riverside on W",
-      "Falinge Park High School: Ignite Fire Festival 2026",
-      "rochdaledaily.co.uk: Rochdale White Ribbon vigil: where Wednesday's walk starts and how to "
+      "Rochdale Borough Council: Middleton Road, roadworks in Heywood from 23 November 2026",
+      "Rochdale Times: Football project helps girls tackle mental health issues - Rochdale Ti",
+      "Rochdaledaily: Police advice for Rochdale fans after substance forced Co-op Live evac"
     ],
     "age": [
-      "Rochdale Times: Young guitar star reaches national finals - Rochdale Times",
-      "Rochdale Borough Council: Committee Report - Rochdale Borough Council",
-      "Rochdale AFC: Dale Welcome York City - Rochdale AFC"
+      "Manchester Evening News: Rochdale Council - Manchester Evening News",
+      "rochdaledaily.co.uk: Rochdale Council oversees essential services for 205,000 residents - r",
+      "Manchester Evening News: 'This is how people go missing': How one man got trapped in Pakistan"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
