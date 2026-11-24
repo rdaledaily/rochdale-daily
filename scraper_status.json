@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T00:30:05.584632Z",
+  "last_run_at": "2026-11-24T00:51:46.371202Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,28 +54,28 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 120,
-  "job_or_career_posts_rejected": 0,
-  "raw_candidates": 120,
-  "candidate_clusters": 55,
+  "raw_candidates_before_job_filter": 127,
+  "job_or_career_posts_rejected": 3,
+  "raw_candidates": 124,
+  "candidate_clusters": 56,
   "google_news_resolution": {
-    "wrappers": 80,
-    "resolved": 34,
-    "text_recovered": 1,
+    "wrappers": 63,
+    "resolved": 25,
+    "text_recovered": 8,
     "reattributed": 2,
-    "images_found": 12
+    "images_found": 19
   },
-  "duplicates_merged": 65,
-  "attempted_rewrites": 5,
+  "duplicates_merged": 68,
+  "attempted_rewrites": 3,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 689,
-  "skipped": 5,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 2,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Foreign, Office do not appear in the source. Name only people": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "editorial gate: REJECTED_NON_LOCAL": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) QRISK do not appear in the source. Name only people, places a": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -90,20 +90,56 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 216,
+    "entries": 217,
     "by_outcome": {
       "editorial_twin": 21,
       "failed": 55,
       "published": 72,
-      "rejected": 68
+      "rejected": 69
     },
-    "held_back_this_run": 34,
+    "held_back_this_run": 36,
     "held_already_published": 14,
-    "held_rejected": 20,
+    "held_rejected": 22,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaleafc.co.uk/watson-departs-221126",
+      "title": "Ian Watson Departs - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T00:25:53.866508Z"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
+      "title": "💔 Daalat Ali feared he would never get home after being pulled off a flight back from Pakistan. Rochdale’s deputy council leader was detaine",
+      "source_name": "Facebook",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Foreign, Office do not appear in the source. Name only people",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T00:25:53.213515Z"
+    },
+    {
+      "url": "https://sports.yahoo.com/articles/rochdale-sack-boss-watson-northampton-105509802.html?guccounter=1",
+      "title": "Rochdale sack boss Watson after Northampton defeat - Yahoo Sports",
+      "source_name": "Yahoo Sports",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T00:25:51.314924Z"
+    },
+    {
+      "url": "https://rochdaleafc.co.uk/at-home-a-week-on-saturday",
+      "title": "Dale Welcome York City - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T00:25:44.897879Z"
+    },
     {
       "url": "https://cwibc.co.id/en/rochdale-sack-ian-watson",
       "title": "Rochdale Sack Ian Watson After Four Straight League Two Defeats - cwibc.co.id",
@@ -222,24 +258,6 @@
       "last_attempt_at": "2026-11-23T21:15:19.333591Z"
     },
     {
-      "url": "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
-      "title": "Hogg reveals ‘angriness’ in Cobblers dressing room despite Rochdale win",
-      "source_name": "Northampton Chronicle and Echo",
-      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-23T21:15:19.127236Z"
-    },
-    {
-      "url": "https://www.northamptonchron.co.uk/sport/football/dale-really-enjoys-playing-for-cobblers-after-standout-display-9367744",
-      "title": "Dale ‘really enjoys’ playing for Cobblers after standout display",
-      "source_name": "Northampton Chronicle and Echo",
-      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-23T21:15:14.948226Z"
-    },
-    {
       "url": "https://www.falingepark.com/2026/11/23/ignite-fire-festival-2026",
       "title": "Ignite Fire Festival 2026",
       "source_name": "Falinge Park High School",
@@ -293,10 +311,10 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 113,
-    "website_discovery": 6,
+    "rss_and_google_news": 111,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
-    "live_service_pages": 0,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -308,6 +326,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -341,14 +360,6 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -493,16 +504,17 @@
   },
   "immediate_first": [],
   "source_counts": {
+    "Rochdale Times": 24,
     "rochdaledaily.co.uk": 23,
-    "Rochdale Times": 22,
     "Rochdale AFC": 17,
     "Manchester Evening News": 12,
     "Rochdale Borough Council": 10,
     "Roch Valley Radio": 6,
-    "Northampton Chronicle and Echo": 5,
-    "Oldham Evening Chronicle": 3,
+    "Bee Network live travel alerts": 4,
+    "Northampton Chronicle and Echo": 3,
     "About Manchester": 3,
     "Roch Valley Radio Local News": 3,
+    "Oldham Evening Chronicle": 2,
     "Id": 2,
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
@@ -512,6 +524,7 @@
     "The Sun": 1,
     "Yahoo Sports": 1,
     "Yahoo": 1,
+    "Facebook": 1,
     "Oldham Times": 1,
     "Rochdale Hornets": 1,
     "Rochdale Borough Council News": 1,
@@ -520,8 +533,9 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 2,
-    "sport": 3
+    "crime": 1,
+    "health": 1,
+    "transport": 1
   },
   "published_by_category": {
     "business": 73,
@@ -560,18 +574,14 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-ff69d09750d0c01cca06",
-    "sport-v3-e52881b765369ebe30e5",
     "hard-news-v3-c51760d73c547e0a4e25",
-    "sport-v3-397b593ec62eb38400b3",
-    "sport-v3-a932916ef1af6dea88fc"
+    "transport-v3-8d5fe4c09713bf71b895",
+    "health-v3-cb17c4f9dc983a1b32b1"
   ],
   "selected_candidate_urls": [
-    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
-    "https://rochdaleafc.co.uk/at-home-a-week-on-saturday/",
     "https://www.rochdaletimes.co.uk/pensioner-jailed-for-abusing-schoolboy/",
-    "https://sports.yahoo.com/articles/rochdale-sack-boss-watson-northampton-105509802.html?guccounter=1",
-    "https://rochdaleafc.co.uk/watson-departs-221126/"
+    "https://www.northamptonchron.co.uk/sport/football/hogg-reveals-angriness-in-cobblers-dressing-room-despite-rochdale-win-9367306",
+    "https://www.rochdaletimes.co.uk/free-health-checks-identify-1000-undiagnosed-conditions/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -584,11 +594,13 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "sport"
+      "health",
+      "transport"
     ],
     "selected_categories": [
       "crime",
-      "sport"
+      "health",
+      "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -600,18 +612,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 2,
-      "sport": 3
+      "crime": 1,
+      "health": 1,
+      "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 5
+      "rochdale": 3
     },
     "selected_by_source": {
-      "facebook": 1,
-      "rochdale afc": 2,
-      "rochdale times": 1,
-      "yahoo sports": 1
+      "northampton chronicle and echo": 1,
+      "rochdale times": 2
     },
     "must_cover_selected": 0
   },
@@ -1161,7 +1172,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 11,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1172,12 +1183,15 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
     "https://news.google.com/rss/articles/CBMie0FVX3lxTE5Nd1pRZkxJM1F0UjJWT2I2OFgyZUlzUTBYMUZuS2VJMFFrbW9wTlRvTHY3bXI1aTU4SHZKc3FmMnBoQ0gxZDJQazRjdkdwbU9qeVVVTDBqWFppRlFRTFYxZlZ4aEZXOGthZTA2YkdoWTY1QjJteHlMSl9MUQ?oc=5",
-    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
-    "https://news.google.com/rss/articles/CBMimgFBVV95cUxPQU9VbENXd1RUNktCSmNWR3NZUjA3cW5qR2FGazBERlM5ZWhPVV9FNl9QVmU3cnpmTzVDX05yNTlSSTZKbGd0OTIyMDNRaElkNWNtVEFlaFVqY2tkSTJXRUxFUDhNWGZ4eVljUVdVeG5oalQ0VnVISnhScExBTW5Vbk9SeE9ITEJBcFJHWG1DdnFYQmxndW5fa3RR?oc=5"
+    "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYVFjY1kwS0dDV3JrbVRyelc1YnZNTHgyaHItc0hMWE5IREdCZ2J3NHF4OGNPM05mRmxSc0JjbzJfYXZUaEdvQzVOVFlNQlBNdVdVb2V4X004WmxjWUlTd090U3NiVWxrY0x4U1owem03ejV3c2JZYUNLUTdxZkFDQUVKZi1td2E2LTA5WnE2cC1KZFdQbmpZdE5QME9XRVhVc0tER1RmXzhsVUJkNFJFbXh2YURtbmc1SnNHeFl0Z0lobVg2Snc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1213,7 +1227,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T00:31:41.385911Z",
+  "frontpage_generated_at": "2026-11-24T00:53:02.142385Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
