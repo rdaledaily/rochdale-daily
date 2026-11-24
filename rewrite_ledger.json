@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T14:50:18.968048Z",
+  "updated_at": "2026-11-24T15:11:58.321234Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 237,
@@ -871,8 +871,8 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T14:50:18.967817Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "health",
@@ -2586,22 +2586,6 @@
       "text_fingerprint": "b7e8dbb6b2fa7b1e",
       "recovery_attempts": 2
     },
-    "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274": {
-      "first_attempt_at": "2026-11-16T14:56:31.490162Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T14:56:31.490162Z",
-      "outcome": "editorial_twin",
-      "reason": "covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
-      "title": "Rochdale's iconic Seven Sisters WILL be demolished as plans unveiled",
-      "source_name": "Manchester Evening News",
-      "category": "environment",
-      "text_fingerprint": "0bd98d55d98a8af4"
-    },
     "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664": {
       "first_attempt_at": "2026-11-23T11:06:31.318227Z",
       "attempts": 1,
@@ -2630,13 +2614,13 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T14:50:18.967904Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "281e320946a23878",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/family-friendly-greater-manchester-winter-34926796.amp": {
       "first_attempt_at": "2026-11-18T10:32:20.739400Z",
@@ -2978,22 +2962,6 @@
       "category": "environment",
       "text_fingerprint": "7a5c365259d1fb08"
     },
-    "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank": {
-      "first_attempt_at": "2026-11-16T14:18:54.846084Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T14:38:20.977632Z",
-      "outcome": "editorial_twin",
-      "reason": "covered by the editor's story /articles/college-bank-seven-sisters-demolition-decision",
-      "title": "RBH sets out future plans for College Bank",
-      "source_name": "Rochdale Boroughwide Housing",
-      "category": "community",
-      "text_fingerprint": "79850616aad653f2"
-    },
     "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026": {
       "first_attempt_at": "2026-11-22T23:55:18.416495Z",
       "attempts": 3,
@@ -3120,6 +3088,23 @@
       "category": "traffic",
       "text_fingerprint": "3962fcc3fecec9d2",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+    },
+    "https://www.rochdale.gov.uk/directory-record/2674/middleton-road-roadworks-in-heywood-from-23-november-2026": {
+      "first_attempt_at": "2026-11-24T15:11:58.321130Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2674/middleton-road-roadworks-in-heywood-from-23-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T15:11:58.321130Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Middleton Road, roadworks in Heywood from 23 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "0d993c9dac0bed1a"
     },
     "https://www.rochdale.gov.uk/events/event/1508/winter-support-and-advice-drop-in---number-one-riverside": {
       "first_attempt_at": "2026-11-19T10:27:46.063033Z",
@@ -3398,14 +3383,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T14:50:18.967557Z",
+      "last_attempt_at": "2026-11-24T15:11:58.320934Z",
       "outcome": "published",
       "reason": "",
       "title": "‘No ceiling on what pupils can achieve’, says Ofsted - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "education",
       "text_fingerprint": "0e01cca0cd18463e",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
@@ -3639,14 +3624,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 7,
+      "attempts": 8,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T14:46:28.376022Z",
+      "last_attempt_at": "2026-11-24T15:08:41.109622Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
@@ -4286,6 +4271,23 @@
       "source_name": "The York Press",
       "category": "sport",
       "text_fingerprint": "2a1ee01881ab61be"
+    },
+    "https://www.yorkshirepost.co.uk/sport/football/rochdale-next-manager-favourites-sheffield-wednesday-york-city-doncaster-rovers-9367092": {
+      "first_attempt_at": "2026-11-24T15:11:58.321173Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.yorkshirepost.co.uk/sport/football/rochdale-next-manager-favourites-sheffield-wednesday-york-city-doncaster-rovers-9367092"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "last_attempt_at": "2026-11-24T15:11:58.321173Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Ex-Sheffield Wednesday and York City men emerge as favourites for Rochdale job",
+      "source_name": "Yorkshire Post",
+      "category": "sport",
+      "text_fingerprint": "80412f33c14d477f"
     },
     "https://www.yourtrustrochdale.co.uk/news/rochdale-borough-active-awards-2026-celebrate-our-community-champions": {
       "first_attempt_at": "2026-11-17T14:36:41.112506Z",
