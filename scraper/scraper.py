@@ -3751,8 +3751,12 @@ OVERLAP_REBUILD_POLICY_EPOCH = '2026-10-19-fact-notes-v1'
 # worked (the undefined `publishable` flag, then thinking eating the token
 # budget). Every story rejected while those faults were live was turned down
 # by the faults, not on its merits, so each gets one fresh set of attempts.
-CLAUDE_SWITCH_RETRY_EPOCH = '2026-11-23-claude-switch-v1'
-CLAUDE_SWITCH_FAULT_WINDOW = ('2026-11-23T17:00:00', '2026-11-23T21:00:00')
+# v2, 24 Nov 2026: the editor switched rewrites back to OpenAI. Everything
+# Claude rejected from 17:00 on 23 Nov until the switch back (including
+# borough-name fidelity misfires and Rochdale AFC marked non-local) gets one
+# fresh set of attempts with OpenAI. Entries reopened under v1 qualify again.
+CLAUDE_SWITCH_RETRY_EPOCH = '2026-11-24-claude-era-v2'
+CLAUDE_SWITCH_FAULT_WINDOW = ('2026-11-23T17:00:00', '2026-11-24T10:00:00')
 
 
 def _claude_switch_retry(entry: dict[str, Any]) -> bool:
