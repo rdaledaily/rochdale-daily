@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T03:37:19.507880Z",
+  "last_run_at": "2026-11-24T03:56:06.340504Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,36 +54,26 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 143,
-  "job_or_career_posts_rejected": 3,
-  "raw_candidates": 140,
+  "raw_candidates_before_job_filter": 141,
+  "job_or_career_posts_rejected": 2,
+  "raw_candidates": 139,
   "candidate_clusters": 54,
   "google_news_resolution": {
     "wrappers": 80,
     "resolved": 72,
-    "text_recovered": 11,
+    "text_recovered": 10,
     "reattributed": 32,
-    "images_found": 25
+    "images_found": 23
   },
-  "duplicates_merged": 86,
-  "attempted_rewrites": 5,
-  "draft_rewrites_created": 2,
-  "drafted_articles": [
-    {
-      "slug": "letchworth-avenue-closed-to-vehicles-for-roadworks-until-14-december",
-      "source_url": "https://www.rochdale.gov.uk/directory-record/2672/letchworth-avenue-roadworks-in-rochdale-from-23-november-2026"
-    },
-    {
-      "slug": "rochdale-deputy-council-leader-detained-at-islamabad-airport",
-      "source_url": "https://uk.news.yahoo.com/people-missing-one-rochdale-man-180109432.html"
-    }
-  ],
-  "new_articles": 2,
+  "duplicates_merged": 85,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 689,
-  "skipped": 3,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 2,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1
+    "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -105,13 +95,31 @@
       "published": 73,
       "rejected": 80
     },
-    "held_back_this_run": 45,
-    "held_already_published": 13,
-    "held_rejected": 32,
+    "held_back_this_run": 49,
+    "held_already_published": 15,
+    "held_rejected": 34,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-afc-sack-head-coach-ian-watson",
+      "title": "Rochdale AFC sack head coach Ian Watson - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T03:34:30.766453Z"
+    },
+    {
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026",
+      "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T03:34:21.550233Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/wigan-edge-out-dale-in-league-clash",
       "title": "Dale Exit Womens FA Cup - Rochdale AFC",
@@ -401,23 +409,15 @@
       "last_attempt_at": "2026-11-17T11:40:32.129524Z"
     }
   ],
-  "published_with_style_issues": {
-    "Write a social_headline for Facebook.": 1,
-    "Write at least 149 body words using only facts already present in the sources; the draft currently has 121.": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
-    "shown": 1,
-    "outcomes": {
-      "shown": 1,
-      "writer offered no points": 1
-    },
-    "points": {
-      "corrected to the story's own sentence": 1
-    }
+    "shown": 0,
+    "outcomes": {},
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 127,
+    "rss_and_google_news": 125,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -611,18 +611,18 @@
   "immediate_first": [],
   "source_counts": {
     "Rochdaledaily": 27,
-    "Rochdale Times": 24,
-    "Rochdale AFC": 20,
-    "Manchester Evening News": 11,
+    "Rochdale Times": 23,
+    "Rochdale AFC": 18,
+    "Manchester Evening News": 13,
     "Rochdale Borough Council": 10,
-    "Northampton Chronicle and Echo": 7,
-    "Roch Valley Radio": 6,
-    "rochdaledaily.co.uk": 5,
+    "Northampton Chronicle and Echo": 8,
+    "Roch Valley Radio": 5,
+    "rochdaledaily.co.uk": 4,
     "Id": 4,
     "Bee Network live travel alerts": 4,
+    "Oldham Evening Chronicle": 3,
     "About Manchester": 3,
     "Roch Valley Radio Local News": 3,
-    "Oldham Evening Chronicle": 2,
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
     "Yorkshire Post": 1,
@@ -639,10 +639,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "events": 1,
-    "news": 1,
-    "sport": 2,
-    "traffic": 1
+    "sport": 1
   },
   "published_by_category": {
     "business": 73,
@@ -652,8 +649,8 @@
     "environment": 52,
     "events": 40,
     "health": 22,
-    "news": 102,
-    "politics": 21,
+    "news": 101,
+    "politics": 22,
     "sport": 59,
     "traffic": 53,
     "transport": 14
@@ -681,18 +678,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-cdd5ba7100ef776040ec",
-    "sport-v3-b2c252a580cae5d8755a",
-    "events-v3-e2be742792ecfb97c2ee",
-    "hard-news-v3-92ae12f45125ec90afe9",
-    "sport-v3-990244172acb99c01b2b"
+    "sport-v3-b2c252a580cae5d8755a"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdale.gov.uk/directory-record/2672/letchworth-avenue-roadworks-in-rochdale-from-23-november-2026",
-    "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on",
-    "https://uk.news.yahoo.com/people-missing-one-rochdale-man-180109432.html",
-    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026",
-    "https://rochdaledaily.co.uk/articles/rochdale-afc-sack-head-coach-ian-watson"
+    "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -704,16 +693,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "events",
-      "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "selected_categories": [
-      "events",
-      "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -725,20 +708,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "events": 1,
-      "news": 1,
-      "sport": 2,
-      "traffic": 1
+      "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 5
+      "rochdale": 1
     },
     "selected_by_source": {
-      "roch valley radio": 1,
-      "rochdale borough council": 1,
-      "rochdaledaily": 2,
-      "yahoo news uk": 1
+      "roch valley radio": 1
     },
     "must_cover_selected": 0
   },
@@ -1288,7 +1265,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 10,
+  "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1298,12 +1275,15 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
-    "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g",
-    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOSS1iYXNMelRqeEs0VkU5V180M3E5RzFCWUxBOFY4NHpETl9qazdhblZHN2cxYlpGTF9pRTU1QWZMZVFRSHBjZXF0ZzdGVTVmZjZXZlJRWDJZcFptWGFzanN3T2Z3d2JzcHhyM2g1M3N2SWF3MDF0NHNIUXQ3RU5QOThfNmNFdmN3ZmgzMFE1a3ZCbzRoQzFFeHVNd01NUFVOc0h1NThINVU?oc=5"
+    "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1339,7 +1319,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T03:38:23.957088Z",
+  "frontpage_generated_at": "2026-11-24T03:57:18.258209Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1349,6 +1329,7 @@
       "education",
       "health",
       "news",
+      "politics",
       "sport",
       "traffic",
       "transport"
@@ -1359,6 +1340,7 @@
       "education",
       "health",
       "news",
+      "politics",
       "sport",
       "traffic",
       "transport"
@@ -1397,10 +1379,11 @@
       "traffic": 4,
       "crime": 1,
       "transport": 1,
+      "politics": 1,
       "education": 1,
       "community": 3,
       "health": 2,
-      "news": 2
+      "news": 1
     },
     "selected_by_ward": {
       "borough-wide": 10,
@@ -1421,12 +1404,12 @@
       "rochdale borough council": 6,
       "manchester evening news": 1,
       "rochdale times": 1,
+      "yahoo news uk": 1,
       "rochdale borough council news": 1,
       "t&n asbestos trustee company": 1,
-      "yahoo news uk": 1,
+      "rochdale daily": 1,
       "source": 1,
-      "pennine care nhs": 1,
-      "rochdale daily": 1
+      "pennine care nhs": 1
     },
     "pool_size": 17,
     "primary_pool_size": 17,
@@ -1458,11 +1441,8 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "letchworth-avenue-closed-to-vehicles-for-roadworks-until-14-december",
-    "rochdale-deputy-council-leader-detained-twice-in-pakistan"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
