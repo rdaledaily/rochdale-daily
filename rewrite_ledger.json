@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T02:42:36.563311Z",
+  "updated_at": "2026-11-24T02:59:07.406817Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 226,
+  "count": 229,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -484,16 +484,16 @@
     },
     "https://rochdaleafc.co.uk/wigan-edge-out-dale-in-league-clash": {
       "first_attempt_at": "2026-11-24T02:17:09.517031Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaleafc.co.uk/wigan-edge-out-dale-in-league-clash"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T02:40:18.208193Z",
+      "last_attempt_at": "2026-11-24T02:56:49.817836Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan, Wigan do not appear in the source. Name only pe",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
       "title": "Dale Exit Womens FA Cup - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -650,6 +650,23 @@
       "category": "community",
       "text_fingerprint": "1d529c5d49deda4d"
     },
+    "https://rochdaledaily.co.uk/articles/rochdale-afc-sack-head-coach-ian-watson": {
+      "first_attempt_at": "2026-11-24T02:56:47.475083Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-afc-sack-head-coach-ian-watson"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "last_attempt_at": "2026-11-24T02:56:47.475083Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the draft says charged but the source does not. Never change a legal stat",
+      "title": "Rochdale AFC sack head coach Ian Watson - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "sport",
+      "text_fingerprint": "2aa4a10d0d1f2484"
+    },
     "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board": {
       "first_attempt_at": "2026-11-20T10:16:49.107220Z",
       "attempts": 1,
@@ -667,6 +684,24 @@
       "text_fingerprint": "2442692e97143c76",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-deputy-council-leader-detained-twice-in-pakistan?__cf_chl_rt_tk=I3TbMbTLrzFNWftZ34V3aoGKT5UAVCgcB8UJFcxp_qY-1795485428-1.0.1.1-Ij1PbzGYHZwof4x8Tc74uUbTPRGscI_o0jIwBirQZ6Y": {
+      "first_attempt_at": "2026-11-24T02:59:07.406722Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5",
+        "https://rochdaledaily.co.uk/articles/rochdale-deputy-council-leader-detained-twice-in-pakistan?__cf_chl_rt_tk=I3TbMbTLrzFNWftZ34V3aoGKT5UAVCgcB8UJFcxp_qY-1795485428-1.0.1.1-Ij1PbzGYHZwof4x8Tc74uUbTPRGscI_o0jIwBirQZ6Y"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "last_attempt_at": "2026-11-24T02:59:07.406722Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale deputy council leader detained twice in Pakistan - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "news",
+      "text_fingerprint": "a57fc21cffc63b14"
     },
     "https://rochdaledaily.co.uk/articles/rochdale-house-prices-rise-by-4-1-over-the-past-year": {
       "first_attempt_at": "2026-11-19T22:57:40.749288Z",
@@ -767,6 +802,23 @@
       "source_name": "Rochdaledaily",
       "category": "news",
       "text_fingerprint": "9480dbfe8759d1f9"
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026": {
+      "first_attempt_at": "2026-11-24T02:56:38.925528Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "last_attempt_at": "2026-11-24T02:56:38.925528Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "news",
+      "text_fingerprint": "03d2884e72e560cf"
     },
     "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026": {
       "first_attempt_at": "2026-11-20T10:35:28.724572Z",
@@ -3448,14 +3500,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1",
-      "last_attempt_at": "2026-11-24T02:40:03.862683Z",
+      "last_attempt_at": "2026-11-24T02:56:39.294021Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Rochdale Christmas Light Switch On",

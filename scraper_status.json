@@ -1,17 +1,10 @@
 {
-  "last_run_at": "2026-11-24T02:42:36.567594Z",
+  "last_run_at": "2026-11-24T02:59:07.411211Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 4,
-      "offered_today": 0,
-      "listed": 35,
-      "already_seen": 22,
-      "started_long_ago": 0,
-      "too_far_ahead": 12,
-      "undated": 1,
-      "in_window": 0
+      "status": "not due",
+      "last_checked": "2026-11-24T02:39:10.634963Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -19,15 +12,9 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 6,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 6,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-24T02:39:10.634963Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
       "status": "not due",
@@ -40,27 +27,14 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "pages": 1,
-      "releases": 7,
-      "borough_buyer": 0,
-      "not_story_type": 0,
-      "already_seen": 0,
-      "new": 0,
-      "complete": 1
+      "status": "not due",
+      "last_checked": "2026-11-24T02:39:10.634963Z",
+      "interval_hours": 6
     },
     "weather_warnings": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 6,
-      "not_rochdale": 6,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-24T02:39:10.634963Z",
+      "interval_hours": 6
     },
     "claimant_count": {
       "status": "not due",
@@ -80,30 +54,33 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 135,
+  "raw_candidates_before_job_filter": 141,
   "job_or_career_posts_rejected": 3,
-  "raw_candidates": 132,
+  "raw_candidates": 138,
   "candidate_clusters": 54,
   "google_news_resolution": {
-    "wrappers": 70,
-    "resolved": 66,
+    "wrappers": 73,
+    "resolved": 69,
     "text_recovered": 18,
     "reattributed": 31,
-    "images_found": 31
+    "images_found": 32
   },
-  "duplicates_merged": 78,
-  "attempted_rewrites": 12,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 84,
+  "attempted_rewrites": 5,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-deputy-council-leader-daalat-ali-detained-twice-in-pakistan",
+      "source_url": "https://rochdaledaily.co.uk/articles/rochdale-deputy-council-leader-detained-twice-in-pakistan?__cf_chl_rt_tk=I3TbMbTLrzFNWftZ34V3aoGKT5UAVCgcB8UJFcxp_qY-1795485428-1.0.1.1-Ij1PbzGYHZwof4x8Tc74uUbTPRGscI_o0jIwBirQZ6Y"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 689,
-  "skipped": 12,
+  "skipped": 4,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 7,
-    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 2,
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1,
-    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan, Wigan do not appear in the source. Name only pe": 1
+    "editorial gate: REJECTED_NON_NEWS": 2,
+    "quality gate after 4 repairs: Source fidelity: the draft says charged but the source does not. Never change a legal stat": 1,
+    "quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -118,20 +95,110 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 226,
+    "entries": 229,
     "by_outcome": {
       "editorial_twin": 21,
       "failed": 55,
-      "published": 71,
-      "rejected": 79
+      "published": 72,
+      "rejected": 81
     },
-    "held_back_this_run": 35,
+    "held_back_this_run": 45,
     "held_already_published": 13,
-    "held_rejected": 22,
+    "held_rejected": 32,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan",
+      "title": "Rochdale councillor shares ‘scary’ detainment experience in Pakistan",
+      "source_name": "Roch Valley Radio Local News",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:26.043702Z"
+    },
+    {
+      "url": "https://www.theoldhamtimes.co.uk/news/26755401.rochdale-councillor-daalat-ali-detained-twice-pakistan",
+      "title": "'I worried I wasn't going to come back' - Rochdale councillor on Pakistan ordeal - Oldham Times",
+      "source_name": "Oldham Times",
+      "held_because": "already rejected: quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:17.113818Z"
+    },
+    {
+      "url": "https://uk.news.yahoo.com/people-missing-one-rochdale-man-180109432.html",
+      "title": "'This is how people go missing': How one Rochdale man got trapped in Pakistan - Yahoo News UK",
+      "source_name": "Yahoo News UK",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the name(s) Metropolitan do not appear in the source. Name only people, p",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:16.946247Z"
+    },
+    {
+      "url": "https://www.transfermarkt.com/ticker/begegnung/live/4919912",
+      "title": "Match Centre - Northampton Town : Rochdale AFC - Transfermarkt",
+      "source_name": "Transfermarkt",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:09.769242Z"
+    },
+    {
+      "url": "https://www.hornetsrugbyleague.co.uk/article/1930/rochdale-hornets-partner-with-10x-athletic",
+      "title": "Rochdale Hornets partner with 10X Athletic - Rochdale Hornets",
+      "source_name": "Rochdale Hornets",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:09.255918Z"
+    },
+    {
+      "url": "https://suaragarut.id/en/rochdale-sack-ian-watson",
+      "title": "Rochdale Sack Ian Watson After Five Months in Charge - SuaraGarut.ID",
+      "source_name": "Id",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:08.638768Z"
+    },
+    {
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-riverside-free-fostering-advice-25-november-2026?__cf_chl_rt_tk=jdUD_jW_4hYh7p4x1RVumNuaa9arlI485nYqIISH0rE-1795485427-1.0.1.1-cUq2b0MFuoKimipM9jR.mbb8A0QjQX3zo3UJ._ZZpG8",
+      "title": "Thinking about fostering? Free advice stall at Rochdale Riverside on Wednesday - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:04.636264Z"
+    },
+    {
+      "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale-council?service=responsive&pageNumber=134",
+      "title": "Rochdale Council - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:04.566410Z"
+    },
+    {
+      "url": "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g",
+      "title": "Parents please speak to your children say police in Heywood - About Manchester",
+      "source_name": "About Manchester",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:04.117279Z"
+    },
+    {
+      "url": "https://rochdaleafc.co.uk/dale-support-power-of-72",
+      "title": "Dale Support Power Of 72 - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-24T02:40:03.724004Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/free-health-checks-identify-1000-undiagnosed-conditions",
       "title": "Free health checks identify 1,000 undiagnosed conditions - Rochdale Times",
@@ -331,15 +398,19 @@
       "last_attempt_at": "2026-11-17T11:40:32.129524Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "local_impact": {
     "shown": 0,
-    "outcomes": {},
+    "outcomes": {
+      "writer offered no points": 1
+    },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 119,
+    "rss_and_google_news": 125,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -532,11 +603,11 @@
   },
   "immediate_first": [],
   "source_counts": {
+    "Rochdale Times": 26,
     "Rochdaledaily": 26,
-    "Rochdale Times": 24,
-    "Rochdale AFC": 18,
+    "Rochdale AFC": 19,
     "Manchester Evening News": 13,
-    "Rochdale Borough Council": 9,
+    "Rochdale Borough Council": 10,
     "Northampton Chronicle and Echo": 7,
     "Roch Valley Radio": 6,
     "Id": 4,
@@ -546,11 +617,13 @@
     "Yahoo News UK": 2,
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
+    "Oldham Evening Chronicle": 1,
     "Yorkshire Post": 1,
     "Sport": 1,
     "Sky Sports": 1,
     "The Sun": 1,
     "Yahoo Sports": 1,
+    "Transfermarkt": 1,
     "The72": 1,
     "Rochdale Hornets": 1,
     "Rochdale Borough Council News": 1,
@@ -559,21 +632,18 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "events": 1,
-    "news": 3,
-    "sport": 6,
-    "traffic": 1
+    "news": 2,
+    "sport": 3
   },
   "published_by_category": {
     "business": 73,
-    "community": 106,
+    "community": 105,
     "crime": 47,
     "education": 33,
     "environment": 52,
     "events": 40,
     "health": 22,
-    "news": 100,
+    "news": 101,
     "politics": 22,
     "sport": 59,
     "traffic": 53,
@@ -602,32 +672,18 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-08efea0ac0530eeb6975",
-    "transport-v3-f63617b81dd2d2b41503",
-    "sport-v3-50dd761b868d914837db",
-    "events-v3-e2be742792ecfb97c2ee",
-    "hard-news-v3-39a704e9e117e95b6cda",
-    "sport-v3-cf1fe7f0da1401f66944",
-    "hard-news-v3-db41b21fc843dbedd07d",
     "sport-v3-b2c252a580cae5d8755a",
-    "hard-news-v3-ff69d09750d0c01cca06",
-    "sport-v3-de190854ad43a976a988",
-    "sport-v3-bc504af5c4e391280f7e",
-    "sport-v3-ed353fc1ef851c7aa4a5"
+    "hard-news-v3-83b615e75d15505ec549",
+    "sport-v3-ed353fc1ef851c7aa4a5",
+    "hard-news-v3-92ae12f45125ec90afe9",
+    "sport-v3-990244172acb99c01b2b"
   ],
   "selected_candidate_urls": [
-    "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g",
-    "https://www.theoldhamtimes.co.uk/news/26755401.rochdale-councillor-daalat-ali-detained-twice-pakistan/",
-    "https://rochdaleafc.co.uk/dale-support-power-of-72/",
-    "https://uk.news.yahoo.com/people-missing-one-rochdale-man-180109432.html",
-    "https://rochdaledaily.co.uk/articles/rochdale-riverside-free-fostering-advice-25-november-2026?__cf_chl_rt_tk=jdUD_jW_4hYh7p4x1RVumNuaa9arlI485nYqIISH0rE-1795485427-1.0.1.1-cUq2b0MFuoKimipM9jR.mbb8A0QjQX3zo3UJ._ZZpG8",
-    "https://suaragarut.id/en/rochdale-sack-ian-watson",
-    "https://www.manchestereveningnews.co.uk/all-about/rochdale-council?service=responsive&pageNumber=134",
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on",
-    "https://www.rochvalleyradio.com/news-features/3/politics/1463/rochdale-councillor-shares-scary-detainment-experience-in-pakistan",
-    "https://www.hornetsrugbyleague.co.uk/article/1930/rochdale-hornets-partner-with-10x-athletic",
-    "https://www.transfermarkt.com/ticker/begegnung/live/4919912",
-    "https://rochdaleafc.co.uk/wigan-edge-out-dale-in-league-clash/"
+    "https://rochdaledaily.co.uk/articles/rochdale-deputy-council-leader-detained-twice-in-pakistan?__cf_chl_rt_tk=I3TbMbTLrzFNWftZ34V3aoGKT5UAVCgcB8UJFcxp_qY-1795485428-1.0.1.1-Ij1PbzGYHZwof4x8Tc74uUbTPRGscI_o0jIwBirQZ6Y",
+    "https://rochdaleafc.co.uk/wigan-edge-out-dale-in-league-clash/",
+    "https://rochdaledaily.co.uk/articles/rochdale-white-ribbon-vigil-walk-25-november-2026",
+    "https://rochdaledaily.co.uk/articles/rochdale-afc-sack-head-coach-ian-watson"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -639,55 +695,34 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
-      "events",
       "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "selected_categories": [
-      "crime",
-      "events",
       "news",
-      "sport",
-      "traffic"
+      "sport"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [
-      "heywood"
-    ],
+    "available_areas": [],
     "selected_areas": [
-      "heywood",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "events": 1,
-      "news": 3,
-      "sport": 6,
-      "traffic": 1
+      "news": 2,
+      "sport": 3
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "heywood": 1,
-      "rochdale": 11
+      "rochdale": 5
     },
     "selected_by_source": {
-      "about manchester": 1,
-      "id": 1,
-      "manchester evening news": 1,
-      "oldham times": 1,
       "roch valley radio": 1,
-      "roch valley radio local news": 1,
-      "rochdale afc": 2,
-      "rochdale hornets": 1,
-      "rochdaledaily": 1,
-      "transfermarkt": 1,
-      "yahoo news uk": 1
+      "rochdale afc": 1,
+      "rochdaledaily": 3
     },
     "must_cover_selected": 0
   },
@@ -1237,7 +1272,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 9,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1247,11 +1282,16 @@
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
     "https://www.thesun.co.uk/sport/41105467/rochdale-sack-manager-ian-watson/",
-    "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g"
+    "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g",
+    "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQVU2V1VnWlFwaWlsRE44cXZVVHZsVi11U1pCNlJPbVA5SkRLRGxLdXBFbnIwUHBlYm5Vb1JPZFBIbGVGTnh2UzNueWVoUmdRZ3dHWVdXQ25vRDllSkpiNDIzRnNjeDdUcjA0MGk4Rkpia0hyRnlPMVVDS0h0bHBranJSSGZGcEpGZXQ1ZHNLLU1JQkRuTHhic05VcDBVOXpKcVY4b2ZLWlBnMWNMaVIzVUhVQTd3SnZ6bmRHV1A0MmxXZFpkc2k5MEY3ZTRpdFFXdHNpd2hmSmtGRWhHYzNwT01JZ3FiTzQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1287,7 +1327,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T02:43:37.873702Z",
+  "frontpage_generated_at": "2026-11-24T03:00:02.287577Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1396,7 +1436,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 2,
+  "event_dates_corrected_from_ledger": 1,
   "duplicate_articles_after_postprocessing": 689,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1408,8 +1448,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "rochdale-deputy-council-leader-detained-twice-in-pakistan"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
