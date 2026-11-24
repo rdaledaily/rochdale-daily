@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T13:49:05.613737Z",
+  "updated_at": "2026-11-24T14:08:54.216831Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 237,
+  "count": 236,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -639,16 +639,16 @@
     },
     "https://rochdaledaily.co.uk/articles/police-advice-rochdale-fans-co-op-live-evacuation-don-toliver": {
       "first_attempt_at": "2026-11-24T12:44:06.105988Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaledaily.co.uk/articles/police-advice-rochdale-fans-co-op-live-evacuation-don-toliver"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T13:46:15.521338Z",
+      "last_attempt_at": "2026-11-24T14:05:58.061207Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are aware of t",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are investigat",
       "title": "Police advice for Rochdale fans after substance forced Co-op Live evacuation during Don Toliver show - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "traffic",
@@ -835,8 +835,8 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T13:49:05.613466Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Thinking about fostering? Free advice stall at Rochdale Riverside on Wednesday - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "news",
@@ -853,13 +853,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T13:49:05.613562Z",
+      "last_attempt_at": "2026-11-24T14:08:54.216741Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale White Ribbon vigil: where Wednesday's walk starts and how to join - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
       "category": "health",
-      "text_fingerprint": "03d2884e72e560cf"
+      "text_fingerprint": "03d2884e72e560cf",
+      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/springhill-hospice-three-garden-awards-north-west-2026": {
       "first_attempt_at": "2026-11-20T10:35:28.724572Z",
@@ -3381,8 +3382,8 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T13:49:05.613611Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "‘No ceiling on what pupils can achieve’, says Ofsted - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "education",
@@ -3620,14 +3621,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 4,
+      "attempts": 5,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T13:46:13.586836Z",
+      "last_attempt_at": "2026-11-24T14:05:57.085751Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
@@ -4267,23 +4268,6 @@
       "source_name": "The York Press",
       "category": "sport",
       "text_fingerprint": "2a1ee01881ab61be"
-    },
-    "https://www.yourtrustrochdale.co.uk/news/join-for-a-toy": {
-      "first_attempt_at": "2026-11-16T13:18:31.136885Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.yourtrustrochdale.co.uk/news/join-for-a-toy"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T13:39:31.699282Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Join For A Toy - Your Trust",
-      "source_name": "Your Trust Rochdale Articles",
-      "category": "community",
-      "text_fingerprint": "5dceb2f60af48df3",
-      "recovery_attempts": 1
     },
     "https://www.yourtrustrochdale.co.uk/news/rochdale-borough-active-awards-2026-celebrate-our-community-champions": {
       "first_attempt_at": "2026-11-17T14:36:41.112506Z",
