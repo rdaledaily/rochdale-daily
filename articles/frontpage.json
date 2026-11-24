@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-24T11:17:31.136214Z",
+  "generated_at": "2026-11-24T11:25:55.538143Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 15,
@@ -95,9 +95,6 @@
       "ingested_at": "2026-11-24T11:17:07Z",
       "first_published_at": "2026-11-24T01:47:24Z",
       "last_updated_at": "2026-11-24T01:47:24Z",
-      "frontpage_rank": 0,
-      "frontpage_priority": 1000,
-      "slot": "lead",
       "wards": [
         "Castleton"
       ],
@@ -107,7 +104,15 @@
         ],
         "status": "explicit-ward",
         "evidence": "Clover Security Services Ltd to be wound up following resolutions Clover Security Services Ltd, based in Castleton, Rochdale, has passed resolutions for voluntary winding-up at a meeting held on 18 November 2026."
-      }
+      },
+      "related_article_slugs": [
+        "upcoming-bookstart-events-at-castleton-library",
+        "ilearn-international-limited-to-be-wound-up-following-resolutions",
+        "train-services-between-rochdale-and-manchester-victoria-resume-following-points"
+      ],
+      "frontpage_rank": 0,
+      "frontpage_priority": 1000,
+      "slot": "lead"
     },
     {
       "id": "rd-editorial-20261123-you-may-be-able-to-claim-for-turner-brothers-asbestos",
@@ -126,7 +131,7 @@
       "published_at": "2026-11-23T18:20:00Z",
       "first_published_at": "2026-11-23T18:20:00Z",
       "last_updated_at": "2026-11-23T18:20:00Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "T&N Asbestos Trustee Company",
       "source_url": "https://tandnasbestos.org.uk/",
       "source_names": [
@@ -185,7 +190,7 @@
       "published_at": "2026-11-24T09:23:31Z",
       "first_published_at": "2026-11-24T09:23:31Z",
       "last_updated_at": "2026-11-24T09:23:31Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -295,25 +300,33 @@
       "image_status": "source-photo-cached",
       "image_backfill_method": "verified-original-source-photo",
       "core_fact_check": {
-        "status": "unchecked",
+        "status": "passed",
         "issues": [],
-        "reason": "https://rochdaleafc.co.uk/dale-support-power-of-72/: capture failed (ConnectTimeout: HTTPSConnectionPool(host='rochdaleafc.co.uk', port=443): Max retries exceeded wi)",
-        "source_sha": {},
-        "checked_at": "2026-11-24T11:16:58.957052Z",
-        "attempts": 1
+        "reason": "",
+        "source_sha": {
+          "https://rochdaleafc.co.uk/dale-support-power-of-72/": "19cb8351597dbb3e"
+        },
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 2
       },
       "ingested_at": "2026-11-24T11:17:07Z",
       "first_published_at": "2026-11-23T15:45:24Z",
       "last_updated_at": "2026-11-23T15:45:24Z",
-      "frontpage_rank": 3,
-      "frontpage_priority": 997,
-      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "al-rayyan-to-face-rochdale-in-upcoming-match",
+        "rochdale-afc-youth-team-to-start-efl-youth-alliance-campaign",
+        "rochdale-afc-to-support-play-safe-campaign-this-weekend"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "frontpage_rank": 3,
+      "frontpage_priority": 997,
+      "slot": ""
     },
     {
       "id": "manual-search-newsroom-rochdale-white-ribbon-vigil-walk-25-november-2026",
@@ -332,7 +345,7 @@
       "published_at": "2026-11-23T09:25:00Z",
       "first_published_at": "2026-11-23T09:25:00Z",
       "last_updated_at": "2026-11-23T09:25:00Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/events/event/1514/white-ribbon-vigil",
       "source_names": [
@@ -382,7 +395,7 @@
       "published_at": "2026-11-23T09:25:00Z",
       "first_published_at": "2026-11-23T09:25:00Z",
       "last_updated_at": "2026-11-23T09:25:00Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/events/event/1499/the-haunted-library---middleton-library",
       "source_names": [
@@ -444,7 +457,7 @@
       "published_at": "2026-11-23T09:25:00Z",
       "first_published_at": "2026-11-23T09:25:00Z",
       "last_updated_at": "2026-11-23T09:25:00Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/events/event/1295/fostering-information-session---rochdale-riverside",
       "source_names": [
@@ -555,15 +568,13 @@
       "image_alt": "Illustration: Rochdale, transport. Not a photograph of the event.",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "core_fact_check": {
-        "status": "passed",
+        "status": "unchecked",
         "issues": [],
-        "reason": "",
-        "source_sha": {
-          "https://www.rochdaletimes.co.uk/overwhelming-support-for-veterans-accommodation-plan/": "c7f0eeca7872a9f4",
-          "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHg3Wll3UlpYamhMQWpJWW1GM1RnYXkyZF9BQUlkZDFCNzBvYl9qakNmSUh6dEpzdHpKZFRveVNiVnMyX0FnaTRRMmIydVpCc2djLW51Uml0NFA2Y3piVHplVWg3SWxaUnNyd0E0XzRfWkpHVFg0VkRYQ2hUTmVER3N6RVE2RGNVOTRnQ0Zn?oc=5": "c7f0eeca7872a9f4"
-        },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 21
+        "reason": "https://www.rochdaletimes.co.uk/overwhelming-support-for-veterans-accommodation-plan/: not captured; https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHg3Wll3UlpYamhMQWpJWW1GM1RnYXkyZF9BQUlkZDFCNzBvYl9qakNmSUh6dEpzdHpKZFRveVNiVnMyX0FnaTRRMmIydVpCc2djLW51Uml0NFA2Y3piVHplVWg3SWxaUnNyd0E0XzRfWkpHVFg0VkRYQ2hUTmVER3N6RVE2RGNVOTRnQ0Zn?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "source_sha": {},
+        "source_changed_at": "2026-11-24T11:25:08.433776Z",
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 22
       },
       "ingested_at": "2026-11-23T20:40:17Z",
       "first_published_at": "2026-11-23T08:41:38Z",
@@ -614,137 +625,63 @@
     },
     {
       "id": "f0145f64b00e672dbd",
-      "story_key": "education-v3-d12033d1c25861f97f49",
-      "title": "Redwood School praised by Ofsted for preparing learners for next steps",
       "slug": "redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps",
+      "story_key": "manual-article:redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps",
+      "title": "Redwood School praised by Ofsted for preparing learners for next steps",
       "excerpt": "Ofsted has praised Redwood School in Rochdale, a maintained school for children and young people with SEND, after a September inspection.",
-      "content_html": "<p>Ofsted has praised Redwood School, a Rochdale school for children and young people with special educational needs and disabilities (SEND), saying its learners are superbly prepared for their next steps.</p><p>Inspectors visited Redwood School in September and inspected it under Ofsted's new inspection framework. They found strong standards in five of seven areas, and the school met expected standards in achievement and in curriculum and teaching.</p><p>The report says leaders place inclusion at the cornerstone of the school's work. It also says Redwood staff turn Education, Health and Care Plan (EHCP) goals into meaningful and precise targets, drawing on detailed assessments, specialist advice and clear family communication.</p><p>An EHCP is a legal document for young people with SEND up to the age of 25. It outlines their educational, health and social care needs and the provision required to meet them.</p><p>Redwood School is maintained by Rochdale Borough Council, which published the news on its website. The school's next steps in the inspection process are not set out in the source material.</p>",
-      "social_headline": "Redwood School in Rochdale praised by Ofsted for its pupils' next steps",
+      "content_html": "<p>Ofsted has praised Redwood School, a Rochdale school for children and young people with special educational needs and disabilities (SEND), saying its learners are superbly prepared for their next steps.</p><p>Update, 23 November 2026, 3.09pm: Councillor Rachel Massey, cabinet member for children's services and education, commented on the Ofsted report, stating that it is a fantastic endorsement of the outstanding work taking place across Redwood School.</p><p>Inspectors visited Redwood School in September and inspected it under Ofsted's new inspection framework. They found strong standards in five of seven areas, and the school met expected standards in achievement and in curriculum and teaching.</p><p>The report says leaders place inclusion at the cornerstone of the school's work. It also says Redwood staff turn Education, Health and Care Plan (EHCP) goals into meaningful and precise targets, drawing on detailed assessments, specialist advice and clear family communication.</p><p>An EHCP is a legal document for young people with SEND up to the age of 25. It outlines their educational, health and social care needs and the provision required to meet them.</p><p>Redwood School is maintained by Rochdale Borough Council, which published the news on its website. The school's next steps in the inspection process are not set out in the source material.</p>",
       "area": "rochdale",
       "category": "education",
       "types": [
         "education"
       ],
+      "source_kind": "editorial",
+      "status": "published",
       "published_at": "2026-11-23T00:00:00Z",
-      "scraped_at": "2026-11-23T21:37:02Z",
-      "image_url": "assets/img/cards/redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps.jpg",
-      "image_credit": "Rochdale Borough Council / Used with permission",
-      "image_credit_url": "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
-      "source_image_candidate_url": "https://www.rochdale.gov.uk/images/23_Redwood_Oftsed_900_x_450_nov26.jpg",
-      "source_image_reuse_status": "verified-source-image-license",
-      "event_start_at": "",
-      "event_end_at": "",
-      "event_location": "",
-      "source_kind": "article",
+      "first_published_at": "2026-11-23T00:00:00Z",
+      "last_updated_at": "2026-11-23T15:09:34Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Borough Council News",
       "source_url": "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
       "source_names": [
         "Rochdale Borough Council News"
       ],
       "source_urls": [
-        "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted"
+        "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
+        "https://news.google.com/rss/articles/CBMisgFBVV95cUxOWlhlZlVGUFYwZFJoUWMzdjI0NTkwTzhjMmJlM3lvX0dhaDBnU04xNXhHN1dPRjV3ZGpFQm12MlRWSlROSjIzVU9WM1doLXJYODF1Uy1qNlJ1TTlSb3ROWHUyZk1WRWdXN0NrVTh1MTV0Qmh5dFB4US1XQmowWlFCcmNvVnpUMkhES2tOZWNmZnlJSEo1anJQeUo5M2xETGJUYmxpa243Yi00SnJ1SkFaWlJR?oc=5"
       ],
-      "source_count": 1,
-      "locality_evidence": [
-        "Rochdale"
-      ],
-      "context_research": [
-        {
-          "question": "Redwood learners superbly prepared for their next steps says Ofsted rochdale",
-          "role": "same_incident",
-          "status": "no-additional-verified-source",
-          "sources_added": 0
-        },
-        {
-          "question": "\"Rochdale Borough Council The\" rochdale public role background",
-          "role": "public_background",
-          "status": "no-additional-verified-source",
-          "sources_added": 0
-        }
-      ],
-      "social_context_used": false,
-      "social_reaction_count": 0,
-      "official_social_update_count": 0,
-      "social_platforms": [],
-      "social_context_note": "",
-      "sensitive_story": false,
-      "police_matter": false,
-      "requires_approval": false,
+      "image_url": "assets/img/cards/redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps.jpg",
+      "image_credit": "Rochdale Borough Council / Used with permission",
+      "image_credit_url": "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
+      "byline": "Rochdale Daily Newsdesk",
+      "manual_article": true,
+      "editorial_lock": true,
+      "allow_scrape_merge": false,
+      "publication_route": "editorial",
+      "rewrite_quality_checked": true,
       "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
       "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
-      "byline": "Rochdale Daily Newsdesk",
-      "status": "published",
-      "publication_route": "ai-grounded-rewrite",
-      "rewrite_quality_checked": true,
-      "editorial_style_version": "rochdale-human-newsroom-v15",
-      "style_rewrite_status": "generated-in-house-style",
-      "discovery_query_label": "",
-      "searched_location_slug": "",
-      "searched_location_name": "",
-      "img": "assets/img/cards/redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps.jpg",
-      "image_license_url": "",
-      "image_license": "Used with permission",
-      "image_permission_ref": "Written permission from Press office, Rochdale Borough Council, 2026-10-20",
       "image_alt": "Redwood School praised by Ofsted for preparing learners for next steps",
-      "image_status": "source-photo-cached",
-      "image_backfill_method": "verified-original-source-photo",
-      "core_fact_check": {
-        "status": "passed",
-        "issues": [],
-        "reason": "",
-        "source_sha": {
-          "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted": "3f2c492590e88d13"
-        },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 20
-      },
-      "ingested_at": "2026-11-23T21:40:41Z",
-      "first_published_at": "2026-11-23T00:00:00Z",
-      "last_updated_at": "2026-11-23T00:00:00Z",
+      "content_updated_at": "2026-11-23T15:09:34Z",
+      "manual_canonical_id": "f0145f64b00e672dbd",
+      "source_count": 2,
+      "is_ongoing": true,
+      "ongoing_label": "ONGOING",
+      "update_count": 2,
+      "merged_scrape_duplicate": true,
+      "img": "assets/img/cards/redwood-school-praised-by-ofsted-for-preparing-learners-for-next-steps.jpg",
+      "image_status": "editorial-photo",
+      "image_backfill_method": "manual-editorial-photo",
+      "source_image_reuse_status": "cards-only",
+      "frontpage_rank": 8,
+      "frontpage_priority": 992,
+      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      },
-      "related_article_slugs": [
-        "edgar-wood-academy-celebrates-first-gcse-cohort-following-ofsted-praise",
-        "st-cuthbert-s-rc-high-school-placed-in-special-measures-after-ofsted-inspection",
-        "rochdale-secondary-school-late-applications-september-2027"
-      ],
-      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "evidence_sources": [
-        {
-          "url": "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted",
-          "source_type": "primary",
-          "captured_text": "Redwood learners 'superbly prepared for their next steps', says Ofsted | Rochdale Borough Council Search Search View menu Accessibility and translate Redwood learners 'superbly prepared for their next steps', says Ofsted From left to right: Rosie Thorley, deputy headteacher of Redwood (Quality of Care); Councillor Rachel Massey, cabinet member for children's services and education; and Paul Evans, headteacher of Redwood. Published: 23 November 2026 A Rochdale school that teaches children and young people with special educational needs and disabilities (SEND) has been praised by Ofsted. Oftsed praised the school for creating an environment where ‘there is no ceiling on what pupils can achieve’. This was highlighted in a glowing inspection of Redwood School by the education regulator who also praised how leaders ‘place inclusion at the cornerstone of the school’s work’ and how ‘pupils at all stages are ready and confident to learn’. Inspectors visited the special school, maintained by Rochdale Borough Council, in September and under the new inspection framework, they found strong standards in 5 out of 7 areas. These areas were inclusion, attendance and behaviour, leadership and governance, personal development and wellbeing, and post-16 provision. The school also met expected standards in its achievement and curriculum and teaching. Within the report, Redwood is recognised for drawing on detailed assessments, specialist advice and clear communication with families to ‘skilfully turn’ pupils' education, health and care plan (EHCP) goals into meaningful and precise targets. EHCPs are a legal document given to children and young people up to the age of 25 with SEND which outlines their educational, health and social care needs and the provision that must be implemented in order to help them achieve key life outcomes. Ofsted also highlighted how the school’s careful adaptations to meet a diverse and complex range of needs enable pupils to make ‘meaningful progress from their individual starting points’. Specific praise was also given to Redwood's sixth form provision, which operates across 3 campuses in Rochdale, Heywood and Middleton and supports learners aged 16 to 19. Described as a significant strength of the school, Ofsted commented on how pupils are ‘superbly prepared for their next steps’ and that its unwavering focus on developing independence and preparing pupils well for their future lives, ran as ‘a golden thread through every aspect of school life’. The school’s post-16 curriculum was further labelled as ‘ambitious’ and ‘aspirational’ and noted for having ‘a clear focus on removing barriers and maximising what every student can achieve’. Learners increasingly develop the confidence, independence and skills that they need as a result. Reflecting on the school’s recent inspection, Paul Evans, headteacher of Redwood School, said: “We are extremely pleased with the outcome and would like to thank our entire school community for their continued support. “The report reflects the hard work, dedication and commitment of our staff, learners, families and governors, and we are incredibly proud of what has been achieved together. “We would like to extend a heartfelt thank you to all parents and carers for your ongoing encouragement, partnership and support. Your contribution plays a vital role in helping our learners thrive and achieve their best.” Redwood School was last inspected in June 2022 when it was rated ‘Good’. Spread across 6 sites in total, Redwood supports more than 350 pupils with a range of learning difficulties, social, emotional and mental health needs, autism spectrum disorder and multi-sensory impairment. Councillor Rachel Massey, cabinet member for children’s services and education, added: “This report is a fantastic endorsement of the outstanding work taking place across Redwood School. \"The school's commitment to inclusion, ambition and supporting every child to reach their full potential shines through in Ofsted's findings, including on its efforts to prepare young people for independent and fulfilling lives beyond school. Well done to everyone involved.” Related content Councillor Rachel Massey Council news from across the borough of Rochdale Special educational needs Was this page helpful? Was this page helpful? Yes It's good, but Please select a reason why this information is useful Please select There's a spelling mistake It needs updating There's a broken link Other - use box below to provide any additional comments or suggestions (optional) No, because Please select a reason why this information is not useful Please select It's hard to understand It's incorrect It was hard to find Other - use box below to provide any additional comments or suggestions (optional) Please provide additional comments to help improve this web page. We cannot respond to feedback. Send",
-          "captured_at": "2026-11-24T02:26:27.543086+00:00",
-          "sha256": "3a20e34bc489ba8202a1f4127d2a25cbf9c96ccb52734882c0ea70202fe47bd0"
-        }
-      ],
-      "evidence_candidates": {
-        "headline": [
-          "Redwood learners 'superbly prepared for their next steps', says Ofsted | Rochdale Borough Council Search Search View menu Accessibility and translate Redwood learners 'superbly prepared for their next steps', says Ofsted From left to right: Rosie Thorley, deputy headteacher of Redwood (Quality of Care); Councillor Rachel Massey, cabinet member for children's services and education; and Paul Evans, headteacher of Redwood.",
-          "Described as a significant strength of the school, Ofsted commented on how pupils are ‘superbly prepared for their next steps’ and that its unwavering focus on developing independence and preparing pupils well for their future lives, ran as ‘a golden thread through every aspect of school life’.",
-          "Published: 23 November 2026 A Rochdale school that teaches children and young people with special educational needs and disabilities (SEND) has been praised by Ofsted."
-        ],
-        "summary": [
-          "Published: 23 November 2026 A Rochdale school that teaches children and young people with special educational needs and disabilities (SEND) has been praised by Ofsted.",
-          "Inspectors visited the special school, maintained by Rochdale Borough Council, in September and under the new inspection framework, they found strong standards in 5 out of 7 areas.",
-          "Redwood learners 'superbly prepared for their next steps', says Ofsted | Rochdale Borough Council Search Search View menu Accessibility and translate Redwood learners 'superbly prepared for their next steps', says Ofsted From left to right: Rosie Thorley, deputy headteacher of Redwood (Quality of Care); Councillor Rachel Massey, cabinet member for children's services and education; and Paul Evans, headteacher of Redwood."
-        ]
-      },
-      "verification_reasons": [
-        "Verification service failed: RateLimitError"
-      ],
-      "source_review_verified": false,
-      "primary_source_verified": false,
-      "frontpage_rank": 8,
-      "frontpage_priority": 992,
-      "slot": ""
+      }
     },
     {
       "id": "32dee1aa1fb9462f72",
@@ -830,8 +767,8 @@
         "source_sha": {
           "https://www.penninecare.nhs.uk/about-us/latest-news/new-mental-health-football-project-kicks-rochdale": "4d6b1122b1de438f"
         },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 20
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 21
       },
       "ingested_at": "2026-11-23T21:20:56Z",
       "first_published_at": "2026-11-23T00:00:00Z",
@@ -965,8 +902,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2672/letchworth-avenue-roadworks-in-rochdale-from-23-november-2026": "f226be13db82f6f5"
         },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 13
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 14
       },
       "ingested_at": "2026-11-24T03:38:05Z",
       "wards": [],
@@ -1058,7 +995,7 @@
       "image_url": "assets/img/cards/roadworks.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -1114,8 +1051,8 @@
       "ongoing_label": "ONGOING",
       "update_count": 3,
       "img": "assets/img/cards/roadworks.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "roadworks.jpg",
       "image_match_score": 15129,
       "core_fact_check": {
@@ -1125,8 +1062,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2611/healey-lane-roadworks-in-rochdale-from-7-december-2026": "0621a6e429422eda"
         },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 16
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 17
       },
       "ingested_at": "2026-11-24T02:02:19Z",
       "wards": [
@@ -1216,6 +1153,7 @@
       "verification_method": "structured-official-directory-record",
       "verification_source_type": "primary",
       "verification_reasons": [],
+      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 11,
       "frontpage_priority": 989,
       "slot": ""
@@ -1238,7 +1176,7 @@
       "image_url": "assets/img/cards/castleton-house-approved-for-eight-bed-care-home.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -1288,8 +1226,8 @@
       "searched_location_slug": "",
       "searched_location_name": "",
       "img": "assets/img/cards/castleton-house-approved-for-eight-bed-care-home.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "castleton-house-approved-for-eight-bed-care-home.jpg",
       "image_match_score": 21248,
       "core_fact_check": {
@@ -1297,10 +1235,11 @@
         "issues": [],
         "reason": "",
         "source_sha": {
-          "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home": "7c2da0492ff3cd9e"
+          "https://www.rochvalleyradio.com/news-features/142/community/1465/castleton-house-approved-for-eight-bed-care-home": "b3a7ff5444e365d3"
         },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 17
+        "source_changed_at": "2026-11-24T11:25:08.433776Z",
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 18
       },
       "ingested_at": "2026-11-24T00:04:58Z",
       "first_published_at": "2026-11-23T22:15:21Z",
@@ -1354,6 +1293,7 @@
       ],
       "source_review_verified": false,
       "primary_source_verified": false,
+      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 12,
       "frontpage_priority": 988,
       "slot": ""
@@ -1441,8 +1381,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2673/middleton-pantomime-temporary-prohibition-of-waiting-in-middleton-from-26-november-2026": "73935330621fcdae"
         },
-        "checked_at": "2026-11-24T10:52:22.624470Z",
-        "attempts": 21
+        "checked_at": "2026-11-24T11:25:08.433776Z",
+        "attempts": 22
       },
       "ingested_at": "2026-11-23T20:40:17Z",
       "first_published_at": "2026-11-23T14:23:14Z",
@@ -1508,7 +1448,7 @@
       "published_at": "2026-11-23T09:03:47Z",
       "first_published_at": "2026-11-23T09:03:47Z",
       "last_updated_at": "2026-11-23T09:03:47Z",
-      "scraped_at": "2026-11-24T11:17:31Z",
+      "scraped_at": "2026-11-24T11:25:55Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1558,8 +1498,8 @@
       ],
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
-      "last_updated_at": "2026-11-24T11:17:32.451761Z",
-      "scraped_at": "2026-11-24T11:17:32.451761Z",
+      "last_updated_at": "2026-11-24T11:17:32Z",
+      "scraped_at": "2026-11-24T11:25:56.581611Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg/v1/fill/w_2000,h_2000,al_c,q_90/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1628,9 +1568,9 @@
       "event_start_at": "2026-12-12T10:30:00Z",
       "event_end_at": "2026-12-23T12:00:00Z",
       "event_location": "Queen's Park Café, Queen's Park Road, Heywood",
-      "published_at": "2026-11-24T11:17:31.136214Z",
-      "first_published_at": "2026-11-24T11:17:31.136214Z",
-      "scraped_at": "2026-11-24T11:17:31.136214Z",
+      "published_at": "2026-11-24T11:25:55.538143Z",
+      "first_published_at": "2026-11-24T11:25:55.538143Z",
+      "scraped_at": "2026-11-24T11:25:55.538143Z",
       "source_name": "Queen's Park Café",
       "source_url": "",
       "source_names": [
@@ -1659,9 +1599,9 @@
       "story_key": "events-v3-639e74eb549bf1102a5c",
       "title": "Littleborough Brass Bands Association Christmas Concert",
       "slug": "littleborough-brass-bands-association-christmas-concert",
-      "excerpt": "Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
-      "summary": "Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
-      "content_html": "<p>Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><strong>Date and time:</strong> Saturday 12 December 2026 at 19:00</p><p><strong>Venue:</strong> St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-brass-bands-association-christmas-concert\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
+      "summary": "🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
+      "content_html": "<p>🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><strong>Date and time:</strong> Saturday 12 December 2026 at 19:00</p><p><strong>Venue:</strong> St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-brass-bands-association-christmas-concert\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -1670,8 +1610,8 @@
       ],
       "published_at": "2026-11-17T13:20:24Z",
       "first_published_at": "2026-11-17T13:20:24Z",
-      "last_updated_at": "2026-11-24T11:17:32.594884Z",
-      "scraped_at": "2026-11-24T11:17:32.594884Z",
+      "last_updated_at": "2026-11-24T11:25:56.699706Z",
+      "scraped_at": "2026-11-24T11:25:56.699706Z",
       "image_credit": "Kevin Waterhouse / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg/v1/fill/w_2048,h_2048,al_c,q_90/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1695,6 +1635,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
+      "content_updated_at": "2026-11-24T11:25:56.699706Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d4401fcff795afbf-town-photo.jpg",
       "img": "assets/img/cards/d4401fcff795afbf-town-photo.jpg",
@@ -1728,9 +1669,9 @@
       "story_key": "events-v3-efd2981eccbbdf62a7a0",
       "title": "Christmas At The Movies",
       "slug": "christmas-at-the-movies",
-      "excerpt": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "summary": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "content_html": "<p>Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "summary": "🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "content_html": "<p>🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -1739,8 +1680,8 @@
       ],
       "published_at": "2026-11-12T23:30:44Z",
       "first_published_at": "2026-11-12T23:30:44Z",
-      "last_updated_at": "2026-11-24T11:17:32.842702Z",
-      "scraped_at": "2026-11-24T11:17:32.842702Z",
+      "last_updated_at": "2026-11-24T11:25:56.918157Z",
+      "scraped_at": "2026-11-24T11:25:56.918157Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -1764,7 +1705,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-24T11:17:32.842702Z",
+      "content_updated_at": "2026-11-24T11:25:56.918157Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -1811,7 +1752,7 @@
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
       "last_updated_at": "2026-11-17T10:36:28Z",
-      "scraped_at": "2026-11-24T11:17:32.978936Z",
+      "scraped_at": "2026-11-24T11:25:57.042125Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg/v1/fill/w_1254,h_1254,al_c,q_85/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1880,7 +1821,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:20Z",
-      "scraped_at": "2026-11-24T11:17:33.137186Z",
+      "scraped_at": "2026-11-24T11:25:57.141949Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png/v1/fill/w_1297,h_1212,al_c/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -1949,9 +1890,9 @@
       "event_start_at": "2026-12-20T09:30:00Z",
       "event_end_at": "",
       "event_location": "Ian's Gate, rear of 193 Manchester Road, Heywood OL10 2PP",
-      "published_at": "2026-11-24T11:17:31.136214Z",
-      "first_published_at": "2026-11-24T11:17:31.136214Z",
-      "scraped_at": "2026-11-24T11:17:31.136214Z",
+      "published_at": "2026-11-24T11:25:55.538143Z",
+      "first_published_at": "2026-11-24T11:25:55.538143Z",
+      "scraped_at": "2026-11-24T11:25:55.538143Z",
       "source_name": "Mustard Seed Church, Heywood",
       "source_url": "https://forms.gle/DTGQ3s8szyQj2Wbt6",
       "source_names": [
@@ -1994,9 +1935,9 @@
       "story_key": "events-v3-f4787e6ee070aa696164",
       "title": "New Years Eve with the Jäger Maestro",
       "slug": "new-years-eve-with-the-j-ger-maestro",
-      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -2005,8 +1946,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-11-24T11:17:33.278954Z",
-      "scraped_at": "2026-11-24T11:17:33.278954Z",
+      "last_updated_at": "2026-11-24T11:25:57.241926Z",
+      "scraped_at": "2026-11-24T11:25:57.241926Z",
       "image_credit": "BatAndBall / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg/v1/fill/w_890,h_624,al_c,q_85/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2030,7 +1971,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-24T11:17:33.278954Z",
+      "content_updated_at": "2026-11-24T11:25:57.241926Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/f4174a8ef48844b3-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Littleborough_Cricket_Club_-_geograph.org.uk_-_2498063.jpg",
@@ -2065,9 +2006,9 @@
       "story_key": "events-v3-62d472aa8282ba29e884",
       "title": "Swift & Friends",
       "slug": "swift-friends",
-      "excerpt": "SWIFT & FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
-      "summary": "SWIFT & FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
-      "content_html": "<p>SWIFT &amp; FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life.</p><p>Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Friday 19 February 2027 at 18:00</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/swift-friends\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "✨ SWIFT & FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
+      "summary": "✨ SWIFT & FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
+      "content_html": "<p>✨ SWIFT &amp; FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life.</p><p>Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Friday 19 February 2027 at 18:00</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/swift-friends\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2076,8 +2017,8 @@
       ],
       "published_at": "2026-10-28T19:02:26Z",
       "first_published_at": "2026-10-28T19:02:26Z",
-      "last_updated_at": "2026-11-24T11:17:33.421760Z",
-      "scraped_at": "2026-11-24T11:17:33.421760Z",
+      "last_updated_at": "2026-11-24T11:25:57.335772Z",
+      "scraped_at": "2026-11-24T11:25:57.335772Z",
       "image_credit": "R lee / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png/v1/fill/w_1206,h_1280,al_c/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2101,7 +2042,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-24T11:17:33.421760Z",
+      "content_updated_at": "2026-11-24T11:25:57.335772Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/28b4048459df187b-town-photo.jpg",
       "img": "assets/img/cards/28b4048459df187b-town-photo.jpg",
@@ -2147,7 +2088,7 @@
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
       "last_updated_at": "2026-11-12T21:28:24Z",
-      "scraped_at": "2026-11-24T11:17:33.530832Z",
+      "scraped_at": "2026-11-24T11:25:57.432749Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2202,11 +2143,11 @@
     {
       "id": "b97b37d71a7172bf89fa",
       "story_key": "events-v3-6a89fc56b9a23648589b",
-      "title": "Wonders Of Our Universe: The Next Chapter",
+      "title": "Wonders Of Our Universe. The Next Chapter",
       "slug": "wonders-of-our-universe-the-next-chapter",
-      "excerpt": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "summary": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "content_html": "<p>Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music.</p><p>Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "summary": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "content_html": "<p>🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music.</p><p>Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2215,8 +2156,8 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-11-24T11:17:33.638073Z",
-      "scraped_at": "2026-11-24T11:17:33.638073Z",
+      "last_updated_at": "2026-11-24T11:25:57.543048Z",
+      "scraped_at": "2026-11-24T11:25:57.543048Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg/v1/fill/w_1080,h_1080,al_c,q_85/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2240,7 +2181,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-24T11:17:33.638073Z",
+      "content_updated_at": "2026-11-24T11:25:57.543048Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
       "img": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
@@ -2274,8 +2215,8 @@
       "story_key": "events-v3-fa83eba7c4fc8fa82545",
       "title": "The Black Dyke Band at Rochdale Town Hall 2027",
       "slug": "the-black-dyke-band-at-rochdale-town-hall-2027",
-      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
-      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
+      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
+      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
       "content_html": "<p>In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy.</p><p>Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Thursday 13 May 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/the-black-dyke-band-at-rochdale-town-hall-2027\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
@@ -2286,7 +2227,7 @@
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
       "last_updated_at": "2026-11-12T21:28:27Z",
-      "scraped_at": "2026-11-24T11:17:33.747324Z",
+      "scraped_at": "2026-11-24T11:25:57.642876Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -2433,7 +2374,7 @@
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 8,
     "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 11,
+    "short_briefs_selected": 10,
     "frontpage_minimum_met": true,
     "reservoir_fresh_candidates": 0,
     "reservoir_refilled": 0
@@ -2457,7 +2398,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-11-24T11:19:30.109969Z"
+    "enforced_at": "2026-11-24T11:27:33.989809Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -2468,6 +2409,6 @@
     "fresh_hours": 36,
     "kept": 15,
     "removed": 0,
-    "enforced_at": "2026-11-24T11:19:30.413100Z"
+    "enforced_at": "2026-11-24T11:27:34.246879Z"
   }
 }
