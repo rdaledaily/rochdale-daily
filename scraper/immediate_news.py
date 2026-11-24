@@ -49,6 +49,9 @@ MONITORED_SOURCES: list[dict[str, Any]] = [
         "route": "own RSS feed",
         # A Rochdale-only paper: every item is about the borough.
         "borough_only": True,
+        # Editor, 24 Nov 2026: know the moment a rival runs ANY borough
+        # headline first, not only the immediate-news kinds.
+        "watch_all_headlines": True,
     },
     {
         "key": "roch-valley-radio",
@@ -57,6 +60,7 @@ MONITORED_SOURCES: list[dict[str, Any]] = [
         "route": "own RSS feed",
         # Also covers Bury and Oldham, so each item must name the borough.
         "borough_only": False,
+        "watch_all_headlines": True,
     },
     {
         "key": "men",

@@ -240,7 +240,10 @@ def poll(state: dict[str, Any], *, now: datetime, token: str = "",
     for source, feed in zip(MONITORED_SOURCES, feeds):
         feed["immediate_seen"] = 0
         for item in feed["items"]:
-            kind = immediate_kind(item["title"])
+            # Rochdale Times and Roch Valley Radio: every borough headline is
+            # tracked ("headline"), so being beaten to any story is seen within
+            # one poll and starts the fast lane. The MEN stays immediate-only.
+            kind = immediate_kind(item["title"]) or ("headline" if source.get("watch_all_headlines") else "")
             if not kind or not about_borough(source, item):
                 continue
             feed["immediate_seen"] += 1
@@ -327,7 +330,9 @@ def build_report(state: dict[str, Any], now: datetime) -> dict[str, Any]:
 
 
 def markdown(report: dict[str, Any]) -> str:
-    lines = ["## Immediate-news monitor", ""]
+    lines = ["## Immediate-news monitor", "",
+             "Rochdale Times and Roch Valley Radio: every borough headline is tracked (kind 'headline'); "
+             "the MEN: immediate news only.", ""]
     lines.append("| Outlet | Route | Feed | Items | Immediate |")
     lines.append("|---|---|---|---|---|")
     for feed in report["feeds"]:

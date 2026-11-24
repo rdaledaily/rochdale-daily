@@ -141,7 +141,13 @@ def test_baseline_records_without_starting_the_lane() -> None:
     check(post.posts == [], "first poll after a lost cache starts nothing")
     titles = {r["title"] for r in state["items"].values()}
     check(titles == {"Dozens of properties left without power", "Cordon in place after stabbing in Middleton",
-                     "Fire crews tackle blaze at derelict Rochdale mill"}, f"borough immediate items only: {titles}")
+                     "Fire crews tackle blaze at derelict Rochdale mill",
+                     # 24 Nov 2026: every Rochdale Times / RVR borough headline is tracked
+                     "Rochdale Business Awards 2026 winners announced"},
+          f"borough immediate items plus rival headlines: {titles}")
+    kinds = {r["title"]: r["kind"] for r in state["items"].values()}
+    check(kinds["Rochdale Business Awards 2026 winners announced"] == "headline", f"ordinary rival headline kind: {kinds}")
+    check("Cordon in place after stabbing in Bury town centre" not in titles, "out-of-borough RVR item still ignored")
     check(all(f["ok"] for f in outcome["feeds"]), "all three feeds read")
 
 
