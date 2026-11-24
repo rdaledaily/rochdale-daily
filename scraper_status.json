@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-24T10:18:31.087912Z",
+  "last_run_at": "2026-11-24T10:42:24.869247Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 106,
-  "job_or_career_posts_rejected": 2,
-  "raw_candidates": 104,
-  "candidate_clusters": 49,
+  "raw_candidates_before_job_filter": 110,
+  "job_or_career_posts_rejected": 3,
+  "raw_candidates": 107,
+  "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 53,
-    "resolved": 49,
-    "text_recovered": 10,
-    "reattributed": 19,
-    "images_found": 15
+    "wrappers": 55,
+    "resolved": 48,
+    "text_recovered": 18,
+    "reattributed": 21,
+    "images_found": 21
   },
-  "duplicates_merged": 55,
+  "duplicates_merged": 57,
   "attempted_rewrites": 14,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -147,10 +147,10 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 89,
+    "rss_and_google_news": 94,
     "website_discovery": 11,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -158,7 +158,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 7
+    "men_newsletter": 9
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -195,6 +195,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -252,9 +260,10 @@
       "already_covered": 6,
       "held": 3,
       "held_for_editor": 2,
-      "not_found": 3,
+      "not_found": 1,
       "published": 4,
-      "rewrite_failed": 2
+      "rewrite_failed": 2,
+      "waiting_for_text": 2
     },
     "outstanding_stories": [
       {
@@ -333,45 +342,43 @@
         "id": "ad6e0f6313741754",
         "headline": "'This is how people go missing': How one man got trapped in Pakistan",
         "received_at": "2026-11-24T08:07:14+00:00",
-        "status": "not_found",
-        "reason": "no MEN article matched the exact or keyword search",
-        "resolved_url": "",
-        "resolved_title": ""
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 203 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQdDNDUUJNNzZJSGYzUUV3Y3pqbklvRC1iNGlTMnZPWlNkZjVnLXBWaE11V3hhOTVJbHYwSlFOaU5NTXQ5WHNjaWpEWjRpZWFpbDVzOFFQeHFkUElNZGVnbXEwLW12eU1FbmhUVlBReEJJRXdfNldNUzZRRnd5aE1WV2dOM2ZKSnpobnM3NWkteDZ4bWszNWlBcUdsdjR1YUY4WkZKT0dYMNIBrAFBVV95cUxNNXRveE9aNkhBSE9FR2RaZ2wxY1V2bEw3MTlkYXBUOW1SclBOOGdKbjZxQnRwdDhjLXlDVEZzcURjWVQwLVp3NEV4QzlWVHB5VDlVM2dQSWJ4WW5XM2h3ZXZCS3lqeU5NN05TNThtZDhqVHFfSXF2UktIRVFHdUNLNmVINmJ5eDA4VUhNQnRyZEhTWDYzU2UyWWJVM05uSkFlb3pnTE1oQnJ0QTRs?oc=5",
+        "resolved_title": "'This is how people go missing': How one Rochdale man got trapped in Pakistan"
       },
       {
         "id": "215a6753c108ccd9",
         "headline": "Active travel scheme designed to improve Heywood could actually 'destroy it'",
         "received_at": "2026-11-24T08:07:14+00:00",
-        "status": "not_found",
-        "reason": "no MEN article matched the exact or keyword search",
-        "resolved_url": "",
-        "resolved_title": ""
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 201 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOVFZTT1RRS0dZVi1jVHVjRDZUa2lySmZJQUhjbmd0SGl6OC16SGhSOGpBWDdzT0xTZUtfX2M3MFRISEFtNUtVbS1iSWtOSXQ2NGVmOEZSTDJ2c1lUeVUyaHBIWXZ6LXBXWk45VU45WnIxcHM0U1dRYzVTUFpJdWZvb0lTTWVrZDUyR0VoN0FzZWR6azJGUVhqTExhSdIBmwFBVV95cUxOVFZTT1RRS0dZVi1jVHVjRDZUa2lySmZJQUhjbmd0SGl6OC16SGhSOGpBWDdzT0xTZUtfX2M3MFRISEFtNUtVbS1iSWtOSXQ2NGVmOEZSTDJ2c1lUeVUyaHBIWXZ6LXBXWk45VU45WnIxcHM0U1dRYzVTUFpJdWZvb0lTTWVrZDUyR0VoN0FzZWR6azJGUVhqTExhSQ?oc=5",
+        "resolved_title": "Active travel scheme designed to improve Heywood could actually 'destroy it'"
       }
     ]
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 18,
+    "Rochdale Times": 22,
     "Rochdaledaily": 16,
-    "Manchester Evening News": 13,
+    "Manchester Evening News": 12,
     "Rochdale Borough Council": 9,
     "Northampton Chronicle and Echo": 8,
-    "Roch Valley Radio": 5,
-    "Bee Network live travel alerts": 5,
+    "Roch Valley Radio": 7,
     "rochdaledaily.co.uk": 4,
-    "Oldham Evening Chronicle": 3,
+    "Id": 4,
+    "Bee Network live travel alerts": 4,
     "Rochdale AFC": 3,
     "Roch Valley Radio Local News": 3,
-    "Id": 2,
+    "Oldham Evening Chronicle": 2,
     "About Manchester": 2,
     "Rochdale Hornets": 2,
-    "Falinge Park High School": 1,
     "Rochdale Borough Council RSS": 1,
     "Yorkshire Post": 1,
     "Sport": 1,
     "Yahoo Sports": 1,
-    "The Irish Sun": 1,
-    "The72": 1,
+    "ESPN Singapore": 1,
     "Rochdale Borough Council News": 1,
     "Rochdale Development Agency": 1,
     "Pennine Care NHS": 1,
@@ -1089,25 +1096,25 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 10,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
-    "https://www.thesun.ie",
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://www.thesun.ie/sport/17954335/rochdale-sack-manager-ian-watson/",
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g",
     "https://news.google.com/rss/articles/CBMie0FVX3lxTE5Nd1pRZkxJM1F0UjJWT2I2OFgyZUlzUTBYMUZuS2VJMFFrbW9wTlRvTHY3bXI1aTU4SHZKc3FmMnBoQ0gxZDJQazRjdkdwbU9qeVVVTDBqWFppRlFRTFYxZlZ4aEZXOGthZTA2YkdoWTY1QjJteHlMSl9MUQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "rochdaleafc.co.uk",
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "rochdaleafc.co.uk": 2,
+    "yourtrustrochdale.co.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1144,7 +1151,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-24T10:26:29.813144Z",
+  "frontpage_generated_at": "2026-11-24T10:53:55.942335Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1154,7 +1161,6 @@
       "education",
       "health",
       "news",
-      "politics",
       "traffic",
       "transport"
     ],
@@ -1164,7 +1170,6 @@
       "education",
       "health",
       "news",
-      "politics",
       "traffic",
       "transport"
     ],
@@ -1200,19 +1205,19 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "news": 2,
-      "traffic": 4,
+      "crime": 1,
+      "traffic": 3,
       "transport": 1,
-      "politics": 1,
       "education": 1,
-      "community": 3,
+      "community": 4,
       "health": 2
     },
     "selected_by_ward": {
       "borough-wide": 10,
+      "Castleton": 1,
       "Spotland and Falinge": 1,
       "Healey": 1,
-      "North Middleton": 1,
-      "Castleton": 1
+      "North Middleton": 1
     },
     "selected_by_area": {
       "castleton": 2,
@@ -1224,13 +1229,13 @@
     },
     "selected_by_source": {
       "rochdale daily": 2,
+      "yahoo news uk": 1,
       "rochdale borough council": 6,
       "rochdale times": 1,
-      "yahoo news uk": 1,
       "rochdale borough council news": 1,
+      "source": 1,
       "t&n asbestos trustee company": 1,
-      "pennine care nhs": 1,
-      "source": 1
+      "pennine care nhs": 1
     },
     "pool_size": 16,
     "primary_pool_size": 16,
@@ -1244,9 +1249,9 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
-  "events_kept_other_source": 38,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_kept_other_source": 44,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
