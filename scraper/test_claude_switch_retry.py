@@ -39,5 +39,18 @@ class ClaudeSwitchRetryTests(unittest.TestCase):
         self.assertFalse(core._claude_switch_retry(entry(outcome="failed")))
 
 
+class StripRuleRetryTests(unittest.TestCase):
+    def test_strippable_rejection_reopens_once(self):
+        e = entry(reason="quality gate after 4 repairs: Source fidelity: the figure(s) 6 do not appear in the source.",
+                  last_attempt_at="2026-11-20T10:00:00Z")
+        self.assertTrue(core._strip_rule_retry(e))
+        self.assertFalse(core._strip_rule_retry(dict(e, strip_rule_epoch=core.STRIP_RULE_RETRY_EPOCH)))
+
+    def test_quote_and_locality_rejections_stay_closed(self):
+        for reason in ["quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source",
+                       "editorial gate: REJECTED_NON_LOCAL"]:
+            self.assertFalse(core._strip_rule_retry(entry(reason=reason)))
+
+
 if __name__ == "__main__":
     unittest.main()

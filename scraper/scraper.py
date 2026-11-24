@@ -3769,6 +3769,26 @@ def _claude_switch_retry(entry: dict[str, Any]) -> bool:
     )
 
 
+# 24 Nov 2026: unsupported names, dates, years, figures and weekdays are now
+# cut from a draft instead of rejecting it (editorial_upgrade.STRIPPABLE_ISSUE_
+# PREFIXES). 33 stories in the ledger were rejected for exactly those reasons,
+# most with all attempts spent; each gets one fresh set under the new rule.
+STRIP_RULE_RETRY_EPOCH = '2026-11-24-strip-not-reject-v1'
+STRIP_RULE_REASONS = (
+    'Source fidelity: the name(s)', 'Source fidelity: the date(s)', 'Source fidelity: the figure(s)',
+    'unsupported calendar year', 'Weekday does not match',
+)
+
+
+def _strip_rule_retry(entry: dict[str, Any]) -> bool:
+    """Reopen a rejection the strip-not-reject rule would now publish, once."""
+    return (
+        entry.get('outcome') == 'rejected'
+        and entry.get('strip_rule_epoch') != STRIP_RULE_RETRY_EPOCH
+        and any(marker in str(entry.get('reason') or '') for marker in STRIP_RULE_REASONS)
+    )
+
+
 def _overlap_rebuild_retry(entry: dict[str, Any]) -> bool:
     """Reopen held copying failures once after introducing the fact-note rebuild."""
     return (
@@ -3800,13 +3820,14 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
             and 'quality gate after' in str(entry.get('reason') or '')
             and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH
         )
-        if new_material or entry.get('outcome') != outcome or policy_retry or _overlap_rebuild_retry(entry) or _claude_switch_retry(entry):
+        if new_material or entry.get('outcome') != outcome or policy_retry or _overlap_rebuild_retry(entry) or _claude_switch_retry(entry) or _strip_rule_retry(entry):
             # Updated source material or a changed rewrite policy gets a
             # bounded fresh attempt, not an infinite retry on each run.
             entry['attempts'] = 0
         entry['policy_epoch'] = NEWSROOM_RETRY_POLICY_EPOCH
         entry['overlap_rebuild_epoch'] = OVERLAP_REBUILD_POLICY_EPOCH
         entry['claude_switch_epoch'] = CLAUDE_SWITCH_RETRY_EPOCH
+        entry['strip_rule_epoch'] = STRIP_RULE_RETRY_EPOCH
         entry['attempts'] = int(entry.get('attempts') or 0) + 1
         entry['last_attempt_at'] = now
         entry['outcome'] = outcome
@@ -3847,6 +3868,8 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     if _overlap_rebuild_retry(entry):
         return ''
     if _claude_switch_retry(entry):
+        return ''
+    if _strip_rule_retry(entry):
         return ''
     if outcome == 'published':
         return 'already published from this source material'
