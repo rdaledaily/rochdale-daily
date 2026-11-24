@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T17:10:23.950421Z",
+  "updated_at": "2026-11-24T17:28:52.267807Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 237,
+  "count": 236,
   "entries": {
     "https://aboutmanchester.co.uk/man-pleads-guilty-to-murder-of-woman-whose-body-found-in-rochdale-flats": {
       "first_attempt_at": "2026-11-18T14:22:25.535086Z",
@@ -2615,8 +2615,8 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T17:10:23.950223Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -3625,14 +3625,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 13,
+      "attempts": 14,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T17:07:18.247792Z",
+      "last_attempt_at": "2026-11-24T17:26:05.742435Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
@@ -3918,23 +3918,6 @@
       "category": "sport",
       "text_fingerprint": "913640fc0f1e4805",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
-    },
-    "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights": {
-      "first_attempt_at": "2026-11-15T16:58:39.233926Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMif0FVX3lxTFB5cm5reTczQTBnTVp3Q2piN1kwSjBIV3FEV25vSnJrUkwyVXRDTVpCS0pHZmpabl81dDV6MnZQRUxweW54MVphWFBBU2JWTmd0bVBHNWdzMU9MX0ZCaEtPVVdOS0U4TGxNTGxGODlSZV90a1M5RF8wWGtBYWVIc28?oc=5",
-        "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T17:09:02.762192Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Rochdale 0-1 York City | League Two highlights - Sky Sports",
-      "source_name": "Sky Sports",
-      "category": "sport",
-      "text_fingerprint": "ef5cf0b0c77cb77b"
     },
     "https://www.skysports.com/football/video/13614993/northampton-3-2-rochdale-league-two-highlights": {
       "first_attempt_at": "2026-11-21T21:43:39.149419Z",
