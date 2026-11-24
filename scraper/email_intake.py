@@ -282,7 +282,7 @@ def api(method: str, key: str | None = None) -> bytes:
 
 
 NOT_CONFIGURED = (
-    "::warning title=Email intake not connected::EVENTS_ADMIN_TOKEN is not set as a repository secret, "
+    "::error title=Email intake not connected::EVENTS_ADMIN_TOKEN is not set as a repository secret, "
     "so emails waiting in Cloudflare cannot be collected. Add it under Settings -> Secrets and variables -> "
     "Actions, with the same value as the EVENTS_ADMIN_TOKEN on the Cloudflare Pages project."
 )
@@ -290,9 +290,11 @@ NOT_CONFIGURED = (
 
 def collect(root: Path = ROOT) -> int:
     if not os.environ.get("EVENTS_ADMIN_TOKEN"):
+        # A red run, not a quiet warning: from at least 6 Nov to 24 Nov 2026 this
+        # was only a warning on a green run, and no email reached the paper.
         print(NOT_CONFIGURED)
         (root / ACK_FILE).write_text("[]", encoding="utf-8")
-        return 0
+        return 1
     keys = [k["name"] for k in json.loads(api("GET")).get("keys", [])]
     print(f"{len(keys)} message(s) waiting")
     ack: list[str] = []
