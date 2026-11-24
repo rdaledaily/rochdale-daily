@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T17:28:52.267807Z",
+  "updated_at": "2026-11-24T17:47:39.208009Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 236,
@@ -2615,13 +2615,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T17:10:23.950223Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "281e320946a23878",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/family-friendly-greater-manchester-winter-34926796.amp": {
       "first_attempt_at": "2026-11-18T10:32:20.739400Z",
@@ -3625,14 +3626,14 @@
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on": {
       "first_attempt_at": "2026-11-24T01:58:35.251208Z",
-      "attempts": 14,
+      "attempts": 15,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/rochdale-christmas-light-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "last_attempt_at": "2026-11-24T17:26:05.742435Z",
+      "last_attempt_at": "2026-11-24T17:44:49.934080Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 22 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Christmas Light Switch On",
