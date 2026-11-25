@@ -1,38 +1,35 @@
 {
-  "examined_at": "2026-11-24T18:18:22.859209Z",
+  "examined_at": "2026-11-25T17:37:06.832126Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 145,
+  "candidates_examined": 147,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 129,
-    "would publish": 8,
-    "duplicate of published story": 8
+    "age": 144,
+    "duplicate of published story": 2,
+    "would publish": 1
   },
-  "would_publish": 8,
+  "would_publish": 1,
   "age_gate_sensitivity": {
-    "6h": 4,
-    "14h": 11,
-    "24h": 16,
-    "48h": 61,
-    "72h": 100,
-    "168h": 145
+    "6h": 0,
+    "14h": 0,
+    "24h": 3,
+    "48h": 24,
+    "72h": 66,
+    "168h": 147
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "rochdaledaily.co.uk: Middleton Road roadworks in Heywood to begin on 23 November 2026 - roc",
-      "Football Lowdown: “The Step Up Was Too Big” – Rochdale Backed Over Ian Watson Sacking - "
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Middleton Road, roadworks in Heywood from 23 November 2026",
-      "Rochdale Times: Football project helps girls tackle mental health issues - Rochdale Ti",
-      "Rochdaledaily: Police advice for Rochdale fans after substance forced Co-op Live evac"
+      "Rochdale Times: Farm owners’ bid to keep countryside sauna and hot tub retreat - Rochd",
+      "Rochdale Times: Farm owners’ bid to keep countryside sauna and hot tub retreat - Rochd"
     ],
     "age": [
-      "Manchester Evening News: Rochdale Council - Manchester Evening News",
-      "rochdaledaily.co.uk: Rochdale Council oversees essential services for 205,000 residents - r",
-      "Manchester Evening News: 'This is how people go missing': How one man got trapped in Pakistan"
+      "Rochdale Times: Football project helps girls tackle mental health issues - Rochdale Ti",
+      "Rochdale Borough Council: Middleton Road, roadworks in Heywood from 23 November 2026",
+      "rochdaledaily.co.uk: Middleton Road roadworks in Heywood to begin on 23 November 2026 - roc"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
