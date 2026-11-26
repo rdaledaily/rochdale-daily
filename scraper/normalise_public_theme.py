@@ -258,6 +258,35 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
     for rel in dead_links.sweep(root, check=check):
         if rel not in changed:
             changed.append(rel)
+    # A briefing can qualify for a topic hub only because it links to another
+    # story about that topic.  The dead-link sweep above can remove that last
+    # qualifying entry, so rebuild the topic/place hubs from the finished
+    # article pages.  Without this pass the immediately following --check run
+    # sees stale hub counts and fails publication even though the sweep made
+    # the correct repair.
+    refreshed_pages, refreshed_stale = build_internal_links(root)
+    for path, html in refreshed_pages.items():
+        html = normalise_text(path, html)
+        current = path.read_text(encoding="utf-8") if path.is_file() else None
+        if html == current:
+            continue
+        rel = path.relative_to(root).as_posix()
+        if rel not in changed:
+            changed.append(rel)
+        if not check:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(html, encoding="utf-8")
+    for path in refreshed_stale:
+        rel = path.relative_to(root).as_posix()
+        if rel not in changed:
+            changed.append(rel)
+        if not check:
+            path.unlink()
+    # The refreshed hubs are derived only from live article pages, but keep
+    # the no-dead-links invariant explicit at the final page boundary.
+    for rel in dead_links.sweep(root, check=check):
+        if rel not in changed:
+            changed.append(rel)
     changed += clean_sitemaps(root, check=check)
     if not check:
         # Share-image crops nothing points at any more. Last, once every page
