@@ -1,35 +1,26 @@
 {
-  "examined_at": "2026-11-25T17:37:06.832126Z",
+  "examined_at": "2026-11-26T17:18:33.779548Z",
   "reservoir_retention_hours": 96,
   "candidates_examined": 147,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 144,
-    "duplicate of published story": 2,
-    "would publish": 1
+    "age": 147
   },
-  "would_publish": 1,
+  "would_publish": 0,
   "age_gate_sensitivity": {
     "6h": 0,
     "14h": 0,
-    "24h": 3,
-    "48h": 24,
-    "72h": 66,
+    "24h": 0,
+    "48h": 3,
+    "72h": 26,
     "168h": 147
   },
   "gates_unavailable": [],
   "examples": {
-    "would publish": [
-      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene"
-    ],
-    "duplicate of published story": [
+    "age": [
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
       "Rochdale Times: Farm owners’ bid to keep countryside sauna and hot tub retreat - Rochd",
       "Rochdale Times: Farm owners’ bid to keep countryside sauna and hot tub retreat - Rochd"
-    ],
-    "age": [
-      "Rochdale Times: Football project helps girls tackle mental health issues - Rochdale Ti",
-      "Rochdale Borough Council: Middleton Road, roadworks in Heywood from 23 November 2026",
-      "rochdaledaily.co.uk: Middleton Road roadworks in Heywood to begin on 23 November 2026 - roc"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
