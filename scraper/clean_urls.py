@@ -133,20 +133,49 @@ def indexable_as(page: Path, url: str) -> bool:
     return True
 
 
+def redirect_sources(root: Path) -> set[str]:
+    """Paths _redirects sends elsewhere, without .html ('/articles/old-slug').
+
+    Cloudflare Pages applies _redirects BEFORE static files, so a page file can
+    still exist on disk while its address answers 301. On 26 Nov 2026 Ahrefs
+    found two such addresses listed in sitemap.xml and image-sitemap.xml.
+    """
+    sources: set[str] = set()
+    try:
+        lines = (root / "_redirects").read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return sources
+    for line in lines:
+        parts = line.split()
+        if len(parts) >= 2 and not parts[0].startswith("#"):
+            sources.add(parts[0].removesuffix(".html").rstrip("/") or "/")
+    return sources
+
+
+def is_redirected(url: str, sources: set[str]) -> bool:
+    if not url.startswith(SITE):
+        return False
+    path = url[len(SITE):].split("#", 1)[0].split("?", 1)[0]
+    return (path.removesuffix(".html").rstrip("/") or "/") in sources
+
+
 _URL_BLOCK_RE = re.compile(r"\s*<url>.*?</url>", re.S)
 _LOC_RE = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
 
 
 def clean_sitemap_text(text: str, root: Path) -> tuple[str, int]:
-    """Clean every address, and drop <url> entries whose page does not exist."""
+    """Clean every address, and drop <url> entries whose page does not exist
+    or whose address _redirects sends elsewhere."""
     dropped = 0
+    redirected = redirect_sources(root)
 
     def block(match: re.Match[str]) -> str:
         nonlocal dropped
         loc = _LOC_RE.search(match.group(0))
         if loc and not re.search(r"\.(?:jpe?g|png|webp|gif|svg)$", loc.group(1), re.I):
             page = file_for_url(loc.group(1), root)
-            if page is None or not indexable_as(page, clean_text(loc.group(1))):
+            if (page is None or is_redirected(loc.group(1), redirected)
+                    or not indexable_as(page, clean_text(loc.group(1)))):
                 dropped += 1
                 return ""
         return match.group(0)

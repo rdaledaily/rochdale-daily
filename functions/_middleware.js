@@ -518,6 +518,9 @@ export const HEAD_SNIPPETS = [
 ];
 
 
+export const EMAIL_OFF_OPEN = '<!--email_off-->';
+export const EMAIL_OFF_CLOSE = '<!--/email_off-->';
+
 function stripBannedLinks(response) {
   if (typeof HTMLRewriter === 'undefined') return response;
   // A page whose own <head> already carries a snippet (e.g. pasted into a
@@ -531,6 +534,18 @@ function stripBannedLinks(response) {
         if (isBannedLink(href)) { el.removeAndKeepContent(); return; }
         const tidy = tidyInternalHref(href);
         if (tidy !== href) el.setAttribute('href', tidy);
+      },
+    })
+    // Cloudflare Email Address Obfuscation rewrote every mailto: on the site
+    // (footer news@ link, ~2,100 pages) to /cdn-cgi/l/email-protection, which
+    // answers 404 to crawlers: Ahrefs, 26 Nov 2026, counted 2,037 pages
+    // "linking to a broken page" from that alone. The documented opt-out
+    // wraps the markup in email_off comments. The addresses are already
+    // public on the site's contact and trust pages.
+    .on('body', {
+      element(el) {
+        el.prepend(EMAIL_OFF_OPEN, { html: true });
+        el.append(EMAIL_OFF_CLOSE, { html: true });
       },
     })
     .on('head script[src]', { element(el) { present.add(el.getAttribute('src')); } })

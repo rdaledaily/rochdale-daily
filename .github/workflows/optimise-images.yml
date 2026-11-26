@@ -1,0 +1,74 @@
+name: Optimise public images
+
+# Photos reach the site from many routes (web uploads, email intake, Commons
+# and Geograph downloads, archive repairs). Rather than patch each writer,
+# this one lane shrinks any public image over 600 KB in place (same filename,
+# same format) after it lands. Ahrefs, 26 Nov 2026: 19 card images of 1-5.9 MB.
+# It runs outside the fast news lanes on purpose: they commit an explicit file
+# list and rebase on conflict, so a stray uncommitted image there would break
+# their push recovery.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "assets/img/**"
+      - "assets/article-images/**"
+      - "scraper/optimise_images.py"
+      - ".github/workflows/optimise-images.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-optimise-images
+  cancel-in-progress: false
+
+jobs:
+  optimise:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out latest main
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install image dependencies
+        run: pip install "Pillow>=10,<13"
+
+      - name: Shrink images over the limit
+        run: python scraper/optimise_images.py
+
+      - name: Commit optimised images
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git add -u -- assets/img assets/article-images
+            if git diff --cached --quiet; then
+              echo "No public image over the limit needed changing."
+              exit 0
+            fi
+            git commit -m "Optimise oversized public images"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "main moved while optimising (attempt ${attempt}); redoing on latest main."
+            sleep $((attempt * 5))
+            git fetch origin main
+            git reset --hard origin/main
+            python scraper/optimise_images.py
+          done
+          echo "::error::main kept moving through five attempts; the next scheduled run will retry."
+          exit 1
