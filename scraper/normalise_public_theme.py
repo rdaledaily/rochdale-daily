@@ -78,6 +78,8 @@ from archive_integrity import run as archive_integrity  # noqa: E402
 from publisher_markup import enrich_text  # noqa: E402
 from archive_pages import build as build_archive_pages  # noqa: E402
 from internal_links import build as build_internal_links  # noqa: E402
+import dead_links  # noqa: E402
+from takedown_sweep import public_files  # noqa: E402
 
 FEEDS = ("rss.xml",)
 
@@ -93,6 +95,31 @@ def public_pages(root: Path = ROOT) -> list[Path]:
         if folder.exists():
             pages.update(path for path in folder.rglob("*.html") if path.is_file())
     return sorted(pages)
+
+
+_CANONICAL_RE = re.compile(r'<link rel="canonical"', re.I)
+
+
+def address_only_pages(root: Path = ROOT) -> list[Path]:
+    """Indexable pages outside the themed set that still need clean addresses.
+
+    The theme contract (PUBLIC_ROOT_FILES / PUBLIC_DIRS) is a deliberate list,
+    but URL cleaning is not a theme choice: every page that declares a
+    canonical must declare the address that answers 200. On 26 Nov 2026
+    Ahrefs found 13 pages added after the list was written (advertise,
+    advertising-media-pack, my-rochdale, news-alerts, roadworks, whats-on,
+    weather/*, guides/*) still declaring their 308-redirecting .html address
+    as canonical, which also made their sitemap entries "non-canonical".
+    """
+    themed = set(public_pages(root))
+    pages = []
+    for path in public_files(root):
+        if path.suffix != ".html" or path in themed:
+            continue
+        head = path.read_text(encoding="utf-8", errors="ignore").split("</head>", 1)[0]
+        if _CANONICAL_RE.search(head):
+            pages.append(path)
+    return pages
 
 
 def _stamp_html_tag(text: str) -> str:
@@ -216,6 +243,21 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         changed.append(path.relative_to(root).as_posix())
         if not check:
             path.unlink()
+    for path in address_only_pages(root):
+        original = path.read_text(encoding="utf-8")
+        updated = clean_text(original)
+        if updated == original:
+            continue
+        rel = path.relative_to(root).as_posix()
+        if rel not in changed:
+            changed.append(rel)
+        if not check:
+            path.write_text(updated, encoding="utf-8")
+    # Last of the page passes, on the finished site: no page may link to a
+    # story page that is not there (see dead_links.py).
+    for rel in dead_links.sweep(root, check=check):
+        if rel not in changed:
+            changed.append(rel)
     changed += clean_sitemaps(root, check=check)
     if not check:
         # Share-image crops nothing points at any more. Last, once every page

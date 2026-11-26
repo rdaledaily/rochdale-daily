@@ -78,6 +78,43 @@ class Sitemaps(unittest.TestCase):
         self.assertIn("<loc>https://rochdaledaily.co.uk/articles/kept</loc>", out)
         self.assertIn("<loc>https://rochdaledaily.co.uk/</loc>", out)
 
+    def test_entries_that_redirects_send_elsewhere_are_dropped(self):
+        # Ahrefs, 26 Nov 2026: two story URLs answered 301 from _redirects
+        # while their old page files were still on disk and in the sitemaps.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "articles").mkdir()
+            (root / "articles" / "old-slug.html").write_text("x", encoding="utf-8")
+            (root / "articles" / "new-slug.html").write_text("x", encoding="utf-8")
+            (root / "_redirects").write_text("# note\n/articles/old-slug /articles/new-slug 301\n"
+                                             "/articles/old-slug.html /articles/new-slug 301\n", encoding="utf-8")
+            xml = ("<urlset>\n<url><loc>https://rochdaledaily.co.uk/articles/old-slug</loc></url>\n"
+                   "<url><loc>https://rochdaledaily.co.uk/articles/new-slug</loc></url>\n</urlset>")
+            out, dropped = cu.clean_sitemap_text(xml, root)
+        self.assertEqual(dropped, 1)
+        self.assertNotIn("old-slug", out)
+        self.assertIn("new-slug", out)
+
+
+class AddressOnlyPages(unittest.TestCase):
+    def test_pages_outside_the_theme_list_get_clean_canonicals(self):
+        # Ahrefs, 26 Nov 2026: 13 pages added after the theme list was
+        # written (advertise, whats-on, weather/*, guides/* ...) declared
+        # their 308-redirecting .html address as canonical.
+        import normalise_public_theme as npt
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "weather").mkdir()
+            page = ('<html><head><link rel="canonical" href="https://rochdaledaily.co.uk/weather/milnrow.html">'
+                    '</head><body><a href="/whats-on.html">x</a></body></html>')
+            (root / "weather" / "milnrow.html").write_text(page, encoding="utf-8")
+            (root / "tool.html").write_text("<html><head></head><body>no canonical</body></html>", encoding="utf-8")
+            pages = [p.relative_to(root).as_posix() for p in npt.address_only_pages(root)]
+            self.assertEqual(pages, ["weather/milnrow.html"])
+            out = cu.clean_text(page)
+        self.assertIn('href="https://rochdaledaily.co.uk/weather/milnrow"', out)
+        self.assertIn('href="/whats-on"', out)
+
 
 
 class PaidLinkTests(unittest.TestCase):
