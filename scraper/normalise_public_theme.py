@@ -221,6 +221,15 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         for page in archive_integrity(root, check=False):
             if page not in changed:
                 changed.append(page)
+    # No page may link to a story page that is not there (see dead_links.py).
+    # Before the month archives and topic hubs are built: they are derived
+    # from story pages, so building them first lists briefing entries the
+    # sweep then removes, and the --check run fails on the stale hubs
+    # (publish run 45825322184, 26 Nov 2026). Nothing after this point
+    # deletes a story page.
+    for rel in dead_links.sweep(root, check=check):
+        if rel not in changed:
+            changed.append(rel)
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
@@ -253,11 +262,6 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
             changed.append(rel)
         if not check:
             path.write_text(updated, encoding="utf-8")
-    # Last of the page passes, on the finished site: no page may link to a
-    # story page that is not there (see dead_links.py).
-    for rel in dead_links.sweep(root, check=check):
-        if rel not in changed:
-            changed.append(rel)
     changed += clean_sitemaps(root, check=check)
     if not check:
         # Share-image crops nothing points at any more. Last, once every page
