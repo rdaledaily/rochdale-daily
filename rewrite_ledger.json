@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T15:28:41.280538Z",
+  "updated_at": "2026-11-27T15:51:32.681142Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 189,
@@ -1396,7 +1396,7 @@
     },
     "https://www.falingepark.com/2026/11/27/year-8-design-and-discover-curriculum": {
       "first_attempt_at": "2026-11-27T15:04:30.538551Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.falingepark.com/2026/11/27/year-8-design-and-discover-curriculum"
       ],
@@ -1404,7 +1404,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T15:25:17.746935Z",
+      "last_attempt_at": "2026-11-27T15:47:33.325694Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Year 8 ‘Design and Discover’ Curriculum",
@@ -2794,15 +2794,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T15:28:41.280300Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Lighting up the town for Christmas - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "76b9050508cc189b",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/littleborough-celebrates-being-crowned-cricket-club-of-the-year": {
