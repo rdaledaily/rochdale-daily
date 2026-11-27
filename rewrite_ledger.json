@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T16:30:41.261443Z",
+  "updated_at": "2026-11-27T16:49:42.411126Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 189,
+  "count": 190,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -2097,15 +2097,16 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T16:11:09.256150Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "924a22eda94e0593",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "recovery_attempts": 2,
-      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1"
+      "recovery_attempts": 0,
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp": {
       "first_attempt_at": "2026-11-24T12:44:06.106243Z",
@@ -2478,6 +2479,24 @@
       "category": "traffic",
       "text_fingerprint": "e17d50a78dfc79be"
     },
+    "https://www.rochdale.gov.uk/directory-record/2680/lower-lane-roadworks-in-rochdale-on-27-november-2026": {
+      "first_attempt_at": "2026-11-27T16:49:42.411095Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2680/lower-lane-roadworks-in-rochdale-on-27-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T16:49:42.411095Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Lower Lane, roadworks in Rochdale on 27 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "cb334a01770a8052"
+    },
     "https://www.rochdale.gov.uk/news/article/702/redwood-learners-superbly-prepared-for-their-next-steps-says-ofsted": {
       "first_attempt_at": "2026-11-23T15:06:15.116224Z",
       "attempts": 1,
@@ -2849,15 +2868,16 @@
       "first_attempt_at": "2026-11-27T16:08:00.270059Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNWFFnaEJZb0lWT3dMX01RNkZRX1dSM1hSOThmdktKZl90aVFVRzZXdk1KaVlVVTk3Vi1FLUJrVEdlU3JUUURUektyZ3lxaVdnRzdJTVRmb2g4NEltWlE1eHdRQW45dnhQTnhWY1NhU2REU1BscnBpT00tS0NWYWRhTkhlNjk1NEItazhkQThLZU1BTE1iWXpxRFBOVVpXNVo4cl9vamJsMzdBQnNLaTUyb3g0eU1WT1Nk?oc=5",
         "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T16:30:41.261212Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-27T16:46:38.581092Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Ali was involved",
       "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -2903,13 +2923,14 @@
       "first_attempt_at": "2026-11-27T10:33:55.838813Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMijgFBVV95cUxPV0dDaFd6WWgtaWF6ZXdCaVVrd1doaERNRk1TZmUwMnpneTBmYTVVZjVteGtCVmdBdlB2YkxNeTd5cXBNX2JvZHhLaFl3eE1uMHdkWTJTbU9sVTZFamNUMEQ3SmxOeS0wX2JWZS0yaEQ2Rkdtdm5aTXVsYlB6cndzSFZMcmo2WVZ4VU8xb0Fn?oc=5",
         "https://www.rochdaletimes.co.uk/rise-in-council-staff-off-with-stress-and-depression"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:33:55.838813Z",
+      "last_attempt_at": "2026-11-27T16:49:42.410942Z",
       "outcome": "published",
       "reason": "",
       "title": "Rise in council staff off with stress and depression - Rochdale Times",
