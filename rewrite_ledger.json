@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T18:15:35.634662Z",
+  "updated_at": "2026-11-27T18:34:53.653033Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 189,
@@ -2080,14 +2080,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T18:15:35.634312Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "924a22eda94e0593",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
       "evidence_recovery_policy": 1
     },
@@ -2850,7 +2850,7 @@
     },
     "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
       "first_attempt_at": "2026-11-27T16:08:00.270059Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNWFFnaEJZb0lWT3dMX01RNkZRX1dSM1hSOThmdktKZl90aVFVRzZXdk1KaVlVVTk3Vi1FLUJrVEdlU3JUUURUektyZ3lxaVdnRzdJTVRmb2g4NEltWlE1eHdRQW45dnhQTnhWY1NhU2REU1BscnBpT00tS0NWYWRhTkhlNjk1NEItazhkQThLZU1BTE1iWXpxRFBOVVpXNVo4cl9vamJsMzdBQnNLaTUyb3g0eU1WT1Nk?oc=5",
         "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs"
@@ -2859,9 +2859,9 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T16:46:38.581092Z",
+      "last_attempt_at": "2026-11-27T18:31:48.823838Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Ali was involved",
+      "reason": "quality gate after 4 repairs: Source fidelity: the draft says convicted / found guilty but the source does not. Never ch",
       "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
