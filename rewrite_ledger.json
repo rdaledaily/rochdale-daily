@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T20:27:16.705154Z",
+  "updated_at": "2026-11-27T20:44:19.438576Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 187,
+  "count": 186,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -2063,14 +2063,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T20:27:16.704688Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "924a22eda94e0593",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
       "evidence_recovery_policy": 1
     },
@@ -2904,23 +2904,6 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "3d174be5198e8e7d"
-    },
-    "https://www.rochdaletimes.co.uk/rochdale-afc-sets-christmas-toys-goal": {
-      "first_attempt_at": "2026-11-19T19:20:40.827611Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMiekFVX3lxTE9QY3NCWHBUSllOMWhxVzNyTFRuYlhyWjBkYTk0UFV6YnNlLTlSOHEycXRnVF9VWGtiRzkxUkdhN1BKcUVRdTNFRE9UTGdyNmFfb1RRWVhMZElsdC16bWVEYnZHV2RLWjc4VWZaOHU0S0ZaR04tMDhMb2xn?oc=5",
-        "https://www.rochdaletimes.co.uk/rochdale-afc-sets-christmas-toys-goal"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T20:15:31.553012Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale AFC sets Christmas toys goal - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "sport",
-      "text_fingerprint": "8726410c823eea2c"
     },
     "https://www.rochdaletimes.co.uk/six-arrests-over-sophisticated-6-million-cannabis-importation-plan": {
       "first_attempt_at": "2026-11-27T11:10:34.314532Z",
