@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T14:06:10.223835Z",
+  "updated_at": "2026-11-27T14:29:58.445347Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 189,
@@ -2112,14 +2112,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T14:06:10.223482Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "924a22eda94e0593",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1"
     },
     "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664.amp": {
@@ -2774,15 +2774,16 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T13:46:12.437207Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Lighting up the town for Christmas - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "76b9050508cc189b",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/littleborough-celebrates-being-crowned-cricket-club-of-the-year": {
       "first_attempt_at": "2026-11-27T11:44:16.857040Z",
