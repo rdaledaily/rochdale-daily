@@ -67,16 +67,6 @@
       "after": "assets/img/cards/rochdale-council-increases-winter-support-for-homeless-residents.jpg"
     },
     {
-      "slug": "man-charged-after-assault-on-officer-in-middleton-town-centre",
-      "result": "no-cleared-source-image",
-      "source": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/a-man-has-been-charged-after-an-officer-was-assaulted-in-middleton-town-centre/",
-      "after": "assets/img/cards/police.jpg",
-      "why": {
-        "page": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/a-man-has-been-charged-after-an-officer-was-assaulted-in-middleton-town-centre/",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
       "slug": "new-transport-policing-command-rochdale-buses-trams-roads",
       "result": "no-cleared-source-image",
       "source": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
@@ -84,6 +74,24 @@
       "why": {
         "page": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries",
+      "after": "assets/img/cards/rochdale-town-hall.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/contactcentre",
+        "final_url": "https://www.rochdale.gov.uk/contactcentre",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     }
   ]
