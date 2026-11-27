@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T12:43:10.189398Z",
+  "updated_at": "2026-11-27T13:06:34.285460Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 190,
@@ -1399,7 +1399,7 @@
     },
     "https://www.falingepark.com/2026/11/27/time-to-talk-9-workshop": {
       "first_attempt_at": "2026-11-27T12:22:10.802154Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.falingepark.com/2026/11/27/time-to-talk-9-workshop"
       ],
@@ -1407,7 +1407,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:39:56.635761Z",
+      "last_attempt_at": "2026-11-27T13:01:46.111991Z",
       "outcome": "rejected",
       "reason": "quality check: Source fidelity: the name(s) Park, High, School do not appear in the source. Name only people, places and",
       "title": "Time To Talk 9 Workshop",
@@ -1526,7 +1526,7 @@
     },
     "https://www.hornetsrugbyleague.co.uk/article/1932/hornets-1895-cup-group-phase-opponents-confirmed": {
       "first_attempt_at": "2026-11-27T12:06:14.342628Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiowFBVV95cUxPSTZnbVBFeEZBOFN0bmpURW9PMW1qS2dqbXRvOFZEQVcwMm5HTXFzTnlkazNsRkpJU1NnSDJ0ZENKdWlnWU52by1QTkxGdmNDR0tJcENvZEtqYW5Td012N0IwVzJNUnlTWm1SNnlZNmtCMkFyOVJLUEVnRDNMakZjMFJDeUFrSHV6UEJUWHlrZ1cydFJPRUJ6cGlXMVVOdGhDWlFV?oc=5",
         "https://www.hornetsrugbyleague.co.uk/article/1932/hornets-1895-cup-group-phase-opponents-confirmed"
@@ -1535,9 +1535,9 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:40:04.945698Z",
+      "last_attempt_at": "2026-11-27T13:01:52.550748Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited ab",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: He no",
       "title": "Hornets' 1895 Cup group phase opponents confirmed",
       "source_name": "Rochdale Hornets",
       "category": "sport",
@@ -2576,14 +2576,15 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:25:26.084121Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-27T13:06:34.284947Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Care home plan approved despite objections - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "environment",
+      "category": "news",
       "text_fingerprint": "8e5820df4cce78c3",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/celebrating-rochdales-education-stars": {
       "first_attempt_at": "2026-11-27T10:33:55.838889Z",
@@ -2632,14 +2633,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:43:10.189253Z",
+      "last_attempt_at": "2026-11-27T13:06:34.285205Z",
       "outcome": "published",
       "reason": "",
       "title": "Crowds flock to town’s Christmas countdown - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "events",
       "text_fingerprint": "8e549f31603bad82",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty": {
@@ -2809,15 +2810,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-27T12:43:10.189095Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Lighting up the town for Christmas - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "76b9050508cc189b",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/littleborough-celebrates-being-crowned-cricket-club-of-the-year": {
       "first_attempt_at": "2026-11-27T11:44:16.857040Z",
