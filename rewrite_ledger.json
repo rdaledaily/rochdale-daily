@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T15:51:32.681142Z",
+  "updated_at": "2026-11-27T16:11:09.256483Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 189,
@@ -1622,23 +1622,6 @@
       "category": "events",
       "text_fingerprint": "eb4da2fecc03f3fc"
     },
-    "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic": {
-      "first_attempt_at": "2026-11-18T10:32:20.739612Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMizAFBVV95cUxNc0FSUnVFYVMzNDV3eE1MVDhCX1ZzcU0zSnROeHR5dEdSWGtJSVZKMm5XaGNidXQzYWJaVmlHVU9Zb2J1akdoeUtoRFhqLV9nUmszVm5BcUpIbGdJUkN6S0FZcVl2MDZFRVNhMkJ4ay1EREs4dURSeElQMDR2WXI4V0ZOXzZocWl1OGxoa0dlN1VLQ1MxVkpsSU5rUlh2ZU4teDVjTXZWa09pS21wTlozR0YyRjBxZWhiaXR2MTVKQ2ZVc1ZQcDNYcmIzS3E?oc=5",
-        "https://www.inyourarea.co.uk/news/inside-the-enchanted-woodland-tent-coming-to-rochdale-with-warm-spiced-apple-drinks-and-old-magic"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T15:41:50.809680Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Inside the enchanted woodland tent coming to Rochdale with warm spiced apple drinks and old magic - InYourArea",
-      "source_name": "InYourArea",
-      "category": "events",
-      "text_fingerprint": "63fbd30e9916fa0d"
-    },
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-21": {
       "first_attempt_at": "2026-11-22T10:17:15.404135Z",
       "attempts": 23,
@@ -2113,9 +2096,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-27T14:06:10.223482Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-27T16:11:09.256150Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2861,6 +2844,24 @@
       "text_fingerprint": "0e01cca0cd18463e",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
+      "first_attempt_at": "2026-11-27T16:08:00.270059Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T16:08:00.270059Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This sentence ref",
+      "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "59bf452b7b17aff3"
     },
     "https://www.rochdaletimes.co.uk/overwhelming-support-for-veterans-accommodation-plan": {
       "first_attempt_at": "2026-11-23T10:03:35.066099Z",
