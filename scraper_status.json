@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-27T13:46:12.441555Z",
+  "last_run_at": "2026-11-27T14:06:10.228040Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -64,28 +64,24 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 19,
+  "raw_candidates_before_job_filter": 48,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 19,
-  "candidate_clusters": 56,
+  "raw_candidates": 48,
+  "candidate_clusters": 57,
   "google_news_resolution": {
-    "wrappers": 0,
-    "resolved": 0,
-    "text_recovered": 0,
+    "wrappers": 19,
+    "resolved": 2,
+    "text_recovered": 2,
     "reattributed": 0,
-    "images_found": 0
+    "images_found": 2
   },
   "duplicates_merged": 0,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 2,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "rochdale-s-ignite-fire-festival-precedes-christmas-lights-switch-on",
-      "source_url": "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas/"
-    },
-    {
-      "slug": "plans-approved-for-care-home-on-thornham-new-road-despite-local-objections",
-      "source_url": "https://www.rochdaletimes.co.uk/care-home-plan-approved-despite-objections/"
+      "slug": "plans-to-demolish-seven-sisters-tower-blocks-in-rochdale-revealed",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664"
     }
   ],
   "new_articles": 0,
@@ -96,9 +92,9 @@
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
-    "queued_for_retry": 1,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 2,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -110,17 +106,35 @@
     "entries": 189,
     "by_outcome": {
       "editorial_twin": 8,
-      "failed": 51,
-      "published": 81,
-      "rejected": 49
+      "failed": 50,
+      "published": 80,
+      "rejected": 51
     },
-    "held_back_this_run": 27,
+    "held_back_this_run": 29,
     "held_already_published": 22,
-    "held_rejected": 5,
+    "held_rejected": 7,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/care-home-plan-approved-despite-objections",
+      "title": "Care home plan approved despite objections - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-27T13:46:12.437407Z"
+    },
+    {
+      "url": "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas",
+      "title": "Lighting up the town for Christmas - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-27T13:46:12.437207Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/crowds-flock-to-towns-christmas-countdown",
       "title": "Crowds flock to town’s Christmas countdown - Rochdale Times",
@@ -168,21 +182,22 @@
     }
   ],
   "published_with_style_issues": {
-    "Write a social_headline for Facebook.": 1,
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 176.": 1
   },
   "local_impact": {
-    "shown": 0,
+    "shown": 1,
     "outcomes": {
-      "not eligible: events category": 1,
-      "writer offered no points": 1
+      "shown": 1
     },
-    "points": {}
+    "points": {
+      "corrected to the story's own sentence": 2,
+      "dropped: no story sentence to correct it to": 1
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 5,
-    "website_discovery": 8,
+    "rss_and_google_news": 30,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -192,15 +207,16 @@
     "food_hygiene": 2,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 7
+    "men_newsletter": 8
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response",
-    "Google News — category:crime": "google news block page (not RSS)",
-    "Google News — category:traffic": "google news block page (not RSS)",
-    "Google News — source:roch-valley-radio": "google news block page (not RSS)",
-    "Google News": "blocked after 3 block pages; 18 searches skipped this run"
+    "Google News — source:manchester-evening-news": "google news block page (not RSS)",
+    "Google News — priority:crime-web": "google news block page (not RSS)",
+    "Google News — category:politics": "google news block page (not RSS)",
+    "Google News": "blocked after 3 block pages; 12 searches skipped this run"
   },
   "rss_feed_empty": {
     "Manchester Evening News — Rochdale": {
@@ -235,12 +251,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -290,25 +306,16 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 16,
-    "covered": 7,
-    "outstanding": 9,
+    "covered": 8,
+    "outstanding": 8,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 1,
-      "not_found": 2,
-      "published": 6,
+      "not_found": 1,
+      "published": 7,
       "waiting_for_text": 7
     },
     "outstanding_stories": [
-      {
-        "id": "7fc1b0a449cd97da",
-        "headline": "Two iconic landmarks set to go in major developments for Greater Manchester",
-        "received_at": "2026-11-23T08:05:30+00:00",
-        "status": "not_found",
-        "reason": "its article plans-revealed-for-demolition-of-seven-sisters-tower-blocks-in-rochdale is no longer live; searching again",
-        "resolved_url": "",
-        "resolved_title": "Two iconic landmarks set to go in major developments for Greater Manchester"
-      },
       {
         "id": "23057a1301d2422f",
         "headline": "The Rochdale veteran whose decades-long fight for justice may soon be over",
@@ -385,16 +392,20 @@
   },
   "immediate_first": [],
   "source_counts": {
+    "Rochdale Times": 14,
+    "rochdaledaily.co.uk": 13,
+    "Roch Valley Radio": 4,
     "Rochdale Hornets": 4,
     "Bee Network live travel alerts": 4,
-    "Roch Valley Radio": 3,
     "Roch Valley Radio Local News": 3,
-    "Falinge Park High School": 2,
     "Food Standards Agency": 2,
+    "The Bury Times": 1,
+    "Manchester Evening News": 1,
+    "Facebook": 1,
     "BBC Manchester": 1
   },
   "selected_by_category": {
-    "environment": 2,
+    "news": 1,
     "traffic": 1
   },
   "published_by_category": {
@@ -409,7 +420,7 @@
     "politics": 21,
     "sport": 67,
     "traffic": 55,
-    "transport": 17
+    "transport": 16
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -434,14 +445,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-80e943b2c2faed59a28b",
-    "environment-v3-c7b51e1f549fa22d866d",
-    "environment-v3-ef22327c9dacebd656d5"
+    "hard-news-v3-6fbfe39001315aa5a43c",
+    "transport-v3-80e943b2c2faed59a28b"
   ],
   "selected_candidate_urls": [
-    "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOUlRUdkFQSWNxTVBWT282ejYxZDU4MTZfUGpCTGwtMFZKMXVpSENQTlVBai0zSEd5ZmQ2SElDTlVJRXc3MXR2MjhqN0lPQmhtSy13eXJwd0Y3cGJfUDNRXzlVVEJwOTdNR2NvMkVTMnU2a1drUEs1aFVYTWJ2d1VCYS04di1rRGpMVDk1Vnc5Tk1fU0V3RkNuWDNYVS1MZEVmcTkyTng4RlpOYzFKcnVXRUE3OE1jNkFrNjQ2TWkwUUFiMU9sOHNVWWtVSlFIZ3hyRlFkSkdfWjh6YmhRaXFRNnU0UjVVQQ?oc=5",
-    "https://www.rochdaletimes.co.uk/care-home-plan-approved-despite-objections/",
-    "https://www.rochdaletimes.co.uk/lighting-up-the-town-for-christmas/"
+    "https://www.manchestereveningnews.co.uk/news/two-iconic-landmarks-set-go-34944664",
+    "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOUlRUdkFQSWNxTVBWT282ejYxZDU4MTZfUGpCTGwtMFZKMXVpSENQTlVBai0zSEd5ZmQ2SElDTlVJRXc3MXR2MjhqN0lPQmhtSy13eXJwd0Y3cGJfUDNRXzlVVEJwOTdNR2NvMkVTMnU2a1drUEs1aFVYTWJ2d1VCYS04di1rRGpMVDk1Vnc5Tk1fU0V3RkNuWDNYVS1MZEVmcTkyTng4RlpOYzFKcnVXRUE3OE1jNkFrNjQ2TWkwUUFiMU9sOHNVWWtVSlFIZ3hyRlFkSkdfWjh6YmhRaXFRNnU0UjVVQQ?oc=5"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -453,11 +462,9 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment",
       "traffic"
     ],
     "selected_categories": [
-      "environment",
       "traffic"
     ],
     "available_wards": [],
@@ -466,26 +473,22 @@
       "spotland"
     ],
     "selected_areas": [
-      "rochdale",
       "spotland"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 2,
       "traffic": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2,
       "spotland": 1
     },
     "selected_by_source": {
-      "facebook": 1,
-      "rochdale times": 2
+      "facebook": 1
     },
-    "must_cover_selected": 0
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -564,53 +567,8 @@
       "location_name": ""
     },
     {
-      "label": "category:transport",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (\"Bee Network\" OR bus OR tram OR train OR Northern OR disruption) when:2d",
-      "category": "transport",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:education",
-      "query": "(Rochdale OR Heywood OR Middleton) (school OR college OR academy OR pupils OR students OR SATs OR \"A level results\") when:2d",
-      "category": "education",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:events",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (event OR festival OR fair OR exhibition OR concert OR workshop OR \"coffee morning\") when:2d",
-      "category": "events",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:community",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (charity OR fundraiser OR community group OR volunteer OR donation OR protest) when:2d",
-      "category": "community",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:environment",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth) (flood OR weather warning OR pollution OR canal OR reservoir OR fishing OR park OR environment) when:2d",
-      "category": "environment",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "priority:reform-rochdale-local",
-      "query": "Rochdale \"Reform UK\" councillor when:2d",
+      "label": "category:politics",
+      "query": "(Rochdale OR Heywood OR Middleton) (councillor OR election OR vote OR voted OR motion) when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -618,8 +576,35 @@
       "location_name": ""
     },
     {
-      "label": "priority:planning-council",
-      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "label": "category:sport",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (football OR rugby OR cricket OR athletics OR parkrun OR boxing OR MMA OR netball OR sport) when:2d",
+      "category": "sport",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:business",
+      "query": "(Rochdale OR Heywood OR Middleton) (business OR investment OR shop opening OR restaurant OR takeaway OR development OR regeneration OR \"house prices\") when:2d",
+      "category": "business",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:health",
+      "query": "(Rochdale OR Heywood OR Middleton) (NHS OR hospital OR clinic OR health service OR GP OR Sure Start) when:2d",
+      "category": "health",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:environment",
+      "query": "(Rochdale OR Heywood OR Middleton) (planning application OR housing development OR HMO OR licensing OR demolition) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -627,8 +612,17 @@
       "location_name": ""
     },
     {
-      "label": "priority:power",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:2d",
+      "label": "priority:planning-rochdale",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (\"planning application\" OR \"planning permission\" OR demolition OR development OR HMO) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:water",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -636,8 +630,17 @@
       "location_name": ""
     },
     {
-      "label": "fallback:local-public-posts-today",
-      "query": "(\"GMPRochdale\" OR \"Rochdale Borough Council\" OR \"Bee Network\") (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "label": "priority:environment",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "wards:1",
+      "query": "(\"Balderstone and Kirkholt\" OR \"Bamford\" OR \"Castleton\" OR \"Central Rochdale\" OR \"East Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -645,8 +648,8 @@
       "location_name": ""
     },
     {
-      "label": "wards:2",
-      "query": "(\"Healey\" OR \"Hopwood Hall\" OR \"Kingsway\" OR \"Littleborough Lakeside\" OR \"Milkstone and Deeplish\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
+      "label": "wards:3",
+      "query": "(\"Milnrow and Newhey\" OR \"Norden\" OR \"North Heywood\" OR \"North Middleton\" OR \"Smallbridge and Firgrove\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -654,9 +657,9 @@
       "location_name": ""
     },
     {
-      "label": "wards:4",
-      "query": "(\"South Middleton\" OR \"Spotland and Falinge\" OR \"Wardle, Shore and West Littleborough\" OR \"West Heywood\" OR \"West Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
-      "category": "news",
+      "label": "parties:sites",
+      "query": "(site:reformparty.uk OR site:restorebritain.org.uk OR site:workerspartygb.org OR site:rochdale.laboursites.org OR site:rochdalelibdems.org.uk OR site:rochdale.greenparty.org.uk OR site:hmnrconservatives.org.uk) Rochdale when:2d",
+      "category": "politics",
       "ward": "",
       "person": "",
       "location_slug": "",
@@ -846,23 +849,21 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMigAFBVV95cUxOYWZBaUZlRXkzc3JJMzNPX1pIeUhIeDV4MWtTb1AwTEtleGlhd0h1d0Vkc1V3dEJSUjJNN0t1VjM1cU91XzBmbE1aWWxDZ055RTZ0Um52eHMzdE1lVTBIb1NfVUMtaFRZX0xrUzQ2VTZtOFFHQjV3LVVlSHFsWVZWVw?oc=5",
-    "https://news.google.com/rss/articles/CBMigwFBVV95cUxPUllzRXJGSHUzQ21YUGhvd2EzLWdkR0hwWnlWLXFyelZNZ3hXcncwaUxFNW8xMXcyb2s5Q1ZqVjBRSnNTdW9UQ01IV3JsVU1WVXBNWHRFWkg5NDEzbEw4WjFta2ZqNzFRbW9UU2pPazF5VDJlemhLYzNlWHJNeTk3UkpzMA?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "rochdaleafc.co.uk": 6
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -899,7 +900,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-27T13:50:06.614329Z",
+  "frontpage_generated_at": "2026-11-27T14:07:18.058076Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -950,12 +951,12 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "health": 3,
+      "news": 4,
       "crime": 4,
       "traffic": 1,
       "business": 1,
       "community": 2,
-      "news": 4,
+      "health": 3,
       "sport": 1
     },
     "selected_by_ward": {
@@ -970,15 +971,15 @@
       "spotland": 3
     },
     "selected_by_source": {
-      "nhs england north west press office": 1,
+      "rochdale daily": 2,
       "rochdale times": 5,
       "rochdale borough council": 1,
       "food standards agency": 1,
       "first bus corporate press office": 1,
-      "nhs england north west": 1,
-      "rochdale daily": 2,
-      "greater manchester police press office": 1,
+      "nhs england north west press office": 1,
       "manchester evening news": 1,
+      "greater manchester police press office": 1,
+      "nhs england north west": 1,
       "bbc manchester": 2
     },
     "pool_size": 26,
@@ -1013,7 +1014,7 @@
   "whats_on_event_count": 15,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 2,
+  "drafts_not_published": 1,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
