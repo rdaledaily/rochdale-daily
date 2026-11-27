@@ -192,6 +192,35 @@ def zero_new_attempts_are_starvation(
     return has_collector_errors or lacks_fresh_supply
 
 
+def plan_coverage(records: list[Any], wards: set[str]) -> tuple[set[str], set[str]]:
+    """Categories and wards a search plan covers.
+
+    Coverage is judged on the full alternating rotation (search_plan.py runs
+    half the rotating searches per run), and a ward counts as covered when it
+    has its own search or is named inside a grouped ``wards:N`` search.
+    """
+    categories: set[str] = set()
+    covered: set[str] = set()
+    lowered = {ward: ward.lower() for ward in wards}
+    for item in records:
+        if not isinstance(item, dict):
+            continue
+        category = str(item.get("category") or "").strip().lower()
+        label = str(item.get("label") or "")
+        if label.startswith("category:"):
+            categories.add(label.split(":", 1)[1].strip().lower())
+        elif category:
+            categories.add(category)
+        ward = str(item.get("ward") or "").strip()
+        if ward:
+            covered.add(ward)
+        query = str(item.get("query") or "").lower()
+        for name, low in lowered.items():
+            if f'"{low}"' in query:
+                covered.add(name)
+    return categories, covered
+
+
 def main() -> None:
     status = read_json(STATUS_PATH, {})
     frontpage = read_json(FRONTPAGE_PATH, {})
@@ -246,18 +275,12 @@ def main() -> None:
     search_records = status.get("search_queries") or []
     if not isinstance(search_records, list):
         search_records = []
-    searched_categories = {
-        str(item.get("category") or "").strip().lower()
-        for item in search_records
-        if isinstance(item, dict) and str(item.get("category") or "").strip()
-    }
-    searched_wards = {
-        str(item.get("ward") or "").strip()
-        for item in search_records
-        if isinstance(item, dict) and str(item.get("ward") or "").strip()
-    }
+    coverage_records = status.get("search_plan_rotation") or search_records
+    if not isinstance(coverage_records, list):
+        coverage_records = search_records
     required_categories = {str(category).lower() for category, _query in CATEGORY_QUERIES}
     required_wards = set(ROCHDALE_WARDS)
+    searched_categories, searched_wards = plan_coverage(coverage_records, required_wards)
     missing_categories = sorted(required_categories - searched_categories)
     missing_wards = sorted(required_wards - searched_wards)
 

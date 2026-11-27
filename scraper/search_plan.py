@@ -23,6 +23,10 @@ from typing import Callable, Sequence, TypeVar
 
 T = TypeVar("T")
 
+# Every search across BOTH alternating halves, set by the last plan() call.
+# The health check judges coverage on this, not on one run's half.
+LAST_ROTATION: list = []
+
 WARD_GROUP_SIZE = 5
 WARD_TERMS = "(news OR police OR appeal OR traffic OR council OR charity OR event OR sport)"
 BOROUGH = "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow)"
@@ -90,4 +94,5 @@ def plan(specs: list[T], make: Callable[..., T], now: datetime | None = None) ->
     everything = kept + merged
     always = [s for s in everything if s.label in EVERY_RUN]
     rotating = [s for s in everything if s.label not in EVERY_RUN]
+    LAST_ROTATION[:] = always + rotating
     return always + rotating[shard_index(now)::2]
