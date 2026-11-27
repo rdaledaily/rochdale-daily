@@ -369,6 +369,7 @@ def configure_searches(now: datetime | None = None) -> None:
         current,
     )
     core.SEARCH_QUERY_SPECS = combined
+    core.SEARCH_PLAN_ROTATION = list(search_plan.LAST_ROTATION)
     core.SEARCH_GROUPS = [spec.query for spec in core.SEARCH_QUERY_SPECS]
     core.log.info(
         "Borough search plan: %d queries; guaranteed categories=%d wards=%d; priority=%d",
