@@ -10,6 +10,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import search_plan  # noqa: E402
+from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS  # noqa: E402
+
+
+def _fast():
+    import run_fast_local_pipeline
+    return run_fast_local_pipeline
+
+
+def _health():
+    import check_scraper_health
+    return check_scraper_health
 
 
 @dataclass(frozen=True)
@@ -70,6 +81,43 @@ class SearchPlan(unittest.TestCase):
         text = " ".join(s.query for s in a + b if s.label.startswith("wards:"))
         for w in WARDS:
             self.assertIn(f'"{w}"', text)
+
+
+# Health check judges coverage on the full alternating rotation (27 Nov 2026):
+# every fast run from 24 Nov 21:47 failed check_scraper_health.py because it
+# expected every search in every run.
+def _records(specs):
+    return [{"label": s.label, "query": s.query, "category": s.category, "ward": s.ward} for s in specs]
+
+
+class HealthRotation(unittest.TestCase):
+    def check(self, now):
+        _fast().configure_searches(now)
+        one_run = _records(_fast().core.SEARCH_QUERY_SPECS)
+        rotation = _records(_fast().core.SEARCH_PLAN_ROTATION)
+        need_c = {c.lower() for c, _ in CATEGORY_QUERIES}
+        need_w = set(ROCHDALE_WARDS)
+        cats, wards = _health().plan_coverage(rotation, need_w)
+        self.assertEqual(need_c - cats, set())
+        self.assertEqual(need_w - wards, set())
+        # The single run really is only half: the old check would fail here.
+        self.assertLess(len(one_run), len(rotation))
+
+    def test_shard_zero(self):
+        self.check(datetime(2026, 11, 27, 9, 0, tzinfo=timezone.utc))
+
+    def test_shard_one(self):
+        self.check(datetime(2026, 11, 27, 9, 20, tzinfo=timezone.utc))
+
+    def test_real_gap_still_fails(self):
+        cats, wards = _health().plan_coverage(
+            [{"label": "wards:1", "query": '("Bamford" OR "Norden") x', "category": "news"}],
+            set(ROCHDALE_WARDS),
+        )
+        self.assertEqual(wards, {"Bamford", "Norden"})
+        self.assertNotIn("sport", cats)
+
+
 
 
 if __name__ == "__main__":
