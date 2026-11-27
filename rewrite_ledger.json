@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T12:25:26.084428Z",
+  "updated_at": "2026-11-27T12:43:10.189398Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 190,
@@ -387,13 +387,14 @@
       "first_attempt_at": "2026-11-27T11:10:34.314047Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5pMzBUOFFMZFpCOHVMWFJYSXRpQlJkZFJaNlc2VDN5X2hLV0xJa0FhYUhxaUdTaEkwaXZKRjBJTklEVXFMbkh2VDBoZ2YzWUg1TlFqUzhRd3V4MS16WjFBRTV6aw?oc=5",
         "https://rochdaleafc.co.uk/saturdays-matchday-guide-8"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T11:10:34.314047Z",
+      "last_attempt_at": "2026-11-27T12:43:10.188989Z",
       "outcome": "published",
       "reason": "",
       "title": "Saturday's Matchday Guide",
@@ -1398,7 +1399,7 @@
     },
     "https://www.falingepark.com/2026/11/27/time-to-talk-9-workshop": {
       "first_attempt_at": "2026-11-27T12:22:10.802154Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.falingepark.com/2026/11/27/time-to-talk-9-workshop"
       ],
@@ -1406,7 +1407,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:22:10.802154Z",
+      "last_attempt_at": "2026-11-27T12:39:56.635761Z",
       "outcome": "rejected",
       "reason": "quality check: Source fidelity: the name(s) Park, High, School do not appear in the source. Name only people, places and",
       "title": "Time To Talk 9 Workshop",
@@ -1525,7 +1526,7 @@
     },
     "https://www.hornetsrugbyleague.co.uk/article/1932/hornets-1895-cup-group-phase-opponents-confirmed": {
       "first_attempt_at": "2026-11-27T12:06:14.342628Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiowFBVV95cUxPSTZnbVBFeEZBOFN0bmpURW9PMW1qS2dqbXRvOFZEQVcwMm5HTXFzTnlkazNsRkpJU1NnSDJ0ZENKdWlnWU52by1QTkxGdmNDR0tJcENvZEtqYW5Td012N0IwVzJNUnlTWm1SNnlZNmtCMkFyOVJLUEVnRDNMakZjMFJDeUFrSHV6UEJUWHlrZ1cydFJPRUJ6cGlXMVVOdGhDWlFV?oc=5",
         "https://www.hornetsrugbyleague.co.uk/article/1932/hornets-1895-cup-group-phase-opponents-confirmed"
@@ -1534,9 +1535,9 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:22:11.073818Z",
+      "last_attempt_at": "2026-11-27T12:40:04.945698Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are looking fo",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are excited ab",
       "title": "Hornets' 1895 Cup group phase opponents confirmed",
       "source_name": "Rochdale Hornets",
       "category": "sport",
@@ -2576,8 +2577,8 @@
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
       "last_attempt_at": "2026-11-27T12:25:26.084121Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Care home plan approved despite objections - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
@@ -2631,14 +2632,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T12:25:26.084010Z",
+      "last_attempt_at": "2026-11-27T12:43:10.189253Z",
       "outcome": "published",
       "reason": "",
       "title": "Crowds flock to town’s Christmas countdown - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "events",
       "text_fingerprint": "8e549f31603bad82",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty": {
@@ -2807,7 +2808,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-27T12:06:14.342207Z",
+      "last_attempt_at": "2026-11-27T12:43:10.189095Z",
       "outcome": "published",
       "reason": "",
       "title": "Lighting up the town for Christmas - Rochdale Times",
@@ -2815,7 +2816,8 @@
       "category": "environment",
       "text_fingerprint": "76b9050508cc189b",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
-      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1"
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/littleborough-celebrates-being-crowned-cricket-club-of-the-year": {
       "first_attempt_at": "2026-11-27T11:44:16.857040Z",
@@ -3042,12 +3044,13 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "last_attempt_at": "2026-11-24T19:36:35.184939Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale Christmas Light Switch On",
       "source_name": "Roch Valley Radio",
       "category": "sport",
-      "text_fingerprint": "e4ffd127f308c9bc"
+      "text_fingerprint": "e4ffd127f308c9bc",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/141/local-sport/1455/rochdale-masters-and-mayfield-movers-raise-almost-15-000-in-two-walks": {
       "first_attempt_at": "2026-11-20T12:31:07.929201Z",

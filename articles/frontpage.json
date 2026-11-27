@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T12:26:43.608322Z",
+  "generated_at": "2026-11-27T12:44:25.841182Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 16,
@@ -142,7 +142,7 @@
       "published_at": "2026-11-27T10:58:00Z",
       "first_published_at": "2026-11-27T10:58:00Z",
       "last_updated_at": "2026-11-27T10:58:00Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "NHS England North West press office",
       "source_url": "https://111.nhs.uk",
       "source_names": [
@@ -341,7 +341,7 @@
       "published_at": "2026-11-27T10:08:01Z",
       "first_published_at": "2026-11-27T10:08:01Z",
       "last_updated_at": "2026-11-27T10:08:01Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "NHS England North West",
       "source_url": "https://www.northerncarealliance.nhs.uk/patient-information/patient-leaflets/dementia-welcome-oasis-unit",
       "source_names": [
@@ -403,7 +403,7 @@
       "published_at": "2026-11-27T08:30:02Z",
       "first_published_at": "2026-11-27T08:30:02Z",
       "last_updated_at": "2026-11-27T08:30:02Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "First Bus Corporate press office",
       "source_url": "https://news.firstbus.co.uk/news/national-and-local-award-wins-recognise-first-bus-rochdales-social-impact",
       "source_names": [
@@ -542,15 +542,20 @@
         "attempts": 1
       },
       "ingested_at": "2026-11-27T12:26:24Z",
-      "frontpage_rank": 5,
-      "frontpage_priority": 995,
-      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "urgent-appeal-for-missing-16-year-old-michael-from-rochdale",
+        "middleton-heywood-old-road-cannabis-shipment-six-arrested",
+        "police-seize-2-million-worth-of-suspected-cocaine-and-cannabis-farms-in-middleto"
+      ],
+      "frontpage_rank": 5,
+      "frontpage_priority": 995,
+      "slot": ""
     },
     {
       "id": "184732b76a96ba3f4d",
@@ -569,7 +574,7 @@
       "published_at": "2026-11-26T17:55:00Z",
       "first_published_at": "2026-11-26T17:55:00Z",
       "last_updated_at": "2026-11-26T17:55:00Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "Greater Manchester Police Press Office",
       "source_url": "https://gmp-newsroom.prgloo.com/news/nearly-gbp-6-million-worth-of-cannabis-intercepted-and-six-arrested-following-covert-international-organised-crime-investigation",
       "source_names": [
@@ -688,9 +693,8 @@
         "source_sha": {
           "https://www.rochdaletimes.co.uk/rise-in-council-staff-off-with-stress-and-depression/": "7b5fd103b36a90e6"
         },
-        "source_changed_at": "2026-11-27T12:07:06.958409Z",
-        "checked_at": "2026-11-27T12:07:06.958409Z",
-        "attempts": 3
+        "checked_at": "2026-11-27T12:43:50.314983Z",
+        "attempts": 4
       },
       "ingested_at": "2026-11-27T10:35:31Z",
       "first_published_at": "2026-11-26T17:49:06Z",
@@ -1031,7 +1035,7 @@
       "published_at": "2026-11-27T09:14:55Z",
       "first_published_at": "2026-11-27T09:14:55Z",
       "last_updated_at": "2026-11-27T09:14:55Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1080,7 +1084,7 @@
       "published_at": "2026-11-26T09:14:13Z",
       "first_published_at": "2026-11-26T09:14:13Z",
       "last_updated_at": "2026-11-26T09:14:13Z",
-      "scraped_at": "2026-11-27T12:26:43Z",
+      "scraped_at": "2026-11-27T12:44:25Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1192,11 +1196,12 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://www.rochdaletimes.co.uk/campaigners-hit-out-at-absurd-college-bank-demolition-decision/: not captured; https://news.google.com/rss/articles/CBMiogFBVV95cUxNcUthQnRIbWFKbC00a0NSRE1FLXNqOThpSU5STzRjdUlOM1NhdkQxaFhpcGpiZWxOdkhDUjJiWDl0Tk1EYjdnXzI5WlBWLS1RLWx1S0lELUZOU0kySlB3bFVrNlRvV1Njd3BZYUNuU3FWRFpPcVBmZG9sUmVERE5JWHQzbzhnSC1LSk52R1BrNThhWENHLWpLbzYyRXA2ZlBLWVE?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/campai)",
-        "source_sha": {},
-        "source_changed_at": "2026-11-27T12:26:08.993371Z",
-        "checked_at": "2026-11-27T12:26:08.993371Z",
-        "attempts": 2
+        "reason": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNcUthQnRIbWFKbC00a0NSRE1FLXNqOThpSU5STzRjdUlOM1NhdkQxaFhpcGpiZWxOdkhDUjJiWDl0Tk1EYjdnXzI5WlBWLS1RLWx1S0lELUZOU0kySlB3bFVrNlRvV1Njd3BZYUNuU3FWRFpPcVBmZG9sUmVERE5JWHQzbzhnSC1LSk52R1BrNThhWENHLWpLbzYyRXA2ZlBLWVE?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/campai)",
+        "source_sha": {
+          "https://www.rochdaletimes.co.uk/campaigners-hit-out-at-absurd-college-bank-demolition-decision/": "47b30b739a848009"
+        },
+        "checked_at": "2026-11-27T12:43:50.314983Z",
+        "attempts": 3
       },
       "ingested_at": "2026-11-27T11:45:44Z",
       "first_published_at": "2026-11-26T08:24:41Z",
@@ -1309,15 +1314,22 @@
         "attempts": 1
       },
       "ingested_at": "2026-11-27T12:26:24Z",
-      "frontpage_rank": 13,
-      "frontpage_priority": 987,
-      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "new-muga-pitch-surfaces-installed-in-littleborough",
+        "littleborough-cricket-club-bonfire-2026",
+        "sponsored-hi-pilates-club-women-only-reformer-pilates-littleborough"
+      ],
+      "image_alt": "Littleborough Cricket Club crowned Cricket Club of the Year",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "frontpage_rank": 13,
+      "frontpage_priority": 987,
+      "slot": ""
     },
     {
       "id": "4bdf6179a60757c8ef",
@@ -1403,11 +1415,11 @@
         "issues": [],
         "reason": "",
         "source_sha": {
-          "https://www.bbc.co.uk/news/articles/ck8dv65jy7peo": "065486caf4d33536"
+          "https://www.bbc.co.uk/news/articles/ck8dv65jy7peo": "08e6d4fdf6b5ad49"
         },
-        "source_changed_at": "2026-11-27T12:07:06.958409Z",
-        "checked_at": "2026-11-27T12:07:06.958409Z",
-        "attempts": 3
+        "source_changed_at": "2026-11-27T12:43:50.314983Z",
+        "checked_at": "2026-11-27T12:43:50.314983Z",
+        "attempts": 4
       },
       "ingested_at": "2026-11-27T10:35:31Z",
       "first_published_at": "2026-11-26T06:19:29Z",
@@ -1557,7 +1569,7 @@
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
       "last_updated_at": "2026-11-27T11:46:15Z",
-      "scraped_at": "2026-11-27T12:26:44.726308Z",
+      "scraped_at": "2026-11-27T12:44:26.865259Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg/v1/fill/w_2000,h_2000,al_c,q_90/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1628,7 +1640,7 @@
       "event_location": "Queen's Park Café, Queen's Park Road, Heywood",
       "published_at": "2026-11-17T20:12:10Z",
       "first_published_at": "2026-11-17T20:12:10Z",
-      "scraped_at": "2026-11-27T12:26:43.608322Z",
+      "scraped_at": "2026-11-27T12:44:25.841182Z",
       "source_name": "Queen's Park Café",
       "source_url": "",
       "source_names": [
@@ -1668,8 +1680,8 @@
       ],
       "published_at": "2026-11-17T13:20:24Z",
       "first_published_at": "2026-11-17T13:20:24Z",
-      "last_updated_at": "2026-11-27T12:26:44.840086Z",
-      "scraped_at": "2026-11-27T12:26:44.840086Z",
+      "last_updated_at": "2026-11-27T12:44:26.963935Z",
+      "scraped_at": "2026-11-27T12:44:26.963935Z",
       "image_credit": "Kevin Waterhouse / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg/v1/fill/w_2048,h_2048,al_c,q_90/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1737,8 +1749,8 @@
       ],
       "published_at": "2026-11-12T23:30:44Z",
       "first_published_at": "2026-11-12T23:30:44Z",
-      "last_updated_at": "2026-11-27T12:26:45.053907Z",
-      "scraped_at": "2026-11-27T12:26:45.053907Z",
+      "last_updated_at": "2026-11-27T12:44:27.159322Z",
+      "scraped_at": "2026-11-27T12:44:27.159322Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -1762,7 +1774,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-27T12:26:45.053907Z",
+      "content_updated_at": "2026-11-27T12:44:27.159322Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -1809,7 +1821,7 @@
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
       "last_updated_at": "2026-11-17T10:36:28Z",
-      "scraped_at": "2026-11-27T12:26:45.177509Z",
+      "scraped_at": "2026-11-27T12:44:27.284502Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg/v1/fill/w_1254,h_1254,al_c,q_85/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1878,7 +1890,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:20Z",
-      "scraped_at": "2026-11-27T12:26:45.282852Z",
+      "scraped_at": "2026-11-27T12:44:27.382637Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png/v1/fill/w_1297,h_1212,al_c/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -1949,7 +1961,7 @@
       "event_location": "Ian's Gate, rear of 193 Manchester Road, Heywood OL10 2PP",
       "published_at": "2026-11-18T12:48:55Z",
       "first_published_at": "2026-11-18T12:48:55Z",
-      "scraped_at": "2026-11-27T12:26:43.608322Z",
+      "scraped_at": "2026-11-27T12:44:25.841182Z",
       "source_name": "Mustard Seed Church, Heywood",
       "source_url": "https://forms.gle/DTGQ3s8szyQj2Wbt6",
       "source_names": [
@@ -2003,8 +2015,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-11-27T12:26:45.386443Z",
-      "scraped_at": "2026-11-27T12:26:45.386443Z",
+      "last_updated_at": "2026-11-27T12:44:27.485073Z",
+      "scraped_at": "2026-11-27T12:44:27.485073Z",
       "image_credit": "BatAndBall / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg/v1/fill/w_890,h_624,al_c,q_85/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2028,7 +2040,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-27T12:26:45.386443Z",
+      "content_updated_at": "2026-11-27T12:44:27.485073Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/f4174a8ef48844b3-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Littleborough_Cricket_Club_-_geograph.org.uk_-_2498063.jpg",
@@ -2074,8 +2086,8 @@
       ],
       "published_at": "2026-10-28T19:02:26Z",
       "first_published_at": "2026-10-28T19:02:26Z",
-      "last_updated_at": "2026-11-27T12:26:45.488360Z",
-      "scraped_at": "2026-11-27T12:26:45.488360Z",
+      "last_updated_at": "2026-11-27T12:44:27.580912Z",
+      "scraped_at": "2026-11-27T12:44:27.580912Z",
       "image_credit": "R lee / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png/v1/fill/w_1206,h_1280,al_c/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2099,7 +2111,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-27T12:26:45.488360Z",
+      "content_updated_at": "2026-11-27T12:44:27.580912Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/28b4048459df187b-town-photo.jpg",
       "img": "assets/img/cards/28b4048459df187b-town-photo.jpg",
@@ -2145,7 +2157,7 @@
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
       "last_updated_at": "2026-11-12T21:28:24Z",
-      "scraped_at": "2026-11-27T12:26:45.595180Z",
+      "scraped_at": "2026-11-27T12:44:27.680683Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2213,8 +2225,8 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-11-27T12:26:45.696672Z",
-      "scraped_at": "2026-11-27T12:26:45.696672Z",
+      "last_updated_at": "2026-11-27T12:44:27.777366Z",
+      "scraped_at": "2026-11-27T12:44:27.777366Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg/v1/fill/w_1080,h_1080,al_c,q_85/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2238,7 +2250,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-27T12:26:45.696672Z",
+      "content_updated_at": "2026-11-27T12:44:27.777366Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
       "img": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
@@ -2284,7 +2296,7 @@
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
       "last_updated_at": "2026-11-12T21:28:27Z",
-      "scraped_at": "2026-11-27T12:26:45.796326Z",
+      "scraped_at": "2026-11-27T12:44:27.877906Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -2366,14 +2378,12 @@
       "South Middleton"
     ],
     "available_areas": [
-      "castleton",
       "heywood",
       "littleborough",
       "middleton",
       "spotland"
     ],
     "selected_areas": [
-      "castleton",
       "heywood",
       "littleborough",
       "middleton",
@@ -2397,7 +2407,6 @@
       "South Middleton": 1
     },
     "selected_by_area": {
-      "castleton": 1,
       "heywood": 1,
       "littleborough": 1,
       "middleton": 6,
@@ -2416,8 +2425,8 @@
       "rochdale daily": 2,
       "bbc manchester": 2
     },
-    "pool_size": 27,
-    "primary_pool_size": 27,
+    "pool_size": 26,
+    "primary_pool_size": 26,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -2435,7 +2444,7 @@
     "fresh_hours": 36,
     "frontpage_minimum": 12,
     "frontpage_target": 45,
-    "reservoir_records": 736,
+    "reservoir_records": 735,
     "reservoir_fresh_candidates": 0,
     "reservoir_refilled": 0,
     "fresh_editor_pins": 0,
@@ -2448,7 +2457,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-11-27T12:28:24.556036Z"
+    "enforced_at": "2026-11-27T12:46:03.781448Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -2459,6 +2468,6 @@
     "fresh_hours": 36,
     "kept": 16,
     "removed": 0,
-    "enforced_at": "2026-11-27T12:28:24.805310Z"
+    "enforced_at": "2026-11-27T12:46:04.036014Z"
   }
 }
