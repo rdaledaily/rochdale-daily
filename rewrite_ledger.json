@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T10:33:55.838962Z",
+  "updated_at": "2026-11-27T11:10:34.314941Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 176,
+  "count": 181,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -238,6 +238,24 @@
       "text_fingerprint": "372be97997bb62d2",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
     },
+    "https://ratings.food.gov.uk/business/802265#rating-1-2026-10-20": {
+      "first_attempt_at": "2026-11-27T11:10:34.313941Z",
+      "attempts": 1,
+      "urls": [
+        "https://ratings.food.gov.uk/business/802265#rating-1-2026-10-20"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.313941Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Marios Plus Pizzeria rated 1 out of 5 for food hygiene",
+      "source_name": "Food Standards Agency",
+      "category": "health",
+      "text_fingerprint": "71a728d435f16dfd"
+    },
     "https://ratings.food.gov.uk/open-data#rochdale-2026-11": {
       "first_attempt_at": "2026-11-27T10:33:55.838118Z",
       "attempts": 1,
@@ -346,6 +364,24 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "d1746f3449063c3a"
+    },
+    "https://rochdaleafc.co.uk/saturdays-matchday-guide-8": {
+      "first_attempt_at": "2026-11-27T11:10:34.314047Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/saturdays-matchday-guide-8"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314047Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Saturday's Matchday Guide",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "2ef1edbe2204bd0e"
     },
     "https://rochdaleafc.co.uk/tuesday-trip-to-wrexham-for-academy": {
       "first_attempt_at": "2026-11-23T11:09:29.000389Z",
@@ -851,13 +887,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-23T20:57:01.017034Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 22/11/2026 at 11:20am Live Failsworth Tram Stop - Lifts out of service Duration Sun 22 Nov, 11:20am – until further notice Stops",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "66014b51bb3fc966",
-      "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+      "claude_switch_epoch": "2026-11-23-claude-switch-v1",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-2d677aeb07a97bef1f": {
       "first_attempt_at": "2026-11-27T10:33:55.838448Z",
@@ -1095,6 +1132,24 @@
       "category": "crime",
       "text_fingerprint": "5358118e6192b0ed"
     },
+    "https://www.bbc.co.uk/news/articles/cr930kxyw35lo": {
+      "first_attempt_at": "2026-11-27T11:10:34.314798Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cr930kxyw35lo"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314798Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Nuclear veteran says investigation a 'magical moment'",
+      "source_name": "BBC Manchester",
+      "category": "news",
+      "text_fingerprint": "b210c74ac4ddb99d"
+    },
     "https://www.bbc.co.uk/sport/football/articles/cj62pz1v7zdwo": {
       "first_attempt_at": "2026-11-22T11:01:56.609399Z",
       "attempts": 3,
@@ -1113,25 +1168,6 @@
       "source_name": "BBC Manchester",
       "category": "sport",
       "text_fingerprint": "54aa2cfcfce90f0b"
-    },
-    "https://www.bbc.com/news/articles/c60mdvd4vpy4o": {
-      "first_attempt_at": "2026-11-19T10:28:07.638648Z",
-      "attempts": 1,
-      "urls": [
-        "https://malaysia.news.yahoo.com/york-city-player-pleads-not-160320791.html?guccounter=1",
-        "https://sports.yahoo.com/articles/york-city-player-pleads-not-160320791.html",
-        "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o",
-        "https://www.bbc.com/news/articles/c60mdvd4vpy4o"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T10:28:07.638648Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: The o",
-      "title": "York City player pleads not guilty over alleged punch of Rochdale fan - BBC",
-      "source_name": "BBC",
-      "category": "crime",
-      "text_fingerprint": "6372a85642e21c34"
     },
     "https://www.bbc.com/news/videos/cq8e075r79nwo": {
       "first_attempt_at": "2026-11-20T22:07:44.908106Z",
@@ -1326,7 +1362,7 @@
     },
     "https://www.falingepark.com/2026/11/26/comino-consortium-student-of-the-year": {
       "first_attempt_at": "2026-11-27T10:30:11.624846Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.falingepark.com/2026/11/26/comino-consortium-student-of-the-year"
       ],
@@ -1334,7 +1370,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:30:11.624846Z",
+      "last_attempt_at": "2026-11-27T11:06:44.795927Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Comino Consortium Student of the Year",
@@ -1450,6 +1486,24 @@
       "source_name": "Rochdale Hornets",
       "category": "sport",
       "text_fingerprint": "f635526de8469060"
+    },
+    "https://www.hornetsrugbyleague.co.uk/article/1934/rfl-ceo-ian-nolan-visits-hornets-on-landmark-day": {
+      "first_attempt_at": "2026-11-27T11:10:34.314864Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.hornetsrugbyleague.co.uk/article/1934/rfl-ceo-ian-nolan-visits-hornets-on-landmark-day"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314864Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "RFL CEO Ian Nolan visits Hornets on landmark day",
+      "source_name": "Rochdale Hornets",
+      "category": "sport",
+      "text_fingerprint": "fe1a4daf92031d76"
     },
     "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html": {
       "first_attempt_at": "2026-11-18T17:24:31.172571Z",
@@ -1802,22 +1856,6 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/house-prices-soaring-one-greater-34931987": {
-      "first_attempt_at": "2026-11-19T10:30:30.972053Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/house-prices-soaring-one-greater-34931987"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T10:30:30.972053Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "House prices are soaring in all but one Greater Manchester borough",
-      "source_name": "Manchester Evening News",
-      "category": "news",
-      "text_fingerprint": "ed13c369a346f8a0"
-    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831": {
       "first_attempt_at": "2026-11-18T11:42:42.338488Z",
       "attempts": 1,
@@ -1956,6 +1994,24 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "ef5010d78343d764"
+    },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34974076": {
+      "first_attempt_at": "2026-11-27T11:10:34.314334Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34974076"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314334Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Urgent appeal issued over missing 16 year-old from Rochdale",
+      "source_name": "Manchester Evening News",
+      "category": "crime",
+      "text_fingerprint": "eb6343bdebb215fe"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/victim-of-rochdale-grooming-gang-34946810": {
       "first_attempt_at": "2026-11-21T10:35:15.702667Z",
@@ -2352,13 +2408,15 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:33:55.838565Z",
+      "last_attempt_at": "2026-11-27T11:10:34.314401Z",
       "outcome": "published",
       "reason": "",
       "title": "Middleton Pantomime, temporary prohibition of waiting in Middleton from 30 November 2026",
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
-      "text_fingerprint": "6772af4f7022af28"
+      "text_fingerprint": "6772af4f7022af28",
+      "recovery_attempts": 0,
+      "structured_official_notice_recovery": 1
     },
     "https://www.rochdale.gov.uk/events/event/1508/winter-support-and-advice-drop-in---number-one-riverside": {
       "first_attempt_at": "2026-11-19T10:27:46.063033Z",
@@ -2392,6 +2450,24 @@
       "category": "education",
       "text_fingerprint": "dfc344496add2df0",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
+    },
+    "https://www.rochdaletimes.co.uk/care-home-plan-approved-despite-objections": {
+      "first_attempt_at": "2026-11-27T11:10:34.314455Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/care-home-plan-approved-despite-objections"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314455Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Care home plan approved despite objections - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "environment",
+      "text_fingerprint": "8e5820df4cce78c3"
     },
     "https://www.rochdaletimes.co.uk/celebrating-rochdales-education-stars": {
       "first_attempt_at": "2026-11-27T10:33:55.838889Z",
@@ -2438,13 +2514,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:33:55.838356Z",
+      "last_attempt_at": "2026-11-27T11:10:34.314087Z",
       "outcome": "published",
       "reason": "",
       "title": "Crowds flock to town’s Christmas countdown - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "events",
-      "text_fingerprint": "8e549f31603bad82"
+      "text_fingerprint": "8e549f31603bad82",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/daggers-swords-machetes-and-starting-pistol-surrendered-in-knife-amnesty": {
       "first_attempt_at": "2026-11-21T11:07:11.654563Z",
@@ -2554,6 +2631,24 @@
       "category": "news",
       "text_fingerprint": "d55484e800955bec"
     },
+    "https://www.rochdaletimes.co.uk/illegal-drivers-targeted-in-police-operations": {
+      "first_attempt_at": "2026-11-27T11:10:34.314730Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/illegal-drivers-targeted-in-police-operations"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314730Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Illegal drivers targeted in police operations - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "1e5c496579fbc718"
+    },
     "https://www.rochdaletimes.co.uk/killer-who-hid-wifes-body-under-bed-is-jailed-for-life": {
       "first_attempt_at": "2026-11-18T19:22:19.083653Z",
       "attempts": 1,
@@ -2599,22 +2694,6 @@
       "category": "environment",
       "text_fingerprint": "76b9050508cc189b",
       "claude_switch_epoch": "2026-11-23-claude-switch-v1"
-    },
-    "https://www.rochdaletimes.co.uk/new-home-will-help-independent-gym-grow": {
-      "first_attempt_at": "2026-11-19T10:08:34.133453Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/new-home-will-help-independent-gym-grow"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-19T10:30:30.971786Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "New home will help independent gym grow - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "health",
-      "text_fingerprint": "4c464833a55b849d"
     },
     "https://www.rochdaletimes.co.uk/new-trial-will-get-tough-with-prolific-shoplifters": {
       "first_attempt_at": "2026-11-19T19:41:38.369336Z",
@@ -2724,6 +2803,24 @@
       "source_name": "Rochdale Times",
       "category": "sport",
       "text_fingerprint": "8726410c823eea2c"
+    },
+    "https://www.rochdaletimes.co.uk/six-arrests-over-sophisticated-6-million-cannabis-importation-plan": {
+      "first_attempt_at": "2026-11-27T11:10:34.314532Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/six-arrests-over-sophisticated-6-million-cannabis-importation-plan"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T11:10:34.314532Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Six arrests over sophisticated £6 million cannabis importation plan - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "9302c924b6f4e8d8"
     },
     "https://www.rochdaletimes.co.uk/town-gets-ready-for-panto-fun-with-aladdin-and-the-gang": {
       "first_attempt_at": "2026-11-21T19:50:38.288292Z",
@@ -2922,13 +3019,14 @@
       "first_attempt_at": "2026-11-27T10:33:55.838608Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMirAFBVV95cUxPNk56YkIzRE04enlpdmR4ZExmQ3hrejllT3BfVnd0TWgxaDc1d2d0S2kweDFNalVQNW4xcEZDQ2MxRkZ3MEVPcE8welhiWllNR1RMU2E2Y1ZHTTdJOVo1RVlPUC15ZGVlQm85d2V6WGpXemJxU3dYekhaaGdWMkJHT3c4WjRKYzlPWjFCYkxMTUZubTlLLXI3bUpPeUpHTDZrMENWWkwxY2dNQkVu?oc=5",
         "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1473/heywood-pub-receives-emergency-bleed-control-kit-from-local-scaffolders"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:33:55.838608Z",
+      "last_attempt_at": "2026-11-27T11:10:34.314611Z",
       "outcome": "published",
       "reason": "",
       "title": "Heywood pub receives emergency bleed control kit from local scaffolders",
@@ -3224,13 +3322,14 @@
       "first_attempt_at": "2026-11-27T10:33:55.838762Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMioAFBVV95cUxQRXVkb0VUX2VxV2VKRTJMeHgzY0I0MVdCLXVQV2F0OENBYjN0TXlzTXZpa0otd1JzSV9aUDQtdmNoVE9RbVZiRVBrWXlRMThsY0s4WTduREd0SG1oZWZ2RFI5WHNfN2xLTm45WWpVeGFUakladTN0UDdKcXJwRnREanFhUERpeVpzSUhMeGlvTTFLckJDNmNoQ2lsX1hSY25K?oc=5",
         "https://www.yourtrustrochdale.co.uk/news/christmas-opening-hours-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T10:33:55.838762Z",
+      "last_attempt_at": "2026-11-27T11:10:34.314248Z",
       "outcome": "published",
       "reason": "",
       "title": "Christmas Opening Hours 2026 - Your Trust",

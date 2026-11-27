@@ -3867,16 +3867,22 @@
     }
   },
   "__geograph_probe__": {
-    "subject": "Littleborough Sports Centre",
+    "subject": "Wood Street",
     "http": 200,
-    "centre": "town rochdale",
-    "radius_km": 4.0,
+    "centre": "street OL16 5QN",
+    "radius_km": 0.8,
     "content_type": "application/xml; charset=ISO-8859-1",
-    "items_in_reply": 0,
-    "items_with_image": 0,
-    "first_titles": [],
-    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby</description>\n        <link>https://www.geograph.org.uk/</link>\n        <lastBuildDate>Fri, 27 Nov 2026 08:31:48</lastBuildDate>\n        <generator",
-    "first_item": ""
+    "items_in_reply": 5,
+    "items_with_image": 5,
+    "first_titles": [
+      "SD9012 : Eagle Hotel",
+      "SD9013 : Milnrow Road and Wood Street",
+      "SD9013 : Livsey Street, Rochdale",
+      "SD8913 : Rochdale:  Drake Street",
+      "SD8912 : Ordnance Survey Cut Mark"
+    ],
+    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:creativeCommons=\"http://backend.userland.com/creativeCommonsRssModule\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby (5 in total)</description>\n        <link>https://www.geograph.org.uk/<",
+    "first_item": "<item>\n            <title>SD9012 : Eagle Hotel</title>\n            <link>https://www.geograph.org.uk/photo/1754662</link>\n            <description><![CDATA[<a href=\"https://www.geograph.org.uk/photo/1754662\" title=\"SD9012 : Eagle Hotel by David Dixon\"><img alt=\"SD9012 : Eagle Hotel by David Dixon\" src=\"https://s2.geograph.org.uk/geophotos/01/75/46/1754662_0128b32a_120x120.jpg\" width=\"120\" height=\"90\" /></a><br/>Dist:0.1km<br/>]]></description>\n            <dc:creator>David Dixon</dc:creator>\n            <pubDate>Mon, 15 Mar 2010 18:39:38</pubDate>\n            <guid>https://www.geograph.org.uk/photo/1754662</guid>\n            <creativeCommons:license>http://creativecommons.org/licenses/by-sa/2.0/</creativeCommons:license>\n        </item>"
   },
   "__town_pool__|v1|rochdale": {
     "rows": [
@@ -11880,5 +11886,36 @@
     "subject": "Kentmere Primary Academy",
     "geograph_tried": 5,
     "geograph_items_in_reply": 0
+  },
+  "wood street|middleton": {
+    "status": "matched",
+    "subject": "Wood Street",
+    "geograph_tried": 5,
+    "geograph_items_in_reply": 5,
+    "source": "geograph",
+    "image_url": "assets/img/cards/9f448ee757b084a6-commons-photo.jpg",
+    "image_credit": "DS Pugh / Geograph (CC BY-SA 2.0)",
+    "image_credit_url": "https://www.geograph.org.uk/photo/8381789",
+    "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "commons_title": "SD9013 : Milnrow Road and Wood Street",
+    "page": {
+      "title": "File:SD9013 : Milnrow Road and Wood Street",
+      "imageinfo": [
+        {
+          "mime": "image/jpeg",
+          "extmetadata": {
+            "LicenseShortName": {
+              "value": "CC BY-SA 2.0"
+            },
+            "ImageDescription": {
+              "value": "SD9013 : Milnrow Road and Wood Street"
+            },
+            "Categories": {
+              "value": "Middleton|Rochdale"
+            }
+          }
+        }
+      ]
+    }
   }
 }
