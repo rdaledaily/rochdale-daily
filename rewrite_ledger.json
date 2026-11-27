@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T22:17:04.014896Z",
+  "updated_at": "2026-11-27T22:37:01.516171Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 186,
+  "count": 187,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -1200,6 +1200,24 @@
       "category": "crime",
       "text_fingerprint": "345cafea5ffe4e24"
     },
+    "https://www.businessupnorth.co.uk/rochdale-entrepreneur-behind-uk-wide-chauffeur-directory-recognised-at-rochdale-business-awards": {
+      "first_attempt_at": "2026-11-27T22:33:55.563474Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.businessupnorth.co.uk/rochdale-entrepreneur-behind-uk-wide-chauffeur-directory-recognised-at-rochdale-business-awards"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-27T22:33:55.563474Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) David do not appear in the source. Name only people, places a",
+      "title": "Rochdale Entrepreneur Behind UK-Wide Chauffeur Directory Recognised At Rochdale Business Awards",
+      "source_name": "Business Up North",
+      "category": "business",
+      "text_fingerprint": "c8c330c51b2090ca"
+    },
     "https://www.dublinlive.ie/news/world-news/watch-cctv-captures-moment-suspected-34927767": {
       "first_attempt_at": "2026-11-18T09:02:19.116411Z",
       "attempts": 1,
@@ -2062,9 +2080,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-27T20:27:16.704688Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-27T22:37:01.515812Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
