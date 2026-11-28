@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T08:28:11.839612Z",
+  "updated_at": "2026-11-28T08:47:20.412056Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 197,
+  "count": 198,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -1790,6 +1790,24 @@
       "category": "sport",
       "text_fingerprint": "fe1a4daf92031d76"
     },
+    "https://www.hornetsrugbyleague.co.uk/article/1935/2027-rochdale-hornets-kits-unveiled": {
+      "first_attempt_at": "2026-11-28T08:47:20.411920Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.hornetsrugbyleague.co.uk/article/1935/2027-rochdale-hornets-kits-unveiled"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T08:47:20.411920Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "2027 Rochdale Hornets kits unveiled",
+      "source_name": "Rochdale Hornets",
+      "category": "sport",
+      "text_fingerprint": "9de890635cb4c11e"
+    },
     "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html": {
       "first_attempt_at": "2026-11-18T17:24:31.172571Z",
       "attempts": 1,
@@ -2297,8 +2315,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-28T08:28:11.839292Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Two iconic landmarks set to go in major developments for Greater Manchester",
       "source_name": "Manchester Evening News",
       "category": "news",
