@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-28T01:50:52.465752Z",
+  "last_run_at": "2026-11-28T02:09:30.488342Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -64,20 +64,20 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 107,
+  "raw_candidates_before_job_filter": 121,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 107,
+  "raw_candidates": 121,
   "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 89,
-    "resolved": 67,
-    "text_recovered": 5,
-    "reattributed": 31,
-    "images_found": 15
+    "wrappers": 103,
+    "resolved": 76,
+    "text_recovered": 6,
+    "reattributed": 36,
+    "images_found": 16
   },
-  "duplicates_merged": 54,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 68,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
       "slug": "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
@@ -86,25 +86,19 @@
     {
       "slug": "three-deny-aggravated-burglary-in-rochdale-including-bury-man-loui-dyer",
       "source_url": "https://www.burytimes.co.uk/news/26757394.bury-man-among-three-deny-rochdale-aggravated-burglary/"
-    },
-    {
-      "slug": "rochdale-s-ignite-fire-festival-survey-now-open-for-public-feedback",
-      "source_url": "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026/"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 1,
   "live_articles": 752,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It's about time t": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
     "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
@@ -118,13 +112,22 @@
       "published": 92,
       "rejected": 55
     },
-    "held_back_this_run": 44,
-    "held_already_published": 30,
-    "held_rejected": 14,
+    "held_back_this_run": 46,
+    "held_already_published": 31,
+    "held_rejected": 15,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-nuclear-veteran-welcomes-investigation-into-atomic-programme-s-health-i",
+      "title": "Rochdale nuclear veteran welcomes investigation into atomic programme's health impacts - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It's about time t",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-28T01:47:42.465853Z"
+    },
     {
       "url": "https://rochdaledaily.co.uk/articles/rochdale-council-staff-take-over-30-000-sick-days-due-to-stress-and-depression",
       "title": "Rochdale Council staff take over 30,000 sick days due to stress and depression - rochdaledaily.co.uk",
@@ -253,22 +256,20 @@
     }
   ],
   "published_with_style_issues": {
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write a social_headline for Facebook.": 1
+    "Write a social_headline for Facebook.": 1,
+    "Write at least 123 body words using only facts already present in the sources; the draft currently has 120.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
       "not eligible: sport category": 1,
-      "not eligible: crime, court, police or death": 1,
-      "writer offered no points": 1
+      "not eligible: crime, court, police or death": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 99,
+    "rss_and_google_news": 113,
     "website_discovery": 1,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -441,9 +442,9 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 29,
-    "Rochdale Times": 24,
-    "rochdaledaily.co.uk": 17,
+    "Rochdaledaily": 34,
+    "Rochdale Times": 27,
+    "rochdaledaily.co.uk": 21,
     "Rochdale AFC": 10,
     "Manchester Evening News": 4,
     "Bee Network live travel alerts": 4,
@@ -453,14 +454,14 @@
     "The Bury Times": 2,
     "Oldham Times": 2,
     "Fansnetwork": 2,
+    "InYourArea": 2,
+    "Facebook": 1,
     "Milton Keynes Citizen": 1,
     "Business Up North": 1,
-    "InYourArea": 1,
     "BBC Manchester": 1
   },
   "selected_by_category": {
     "crime": 1,
-    "environment": 2,
     "sport": 1
   },
   "published_by_category": {
@@ -501,15 +502,11 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-5cc9aeadddb5905e2bf0",
-    "sport-v3-cf40e18f4d517f633a04",
-    "environment-v3-ec720a1066fec0462041",
-    "environment-v3-103d2f9226b91241c2b0"
+    "sport-v3-b1e10a36a210b61c655f"
   ],
   "selected_candidate_urls": [
     "https://www.burytimes.co.uk/news/26757394.bury-man-among-three-deny-rochdale-aggravated-burglary/",
-    "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/",
-    "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026/",
-    "https://rochdaledaily.co.uk/articles/rochdale-nuclear-veteran-welcomes-investigation-into-atomic-programme-s-health-i"
+    "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -522,12 +519,10 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "environment",
       "sport"
     ],
     "selected_categories": [
       "crime",
-      "environment",
       "sport"
     ],
     "available_wards": [],
@@ -541,17 +536,14 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 1,
-      "environment": 2,
       "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 4
+      "rochdale": 2
     },
     "selected_by_source": {
       "rochdale afc": 1,
-      "rochdale borough council": 1,
-      "rochdaledaily": 1,
       "the bury times": 1
     },
     "must_cover_selected": 0
@@ -915,14 +907,15 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMijwFBVV95cUxPbUpmOHVzYk8yd0NTT0xrN0VjYV9tWnNmOFlReHR2TVlhczI4TUZKM3RCaGtXUmYzX0J2MjdFdWs1RlRwc2dTZEs0RGJXZ1ZRdjFseUwtVF9haExoRUlxVkdZeHlMMGg2RmVheTcwdkVIWjktb1QxVlh3RHgtQlFYUXNGM29UTndCcTBLMEJXbw?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -962,7 +955,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-28T01:52:17.689764Z",
+  "frontpage_generated_at": "2026-11-28T02:10:48.990662Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1079,10 +1072,9 @@
   "category_archive_count": 11,
   "area_archive_count": 29,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 2,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
-    "rochdale-s-ignite-fire-festival-survey-now-open-for-public-feedback"
+    "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup"
   ],
   "drafts_not_published": 1,
   "publication_health": "partial",
