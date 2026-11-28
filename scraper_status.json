@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-28T14:44:28.213457Z",
+  "last_run_at": "2026-11-28T15:02:49.526234Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -64,18 +64,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 86,
+  "raw_candidates_before_job_filter": 99,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 86,
-  "candidate_clusters": 43,
+  "raw_candidates": 99,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 72,
-    "resolved": 42,
-    "text_recovered": 7,
-    "reattributed": 21,
-    "images_found": 6
+    "wrappers": 77,
+    "resolved": 41,
+    "text_recovered": 11,
+    "reattributed": 27,
+    "images_found": 13
   },
-  "duplicates_merged": 43,
+  "duplicates_merged": 57,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -103,8 +103,8 @@
       "published": 83,
       "rejected": 44
     },
-    "held_back_this_run": 35,
-    "held_already_published": 23,
+    "held_back_this_run": 34,
+    "held_already_published": 22,
     "held_rejected": 12,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -227,8 +227,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 78,
-    "website_discovery": 1,
+    "rss_and_google_news": 86,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -242,6 +242,7 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
+    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -277,12 +278,20 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale Times": {
-      "url": "https://www.rochdaletimes.co.uk/feed/",
-      "http_status": 202,
-      "content_type": "text/html",
-      "final_url": "https://www.rochdaletimes.co.uk/feed/",
-      "bozo": true,
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Rochdale AFC Community Trust": {
+      "url": "https://www.rochdaleafccommunity.org/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.rochdaleafccommunity.org/feed/",
+      "bozo": false,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -393,18 +402,18 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "rochdaledaily.co.uk": 26,
-    "Rochdaledaily": 21,
+    "rochdaledaily.co.uk": 32,
+    "Rochdaledaily": 27,
     "Rochdale Times": 14,
-    "Manchester Evening News": 4,
+    "InYourArea": 7,
     "Bee Network live travel alerts": 4,
-    "Oldham Times": 3,
-    "Barnet FC": 3,
+    "Manchester Evening News": 3,
     "Food Standards Agency": 3,
-    "Falinge Park High School": 2,
-    "InYourArea": 2,
+    "Oldham Times": 2,
     "Rochdale AFC": 2,
-    "Business Up North": 1,
+    "Rochdale Borough Council": 2,
+    "Barnet FC": 1,
+    "The Bury Times": 1,
     "Rochdale Hornets": 1
   },
   "selected_by_category": {},
@@ -534,36 +543,36 @@
       "location_name": ""
     },
     {
-      "label": "category:politics",
-      "query": "(Rochdale OR Heywood OR Middleton) (councillor OR election OR vote OR voted OR motion) when:2d",
-      "category": "politics",
+      "label": "category:transport",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (\"Bee Network\" OR bus OR tram OR train OR Northern OR disruption) when:2d",
+      "category": "transport",
       "ward": "",
       "person": "",
       "location_slug": "",
       "location_name": ""
     },
     {
-      "label": "category:sport",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (football OR rugby OR cricket OR athletics OR parkrun OR boxing OR MMA OR netball OR sport) when:2d",
-      "category": "sport",
+      "label": "category:education",
+      "query": "(Rochdale OR Heywood OR Middleton) (school OR college OR academy OR pupils OR students OR SATs OR \"A level results\") when:2d",
+      "category": "education",
       "ward": "",
       "person": "",
       "location_slug": "",
       "location_name": ""
     },
     {
-      "label": "category:business",
-      "query": "(Rochdale OR Heywood OR Middleton) (business OR investment OR shop opening OR restaurant OR takeaway OR development OR regeneration OR \"house prices\") when:2d",
-      "category": "business",
+      "label": "category:events",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (event OR festival OR fair OR exhibition OR concert OR workshop OR \"coffee morning\") when:2d",
+      "category": "events",
       "ward": "",
       "person": "",
       "location_slug": "",
       "location_name": ""
     },
     {
-      "label": "category:health",
-      "query": "(Rochdale OR Heywood OR Middleton) (NHS OR hospital OR clinic OR health service OR GP OR Sure Start) when:2d",
-      "category": "health",
+      "label": "category:community",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (charity OR fundraiser OR community group OR volunteer OR donation OR protest) when:2d",
+      "category": "community",
       "ward": "",
       "person": "",
       "location_slug": "",
@@ -571,7 +580,7 @@
     },
     {
       "label": "category:environment",
-      "query": "(Rochdale OR Heywood OR Middleton) (planning application OR housing development OR HMO OR licensing OR demolition) when:2d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth) (flood OR weather warning OR pollution OR canal OR reservoir OR fishing OR park OR environment) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -579,54 +588,54 @@
       "location_name": ""
     },
     {
-      "label": "priority:planning-rochdale",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (\"planning application\" OR \"planning permission\" OR demolition OR development OR HMO) when:2d",
-      "category": "environment",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "priority:water",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:2d",
-      "category": "news",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "priority:environment",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:2d",
-      "category": "environment",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "wards:1",
-      "query": "(\"Balderstone and Kirkholt\" OR \"Bamford\" OR \"Castleton\" OR \"Central Rochdale\" OR \"East Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
-      "category": "news",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "wards:3",
-      "query": "(\"Milnrow and Newhey\" OR \"Norden\" OR \"North Heywood\" OR \"North Middleton\" OR \"Smallbridge and Firgrove\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
-      "category": "news",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "parties:sites",
-      "query": "(site:reformparty.uk OR site:restorebritain.org.uk OR site:workerspartygb.org OR site:rochdale.laboursites.org OR site:rochdalelibdems.org.uk OR site:rochdale.greenparty.org.uk OR site:hmnrconservatives.org.uk) Rochdale when:2d",
+      "label": "priority:reform-rochdale-local",
+      "query": "Rochdale \"Reform UK\" councillor when:2d",
       "category": "politics",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:planning-council",
+      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:power",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:2d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:local-public-posts-today",
+      "query": "(\"GMPRochdale\" OR \"Rochdale Borough Council\" OR \"Bee Network\") (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "wards:2",
+      "query": "(\"Healey\" OR \"Hopwood Hall\" OR \"Kingsway\" OR \"Littleborough Lakeside\" OR \"Milkstone and Deeplish\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "wards:4",
+      "query": "(\"South Middleton\" OR \"Spotland and Falinge\" OR \"Wardle, Shore and West Littleborough\" OR \"West Heywood\" OR \"West Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
+      "category": "news",
       "ward": "",
       "person": "",
       "location_slug": "",
@@ -826,14 +835,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk",
-    "visitrochdale.com"
-  ],
-  "slow_domain_failure_counts": {
-    "visitrochdale.com": 1,
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -869,7 +872,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-28T14:45:43.508291Z",
+  "frontpage_generated_at": "2026-11-28T15:04:29.631276Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
