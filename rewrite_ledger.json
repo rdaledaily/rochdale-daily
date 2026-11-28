@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T00:24:57.455229Z",
+  "updated_at": "2026-11-28T00:46:36.973923Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 194,
+  "count": 200,
   "entries": {
     "https://aboutmanchester.co.uk/parents-please-speak-to-your-children-say-police-in-heywood/?__cf_chl_rt_tk=5mn4Hdw9Y9WAh1zl_WxxnhPiIhNAdKJmXID7ROX.P9s-1795485434-1.0.1.1-gLzNNiHQZMNmWKolZ8ya0VjoYZWA.pPC6.7oFSPnx7g": {
       "first_attempt_at": "2026-11-24T01:58:30.242935Z",
@@ -59,7 +59,7 @@
     },
     "https://barnetfc.com/match-preview-rochdale-v-barnet": {
       "first_attempt_at": "2026-11-27T22:53:15.474151Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://barnetfc.com/match-preview-rochdale-v-barnet",
         "https://news.google.com/rss/articles/CBMihAFBVV95cUxNMzVQWHZZMjBweDBnOWNSa0NYMVBFa19yWFNkd00tQkZPZTdIMUVfZ1RUeXItRzBYaEZqTkhyam9IU0lMbXdKUmlkbEFkYllXbjg5MnNiamdaRnQ2N3NZNktMMlZ4TExIR0REc3l2ODkzbXhwWFlWbDhCTElCS1ZlQlNqMks?oc=5"
@@ -68,12 +68,12 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-28T00:19:57.090228Z",
+      "last_attempt_at": "2026-11-28T00:43:13.974200Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are ready for",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are looking fo",
       "title": "MATCH PREVIEW | ROCHDALE V BARNET - Barnet FC",
       "source_name": "Barnet FC",
-      "category": "education",
+      "category": "environment",
       "text_fingerprint": "fa15adb74f147214"
     },
     "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026": {
@@ -87,8 +87,8 @@
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
       "last_attempt_at": "2026-11-28T00:24:57.454926Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "IGNITE Fire Festival 2026 - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "environment",
@@ -352,6 +352,24 @@
       "category": "health",
       "text_fingerprint": "7536868eceb83159"
     },
+    "https://rochdaleafc.co.uk/10-off-this-black-friday": {
+      "first_attempt_at": "2026-11-28T00:43:23.129251Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/10-off-this-black-friday"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:43:23.129251Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "title": "10% Off This Black Friday - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "ee7d486d94cf4b91"
+    },
     "https://rochdaleafc.co.uk/at-home-a-week-on-saturday": {
       "first_attempt_at": "2026-11-22T19:08:00.325187Z",
       "attempts": 1,
@@ -387,6 +405,24 @@
       "category": "sport",
       "text_fingerprint": "610827f0ef549696",
       "claude_switch_epoch": "2026-11-24-claude-era-v2"
+    },
+    "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance": {
+      "first_attempt_at": "2026-11-28T00:46:36.973895Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:46:36.973895Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Dale Face Bolton In Midweek Cup Tie - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "f6a749613674b158"
     },
     "https://rochdaleafc.co.uk/preview-northampton-town-a": {
       "first_attempt_at": "2026-11-20T22:04:55.685959Z",
@@ -497,6 +533,26 @@
       "text_fingerprint": "f6a749613674b158",
       "claude_switch_epoch": "2026-11-24-claude-era-v2"
     },
+    "https://rochdaleafc.co.uk/tvos-preview-barnet-h": {
+      "first_attempt_at": "2026-11-28T00:46:36.973819Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/preview-barnet-h-2",
+        "https://rochdaleafc.co.uk/tvos-preview-barnet-h",
+        "https://www.fansnetwork.co.uk/football/rochdale/news/67307"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:46:36.973819Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "TVOS Preview | Barnet (H) - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "8f0fb18956880c50"
+    },
     "https://rochdaleafc.co.uk/watson-departs-221126": {
       "first_attempt_at": "2026-11-23T23:36:44.738882Z",
       "attempts": 3,
@@ -549,7 +605,7 @@
     },
     "https://rochdaleafc.co.uk/women-host-leaders-salford-in-key-matchup": {
       "first_attempt_at": "2026-11-28T00:20:17.310375Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/women-host-leaders-salford-in-key-matchup"
       ],
@@ -557,7 +613,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-28T00:20:17.310375Z",
+      "last_attempt_at": "2026-11-28T00:43:13.993734Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Salford, City, Crown, Oil, Arena do not appear in the source.",
       "title": "Another COA Tie For Dale Women - Rochdale AFC",
@@ -580,6 +636,24 @@
       "source_name": "Rochdaledaily",
       "category": "environment",
       "text_fingerprint": "cf08df0ce2e30f3d"
+    },
+    "https://rochdaledaily.co.uk/articles/first-bus-rochdale-national-gold-routes-to-work-award": {
+      "first_attempt_at": "2026-11-28T00:43:32.000212Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/first-bus-rochdale-national-gold-routes-to-work-award"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:43:32.000212Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: This recognition",
+      "title": "First Bus Rochdale wins national Gold for Routes to Work scheme - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "environment",
+      "text_fingerprint": "5f3e3f039e5cf0dc"
     },
     "https://rochdaledaily.co.uk/articles/ignite-fire-festival-to-transform-rochdale-town-hall-area": {
       "first_attempt_at": "2026-11-20T10:13:50.803700Z",
@@ -724,6 +798,24 @@
       "category": "sport",
       "text_fingerprint": "b50d4d3ce2cd0d41"
     },
+    "https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday": {
+      "first_attempt_at": "2026-11-28T00:43:14.387381Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:43:14.387381Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Jim, Bentley do not appear in the source. Name only people, p",
+      "title": "Rochdale AFC to host Barnet in League Two clash this Saturday - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "sport",
+      "text_fingerprint": "932aff3133b6fed4"
+    },
     "https://rochdaledaily.co.uk/articles/rochdale-borough-council-establishes-integrated-commissioning-board": {
       "first_attempt_at": "2026-11-20T10:16:49.107220Z",
       "attempts": 1,
@@ -741,6 +833,24 @@
       "text_fingerprint": "2442692e97143c76",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://rochdaledaily.co.uk/articles/rochdale-council-staff-take-over-30-000-sick-days-due-to-stress-and-depression": {
+      "first_attempt_at": "2026-11-28T00:43:33.769985Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaledaily.co.uk/articles/rochdale-council-staff-take-over-30-000-sick-days-due-to-stress-and-depression"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:43:33.769985Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed",
+      "title": "Rochdale Council staff take over 30,000 sick days due to stress and depression - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "environment",
+      "text_fingerprint": "8e7c38d620e933f8"
     },
     "https://rochdaledaily.co.uk/articles/rochdale-deputy-council-leader-detained-twice-in-pakistan?__cf_chl_rt_tk=I3TbMbTLrzFNWftZ34V3aoGKT5UAVCgcB8UJFcxp_qY-1795485428-1.0.1.1-Ij1PbzGYHZwof4x8Tc74uUbTPRGscI_o0jIwBirQZ6Y": {
       "first_attempt_at": "2026-11-24T02:59:07.406722Z",
@@ -763,7 +873,7 @@
     },
     "https://rochdaledaily.co.uk/articles/rochdale-infirmary-dementia-care-hospital-stays-eight-days": {
       "first_attempt_at": "2026-11-27T22:53:17.780071Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaledaily.co.uk/articles/rochdale-infirmary-dementia-care-hospital-stays-eight-days"
       ],
@@ -771,30 +881,13 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-27T22:53:17.780071Z",
+      "last_attempt_at": "2026-11-28T00:43:17.613816Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Johnson do not appear in the source. Name only people, places",
       "title": "Rochdale Infirmary dementia care scheme cuts hospital stays by up to eight days - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
-      "category": "transport",
+      "category": "environment",
       "text_fingerprint": "54a9cd0046ff5885"
-    },
-    "https://rochdaledaily.co.uk/articles/rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity": {
-      "first_attempt_at": "2026-11-19T23:39:50.983095Z",
-      "attempts": 1,
-      "urls": [
-        "https://rochdaledaily.co.uk/articles/rochdale-masters-rugby-league-and-mayfield-movers-raise-14-698-for-charity"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-20T00:27:47.432191Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Rochdale Masters Rugby League and Mayfield Movers raise £14,698 for charity - rochdaledaily.co.uk",
-      "source_name": "Rochdaledaily",
-      "category": "sport",
-      "text_fingerprint": "458b83a599d02817",
-      "recovery_attempts": 1
     },
     "https://rochdaledaily.co.uk/articles/rochdale-metrolink-patrols-sceptre-knife-crime-week-november-2026": {
       "first_attempt_at": "2026-11-20T10:35:30.550355Z",
@@ -812,6 +905,25 @@
       "category": "environment",
       "text_fingerprint": "9b6a8a0ed84df9a0"
     },
+    "https://rochdaledaily.co.uk/articles/rochdale-mother-sentenced-for-child-cruelty-after-baby-s-death": {
+      "first_attempt_at": "2026-11-28T00:46:36.973574Z",
+      "attempts": 1,
+      "urls": [
+        "https://aboutmanchester.co.uk/rochdale-mum-painted-cross-in-blood-on-her-baby-before-he-died",
+        "https://rochdaledaily.co.uk/articles/rochdale-mother-sentenced-for-child-cruelty-after-baby-s-death"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "claude_switch_epoch": "2026-11-24-claude-era-v2",
+      "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
+      "last_attempt_at": "2026-11-28T00:46:36.973574Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale mother sentenced for child cruelty after baby’s death - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "category": "crime",
+      "text_fingerprint": "d52d17255766ca21"
+    },
     "https://rochdaledaily.co.uk/articles/rochdale-primary-schools-launch-engineering-programme-for-pupils": {
       "first_attempt_at": "2026-11-27T22:56:17.467421Z",
       "attempts": 1,
@@ -822,14 +934,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-28T00:24:57.454608Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-28T00:43:17.048367Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) STEM do not appear in the source. Name only people, places an",
       "title": "Rochdale primary schools launch engineering programme for pupils - rochdaledaily.co.uk",
       "source_name": "Rochdaledaily",
-      "category": "events",
+      "category": "environment",
       "text_fingerprint": "413ac2c8310d4b18",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://rochdaledaily.co.uk/articles/rochdale-repeat-shoplifters-pilot-november-2026": {
       "first_attempt_at": "2026-11-20T10:38:27.094831Z",
@@ -1302,13 +1414,14 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-28T00:24:57.454315Z",
+      "last_attempt_at": "2026-11-28T00:46:36.973693Z",
       "outcome": "published",
       "reason": "",
       "title": "Bury man among trio who deny aggravated burglary in Rochdale - The Bury Times",
       "source_name": "The Bury Times",
       "category": "crime",
-      "text_fingerprint": "d20a2c677b1a8080"
+      "text_fingerprint": "d20a2c677b1a8080",
+      "recovery_attempts": 1
     },
     "https://www.burytimes.co.uk/news/26760494.coronation-street-stars-appear-rochdale-pantomimes": {
       "first_attempt_at": "2026-11-27T22:56:17.468116Z",
