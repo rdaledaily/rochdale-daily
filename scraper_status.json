@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-28T01:32:46.789044Z",
+  "last_run_at": "2026-11-28T01:50:52.465752Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -64,51 +64,47 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 129,
+  "raw_candidates_before_job_filter": 107,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 129,
-  "candidate_clusters": 54,
+  "raw_candidates": 107,
+  "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 113,
-    "resolved": 81,
-    "text_recovered": 10,
-    "reattributed": 48,
+    "wrappers": 89,
+    "resolved": 67,
+    "text_recovered": 5,
+    "reattributed": 31,
     "images_found": 15
   },
-  "duplicates_merged": 75,
-  "attempted_rewrites": 8,
+  "duplicates_merged": 54,
+  "attempted_rewrites": 4,
   "draft_rewrites_created": 3,
   "drafted_articles": [
     {
-      "slug": "rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday",
-      "source_url": "https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday"
+      "slug": "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+      "source_url": "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/"
     },
     {
-      "slug": "cardinal-langley-rc-high-school-wins-award-for-commitment-to-sport",
-      "source_url": "https://www.rochdaletimes.co.uk/school-honoured-for-its-commitment-to-sport/"
+      "slug": "three-deny-aggravated-burglary-in-rochdale-including-bury-man-loui-dyer",
+      "source_url": "https://www.burytimes.co.uk/news/26757394.bury-man-among-three-deny-rochdale-aggravated-burglary/"
     },
     {
-      "slug": "rochdale-council-seeks-feedback-on-ignite-fire-festival-2026",
+      "slug": "rochdale-s-ignite-fire-festival-survey-now-open-for-public-feedback",
       "source_url": "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026/"
     }
   ],
   "new_articles": 2,
-  "live_articles": 750,
-  "skipped": 5,
+  "live_articles": 752,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: Weekday does not match date: \"Saturday, 2 December 2026\" (2 December 2026 is a Wednesday);": 1,
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are thrilled t": 1,
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It is about time": 1,
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed": 1
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It's about time t": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 4,
-    "queued_for_retry": 2,
-    "recovery_limit_reached": 2,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
@@ -119,24 +115,42 @@
     "by_outcome": {
       "editorial_twin": 5,
       "failed": 49,
-      "published": 90,
-      "rejected": 57
+      "published": 92,
+      "rejected": 55
     },
-    "held_back_this_run": 40,
-    "held_already_published": 28,
-    "held_rejected": 12,
+    "held_back_this_run": 44,
+    "held_already_published": 30,
+    "held_rejected": 14,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
     {
-      "url": "https://www.burytimes.co.uk/news/26757394.bury-man-among-three-deny-rochdale-aggravated-burglary",
-      "title": "Bury man among trio who deny aggravated burglary in Rochdale - The Bury Times",
-      "source_name": "The Bury Times",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "url": "https://rochdaledaily.co.uk/articles/rochdale-council-staff-take-over-30-000-sick-days-due-to-stress-and-depression",
+      "title": "Rochdale Council staff take over 30,000 sick days due to stress and depression - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed",
       "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-28T01:11:21.033836Z"
+      "attempts": 3,
+      "last_attempt_at": "2026-11-28T01:29:32.620881Z"
+    },
+    {
+      "url": "https://rochdaledaily.co.uk/articles/first-bus-rochdale-national-gold-routes-to-work-award",
+      "title": "First Bus Rochdale wins national Gold for Routes to Work scheme - rochdaledaily.co.uk",
+      "source_name": "Rochdaledaily",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are thrilled t",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-28T01:29:31.598154Z"
+    },
+    {
+      "url": "https://rochdaleafc.co.uk/10-off-this-black-friday",
+      "title": "10% Off This Black Friday - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-28T01:29:21.067872Z"
     },
     {
       "url": "https://rochdaledaily.co.uk/articles/rochdale-infirmary-dementia-care-hospital-stays-eight-days",
@@ -240,21 +254,21 @@
   ],
   "published_with_style_issues": {
     "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Write at least 145 body words using only facts already present in the sources; the draft currently has 141.": 1,
-    "Write at least 103 body words using only facts already present in the sources; the draft currently has 94.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write a social_headline for Facebook.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
       "not eligible: sport category": 1,
-      "writer offered no points": 1,
-      "not eligible: events category": 1
+      "not eligible: crime, court, police or death": 1,
+      "writer offered no points": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 121,
+    "rss_and_google_news": 99,
     "website_discovery": 1,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -427,30 +441,31 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdaledaily": 48,
-    "rochdaledaily.co.uk": 27,
-    "Rochdale Times": 21,
-    "Rochdale AFC": 6,
-    "InYourArea": 5,
+    "Rochdaledaily": 29,
+    "Rochdale Times": 24,
+    "rochdaledaily.co.uk": 17,
+    "Rochdale AFC": 10,
     "Manchester Evening News": 4,
     "Bee Network live travel alerts": 4,
     "Falinge Park High School": 3,
+    "Barnet FC": 3,
     "Food Standards Agency": 3,
     "The Bury Times": 2,
     "Oldham Times": 2,
-    "Rochdale Borough Council": 2,
-    "Barnet FC": 1,
+    "Fansnetwork": 2,
+    "Milton Keynes Citizen": 1,
+    "Business Up North": 1,
+    "InYourArea": 1,
     "BBC Manchester": 1
   },
   "selected_by_category": {
-    "education": 1,
-    "environment": 1,
-    "events": 3,
-    "sport": 3
+    "crime": 1,
+    "environment": 2,
+    "sport": 1
   },
   "published_by_category": {
     "business": 77,
-    "community": 111,
+    "community": 112,
     "crime": 55,
     "education": 40,
     "environment": 55,
@@ -458,7 +473,7 @@
     "health": 27,
     "news": 110,
     "politics": 21,
-    "sport": 69,
+    "sport": 70,
     "traffic": 56,
     "transport": 17
   },
@@ -485,23 +500,15 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "education-v3-8817daedf66fb0e896ce",
-    "sport-v3-a9ac294be24495d06723",
-    "events-v3-05e05cf7e4d4a3c2411c",
-    "environment-v3-ec720a1066fec0462041",
+    "hard-news-v3-5cc9aeadddb5905e2bf0",
     "sport-v3-cf40e18f4d517f633a04",
-    "events-v3-e8555f73ce1488b45f4d",
-    "sport-v3-ef2e294ba063681d980b",
-    "events-v3-b92110972a1094a45360"
+    "environment-v3-ec720a1066fec0462041",
+    "environment-v3-103d2f9226b91241c2b0"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/school-honoured-for-its-commitment-to-sport/",
-    "https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday",
-    "https://rochdaledaily.co.uk/articles/first-bus-rochdale-national-gold-routes-to-work-award",
-    "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026/",
+    "https://www.burytimes.co.uk/news/26757394.bury-man-among-three-deny-rochdale-aggravated-burglary/",
     "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/",
-    "https://rochdaledaily.co.uk/articles/rochdale-council-staff-take-over-30-000-sick-days-due-to-stress-and-depression",
-    "https://rochdaleafc.co.uk/10-off-this-black-friday/",
+    "https://consultations.rochdale.gov.uk/council-wide/ignite-fire-festival-2026/",
     "https://rochdaledaily.co.uk/articles/rochdale-nuclear-veteran-welcomes-investigation-into-atomic-programme-s-health-i"
   ],
   "x_social_records": 0,
@@ -514,15 +521,13 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "education",
+      "crime",
       "environment",
-      "events",
       "sport"
     ],
     "selected_categories": [
-      "education",
+      "crime",
       "environment",
-      "events",
       "sport"
     ],
     "available_wards": [],
@@ -535,20 +540,19 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "education": 1,
-      "environment": 1,
-      "events": 3,
-      "sport": 3
+      "crime": 1,
+      "environment": 2,
+      "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 8
+      "rochdale": 4
     },
     "selected_by_source": {
-      "rochdale afc": 2,
+      "rochdale afc": 1,
       "rochdale borough council": 1,
-      "rochdale times": 1,
-      "rochdaledaily": 4
+      "rochdaledaily": 1,
+      "the bury times": 1
     },
     "must_cover_selected": 0
   },
@@ -629,53 +633,8 @@
       "location_name": ""
     },
     {
-      "label": "category:transport",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (\"Bee Network\" OR bus OR tram OR train OR Northern OR disruption) when:2d",
-      "category": "transport",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:education",
-      "query": "(Rochdale OR Heywood OR Middleton) (school OR college OR academy OR pupils OR students OR SATs OR \"A level results\") when:2d",
-      "category": "education",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:events",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (event OR festival OR fair OR exhibition OR concert OR workshop OR \"coffee morning\") when:2d",
-      "category": "events",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:community",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (charity OR fundraiser OR community group OR volunteer OR donation OR protest) when:2d",
-      "category": "community",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "category:environment",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth) (flood OR weather warning OR pollution OR canal OR reservoir OR fishing OR park OR environment) when:2d",
-      "category": "environment",
-      "ward": "",
-      "person": "",
-      "location_slug": "",
-      "location_name": ""
-    },
-    {
-      "label": "priority:reform-rochdale-local",
-      "query": "Rochdale \"Reform UK\" councillor when:2d",
+      "label": "category:politics",
+      "query": "(Rochdale OR Heywood OR Middleton) (councillor OR election OR vote OR voted OR motion) when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -683,8 +642,35 @@
       "location_name": ""
     },
     {
-      "label": "priority:planning-council",
-      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "label": "category:sport",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (football OR rugby OR cricket OR athletics OR parkrun OR boxing OR MMA OR netball OR sport) when:2d",
+      "category": "sport",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:business",
+      "query": "(Rochdale OR Heywood OR Middleton) (business OR investment OR shop opening OR restaurant OR takeaway OR development OR regeneration OR \"house prices\") when:2d",
+      "category": "business",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:health",
+      "query": "(Rochdale OR Heywood OR Middleton) (NHS OR hospital OR clinic OR health service OR GP OR Sure Start) when:2d",
+      "category": "health",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "category:environment",
+      "query": "(Rochdale OR Heywood OR Middleton) (planning application OR housing development OR HMO OR licensing OR demolition) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -692,8 +678,17 @@
       "location_name": ""
     },
     {
-      "label": "priority:power",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:2d",
+      "label": "priority:planning-rochdale",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (\"planning application\" OR \"planning permission\" OR demolition OR development OR HMO) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:water",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -701,8 +696,17 @@
       "location_name": ""
     },
     {
-      "label": "fallback:local-public-posts-today",
-      "query": "(\"GMPRochdale\" OR \"Rochdale Borough Council\" OR \"Bee Network\") (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "label": "priority:environment",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "wards:1",
+      "query": "(\"Balderstone and Kirkholt\" OR \"Bamford\" OR \"Castleton\" OR \"Central Rochdale\" OR \"East Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -710,8 +714,8 @@
       "location_name": ""
     },
     {
-      "label": "wards:2",
-      "query": "(\"Healey\" OR \"Hopwood Hall\" OR \"Kingsway\" OR \"Littleborough Lakeside\" OR \"Milkstone and Deeplish\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
+      "label": "wards:3",
+      "query": "(\"Milnrow and Newhey\" OR \"Norden\" OR \"North Heywood\" OR \"North Middleton\" OR \"Smallbridge and Firgrove\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -719,9 +723,9 @@
       "location_name": ""
     },
     {
-      "label": "wards:4",
-      "query": "(\"South Middleton\" OR \"Spotland and Falinge\" OR \"Wardle, Shore and West Littleborough\" OR \"West Heywood\" OR \"West Middleton\") (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
-      "category": "news",
+      "label": "parties:sites",
+      "query": "(site:reformparty.uk OR site:restorebritain.org.uk OR site:workerspartygb.org OR site:rochdale.laboursites.org OR site:rochdalelibdems.org.uk OR site:rochdale.greenparty.org.uk OR site:hmnrconservatives.org.uk) Rochdale when:2d",
+      "category": "politics",
       "ward": "",
       "person": "",
       "location_slug": "",
@@ -911,23 +915,18 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiggFBVV95cUxONEJWWjh4LUF5RlF5Mmt5bzFuUjVydnNadk8zLURNUzVkUGs5c1J4cVdEYlpDVEFtVWNUOU56MlZoWjdUd2ZLeWZwcUJqR19XTFUxZTM3c1ZlMk5nX1p4UVg5YUI4QXpjV0M3TjdZSWZQQzBVenpoYW1XMTBhdFNEcldB?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -963,7 +962,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-28T01:33:59.392602Z",
+  "frontpage_generated_at": "2026-11-28T01:52:17.689764Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1012,12 +1011,12 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "traffic": 2,
+      "business": 2,
       "crime": 4,
+      "traffic": 2,
       "transport": 1,
       "education": 2,
       "sport": 1,
-      "business": 2,
       "community": 2,
       "health": 2,
       "environment": 1,
@@ -1031,27 +1030,27 @@
     "selected_by_area": {
       "littleborough": 1,
       "middleton": 7,
-      "rochdale": 20
+      "rochdale": 21
     },
     "selected_by_source": {
-      "rochdale borough council": 1,
+      "business up north": 1,
       "bbc manchester": 1,
       "rochdaledaily": 1,
       "manchester evening news": 2,
       "rochdale times": 5,
       "rochdale afc": 1,
-      "business up north": 1,
+      "food standards agency": 1,
       "first bus corporate press office": 1,
       "nhs england north west press office": 1,
       "oldham times": 1,
       "rochdale daily": 1,
-      "food standards agency": 1,
+      "rochdale borough council": 1,
       "inyourarea": 1,
       "nhs england north west": 1,
       "greater manchester police press office": 1
     },
-    "pool_size": 29,
-    "primary_pool_size": 29,
+    "pool_size": 30,
+    "primary_pool_size": 30,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 20,
@@ -1064,12 +1063,12 @@
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 13,
-  "events_kept_other_source": 33,
+  "events_kept_other_source": 34,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 750,
+  "duplicate_articles_after_postprocessing": 752,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1082,8 +1081,8 @@
   "whats_on_event_count": 15,
   "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday",
-    "cardinal-langley-rc-high-school-wins-award-for-commitment-to-sport"
+    "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+    "rochdale-s-ignite-fire-festival-survey-now-open-for-public-feedback"
   ],
   "drafts_not_published": 1,
   "publication_health": "partial",

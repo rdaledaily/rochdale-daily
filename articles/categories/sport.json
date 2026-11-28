@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-28T01:33:59.392602Z",
+  "generated_at": "2026-11-28T01:52:17.689764Z",
   "category": "sport",
-  "count": 74,
+  "count": 75,
   "articles": [
     {
       "id": "affb42719b3e8aef59",
@@ -90,8 +90,8 @@
         "source_sha": {
           "https://rochdaleafc.co.uk/the-ian-henderson-stand/": "c08dba5f9bfcddb7"
         },
-        "checked_at": "2026-11-28T01:12:32.426469Z",
-        "attempts": 3
+        "checked_at": "2026-11-28T01:51:35.238359Z",
+        "attempts": 4
       },
       "ingested_at": "2026-11-28T00:26:30Z",
       "wards": [
@@ -314,15 +314,16 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://www.fansnetwork.co.uk/football/rochdale/news/67307/: capture failed (ReadTimeout: HTTPSConnectionPool(host='www.fansnetwork.co.uk', port=443): Read timed out. (re)",
+        "reason": "https://rochdaledaily.co.uk/articles/rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/rochda)",
         "source_sha": {
           "https://rochdaleafc.co.uk/saturdays-matchday-guide-8/": "7b3a982b3332ec6c",
           "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5pMzBUOFFMZFpCOHVMWFJYSXRpQlJkZFJaNlc2VDN5X2hLV0xJa0FhYUhxaUdTaEkwaXZKRjBJTklEVXFMbkh2VDBoZ2YzWUg1TlFqUzhRd3V4MS16WjFBRTV6aw?oc=5": "7b3a982b3332ec6c",
           "https://rochdaleafc.co.uk/tvos-preview-barnet-h/": "5d0e3e8fc778aba6",
-          "https://rochdaleafc.co.uk/preview-barnet-h-2/": "22c2444ea4d1e568"
+          "https://rochdaleafc.co.uk/preview-barnet-h-2/": "22c2444ea4d1e568",
+          "https://www.fansnetwork.co.uk/football/rochdale/news/67307/": "4b608e8beef0a80e"
         },
-        "checked_at": "2026-11-28T01:12:32.426469Z",
-        "attempts": 19
+        "checked_at": "2026-11-28T01:51:35.238359Z",
+        "attempts": 20
       },
       "ingested_at": "2026-11-27T12:43:59Z",
       "wards": [],
@@ -342,6 +343,96 @@
       "verification_reasons": [
         "Original URL is not an approved attributable source; editorial review required"
       ]
+    },
+    {
+      "id": "75e296125b3a1d7f12",
+      "story_key": "sport-v3-b1e10a36a210b61c655f",
+      "title": "Rochdale AFC youth team to face Bolton in PDL Cup",
+      "slug": "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+      "excerpt": "Rochdale AFC's youth team will complete their U-17 PDL Cup group stage with a match against Bolton Wanderers on Tuesday, 2pm kick-off.",
+      "content_html": "<p>Rochdale AFC's youth team will complete their U-17 PDL Cup group stage with a match against Bolton Wanderers on Tuesday at 2pm.</p><p>The game will take place at Bolton's training ground, providing an opportunity for the young players to showcase their skills in a competitive environment.</p><p>This fixture is significant for the youth team as they aim to secure a strong finish in the group and progress further in the tournament.</p><p>The match reflects Rochdale AFC's commitment to developing young talent and providing them with valuable match experience.</p>",
+      "social_headline": "Rochdale AFC youth team set to face Bolton in PDL Cup match on Tuesday",
+      "area": "rochdale",
+      "category": "sport",
+      "types": [
+        "sport"
+      ],
+      "published_at": "2026-11-26T10:41:32Z",
+      "scraped_at": "2026-11-28T01:47:41Z",
+      "image_url": "assets/img/cards/rochdale-afc-youth-team-to-face-bolton-in-pdl-cup.jpg",
+      "image_credit": "Rochdale AFC / Used with permission",
+      "image_credit_url": "",
+      "source_image_reuse_status": "cards-only",
+      "event_start_at": "",
+      "event_end_at": "",
+      "event_location": "",
+      "source_kind": "article",
+      "source_name": "Rochdale AFC",
+      "source_url": "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/",
+      "source_names": [
+        "Rochdale AFC"
+      ],
+      "source_urls": [
+        "https://rochdaleafc.co.uk/dale-welcome-shrewsbury-in-youth-alliance/"
+      ],
+      "source_count": 1,
+      "locality_evidence": [
+        "Rochdale"
+      ],
+      "context_research": [
+        {
+          "question": "Dale Face Bolton In Midweek Cup Tie rochdale",
+          "role": "same_incident",
+          "status": "no-additional-verified-source",
+          "sources_added": 0
+        },
+        {
+          "question": "\"Dale Face Bolton In\" rochdale public role background",
+          "role": "public_background",
+          "status": "no-additional-verified-source",
+          "sources_added": 0
+        }
+      ],
+      "social_context_used": false,
+      "social_reaction_count": 0,
+      "official_social_update_count": 0,
+      "social_platforms": [],
+      "social_context_note": "",
+      "sensitive_story": false,
+      "police_matter": false,
+      "requires_approval": false,
+      "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
+      "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
+      "byline": "Rochdale Daily Newsdesk",
+      "status": "published",
+      "publication_route": "ai-grounded-rewrite",
+      "rewrite_quality_checked": true,
+      "editorial_style_version": "rochdale-human-newsroom-v15",
+      "style_rewrite_status": "generated-in-house-style",
+      "discovery_query_label": "priority:planning-rochdale",
+      "searched_location_slug": "",
+      "searched_location_name": "",
+      "img": "assets/img/cards/rochdale-afc-youth-team-to-face-bolton-in-pdl-cup.jpg",
+      "image_status": "cards-library-photo",
+      "image_backfill_method": "cards-filename-match",
+      "image_match_title": "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup.jpg",
+      "image_match_score": 21549,
+      "ingested_at": "2026-11-28T01:51:58Z",
+      "first_published_at": "2026-11-26T10:41:32Z",
+      "last_updated_at": "2026-11-26T10:41:32Z",
+      "wards": [],
+      "ward_verification": {
+        "wards": [],
+        "status": "borough-or-location-unresolved",
+        "evidence": ""
+      },
+      "related_article_slugs": [
+        "rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday",
+        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup",
+        "rochdale-afc-youth-team-to-compete-in-u17-pdl-cup"
+      ],
+      "image_alt": "Rochdale AFC youth team to face Bolton in PDL Cup",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card"
     },
     {
       "id": "bbfa285a35e2e960f5",
@@ -684,7 +775,7 @@
         "evidence": ""
       },
       "related_article_slugs": [
-        "rochdale-afc-to-host-barnet-in-league-two-clash-this-saturday",
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
         "willbutts-lane-stand-to-be-renamed-ian-henderson-stand-at-rochdale-afc",
         "rochdale-hornets-partner-with-10x-athletic-for-2027-season"
       ],
@@ -2192,8 +2283,8 @@
       },
       "related_article_slugs": [
         "rochdale-afc-tickets-for-northampton-town-match-now-available",
-        "rochdale-afc-youth-team-to-compete-in-u17-pdl-cup",
-        "rochdale-afc-youth-team-draws-2-2-in-u17-pdl-cup-match"
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+        "rochdale-afc-youth-team-to-compete-in-u17-pdl-cup"
       ],
       "image_alt": "Illustration: Rochdale, sport. Not a photograph of the event.",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
@@ -2781,7 +2872,7 @@
       "published_at": "2026-11-09T18:55:23Z",
       "first_published_at": "2026-11-09T18:55:23Z",
       "last_updated_at": "2026-11-09T18:55:23Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Owen Webster",
       "source_url": "https://www.fightmag.com/bkfc-96-glasgow-weir-vs-cohoon-live-results/",
       "source_names": [
@@ -3751,8 +3842,8 @@
       },
       "related_article_slugs": [
         "rochdale-afc-partners-with-hopwood-hall-college-for-youth-development",
-        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup",
-        "rochdale-afc-to-host-fa-youth-cup-match-at-crown-oil-arena"
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup"
       ],
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "is_ongoing": false,
@@ -4757,7 +4848,7 @@
       "published_at": "2026-10-24T22:33:36Z",
       "first_published_at": "2026-10-24T22:33:36Z",
       "last_updated_at": "2026-10-24T22:33:36Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale AFC",
       "source_url": "",
       "source_names": [
@@ -5156,7 +5247,7 @@
       "related_article_slugs": [
         "rochdale-afc-prepares-for-home-match-against-accrington-stanley",
         "rochdale-afc-youth-team-draws-2-2-in-u17-pdl-cup-match",
-        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup"
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup"
       ],
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "verification_reasons": [
@@ -5526,8 +5617,8 @@
       },
       "related_article_slugs": [
         "rochdale-to-face-fleetwood-town-in-fa-cup-match-on-november-7-2026",
-        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup",
-        "rochdale-afc-reduces-ticket-prices-for-fa-cup-tie-against-newport-county"
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup"
       ],
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "commons_image_search": "searched",
@@ -6672,7 +6763,7 @@
       "published_at": "2026-10-15T19:20:34Z",
       "first_published_at": "2026-10-15T19:20:34Z",
       "last_updated_at": "2026-10-15T19:20:34Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "BKFC / Owen Webster",
       "source_url": "https://www.bkfc.com/events/bkfc-glasgow",
       "source_names": [
@@ -7458,7 +7549,7 @@
       "published_at": "2026-10-08T20:40:00Z",
       "first_published_at": "2026-10-08T20:40:00Z",
       "last_updated_at": "2026-10-08T20:40:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale Boroughwide Housing",
       "source_url": "",
       "source_names": [
@@ -7490,8 +7581,8 @@
       },
       "related_article_slugs": [
         "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
-        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup",
-        "rochdale-afc-shortlisted-for-fan-engagement-award"
+        "rochdale-afc-youth-team-to-face-bolton-in-pdl-cup",
+        "rochdale-afc-youth-team-faces-bolton-in-u-17-pdl-cup"
       ],
       "image_alt": "RBH football team takes part in Housing Association Charity Cup 2026",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card"
@@ -7513,7 +7604,7 @@
       "published_at": "2026-10-08T20:30:00Z",
       "first_published_at": "2026-10-08T20:30:00Z",
       "last_updated_at": "2026-10-08T20:30:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale Golf Club; Woodhall Spa Golf Club",
       "source_url": "https://www.woodhallspagolf.com/visitors/central-england-foursomes/",
       "source_names": [
@@ -7571,7 +7662,7 @@
       "published_at": "2026-08-31T09:30:00Z",
       "first_published_at": "2026-08-31T09:30:00Z",
       "last_updated_at": "2026-08-31T09:30:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale AFC, Prostate Cancer UK and phs Group",
       "source_url": "https://rochdaleafc.co.uk/dale-launch-back-in-the-game/",
       "source_names": [
@@ -7630,7 +7721,7 @@
       "published_at": "2026-08-15T16:29:00Z",
       "first_published_at": "2026-08-15T16:29:00Z",
       "last_updated_at": "2026-08-15T16:29:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Norden Cricket Club",
       "source_url": "",
       "source_names": [
@@ -7689,7 +7780,7 @@
       "published_at": "2026-08-13T20:02:00Z",
       "first_published_at": "2026-08-13T20:02:00Z",
       "last_updated_at": "2026-08-13T20:02:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale AFC Community Trust",
       "source_url": "https://www.rochdaleafccommunity.org/rochdale-afc-netball-launched-as-rochdale-netball-club-joins-the-rochdale-afc-family/",
       "source_names": [
@@ -7743,7 +7834,7 @@
       "published_at": "2026-08-10T15:00:00Z",
       "first_published_at": "2026-08-10T15:00:00Z",
       "last_updated_at": "2026-08-10T15:00:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Councillor Daniel Meredith",
       "source_url": "",
       "source_names": [
@@ -7800,7 +7891,7 @@
       "published_at": "2026-08-06T22:10:00Z",
       "first_published_at": "2026-08-06T22:10:00Z",
       "last_updated_at": "2026-08-06T22:10:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale AFC",
       "source_url": "https://rochdaleafc.co.uk/job-vacancies-040826/",
       "source_names": [
@@ -7856,7 +7947,7 @@
       "published_at": "2026-08-06T22:00:00Z",
       "first_published_at": "2026-08-06T22:00:00Z",
       "last_updated_at": "2026-08-06T22:00:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Heywood Hurricanes FC",
       "source_url": "",
       "source_names": [
@@ -7911,7 +8002,7 @@
       "published_at": "2026-08-02T22:45:00Z",
       "first_published_at": "2026-08-02T22:45:00Z",
       "last_updated_at": "2026-08-02T22:45:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Littleborough RUFC",
       "source_url": "https://www.facebook.com/",
       "source_names": [
@@ -7978,7 +8069,7 @@
       "published_at": "2026-08-01T14:15:00Z",
       "first_published_at": "2026-08-01T14:15:00Z",
       "last_updated_at": "2026-08-01T14:15:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "",
       "source_names": [
@@ -8030,7 +8121,7 @@
       "published_at": "2026-08-01T11:55:00Z",
       "first_published_at": "2026-08-01T11:55:00Z",
       "last_updated_at": "2026-08-01T11:55:00Z",
-      "scraped_at": "2026-11-28T01:33:59Z",
+      "scraped_at": "2026-11-28T01:52:17Z",
       "source_name": "Syke Bowling Club",
       "source_url": "https://www.facebook.com/",
       "source_names": [
