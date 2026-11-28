@@ -1,44 +1,38 @@
 {
-  "examined_at": "2026-11-27T16:58:32.547355Z",
+  "examined_at": "2026-11-28T15:49:23.636171Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 114,
+  "candidates_examined": 120,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 77,
-    "would publish": 24,
+    "age": 102,
     "duplicate of published story": 10,
-    "not local": 3
+    "would publish": 8
   },
-  "would_publish": 24,
+  "would_publish": 8,
   "age_gate_sensitivity": {
-    "6h": 8,
-    "14h": 29,
-    "24h": 37,
-    "48h": 78,
-    "72h": 90,
-    "168h": 114
+    "6h": 4,
+    "14h": 6,
+    "24h": 18,
+    "48h": 59,
+    "72h": 102,
+    "168h": 120
   },
   "gates_unavailable": [],
   "examples": {
-    "duplicate of published story": [
-      "Rochdale Borough Council: Lower Lane, roadworks in Rochdale on 27 November 2026",
-      "rochdaledaily.co.uk: Rochdale primary schools launch engineering programme for pupils - roc",
-      "rochdaledaily.co.uk: NHS asks Rochdale families to help get patients home safely from hospi"
-    ],
     "would publish": [
       "Food Standards Agency: Heywood Mini Market rated 1 out of 5 for food hygiene",
-      "Bee Network live travel alerts: Updated: 27/11/2026 at 8:28am Live Failsworth Tram Stop - Lifts out of",
-      "Rochdale Times: Inspiring next generation of engineers - Rochdale Times"
+      "Bee Network live travel alerts: Updated: 28/11/2026 at 9:05am Live Failsworth Tram Stop - Lifts out of",
+      "BBC: Rochdale vs Barnet: League Two stats & head-to-head - BBC"
     ],
-    "not local": [
-      "Falinge Park High School: Year 8 ‘Design and Discover’ Curriculum",
-      "Food Standards Agency: Marios Plus Pizzeria rated 1 out of 5 for food hygiene",
-      "Falinge Park High School: Time To Talk 9 Workshop"
+    "duplicate of published story": [
+      "Food Standards Agency: UK Watan Bakery rated 1 out of 5 for food hygiene",
+      "Business Up North: Rochdale Entrepreneur Behind UK-Wide Chauffeur Directory Recognised At",
+      "Business Up North: Rochdale Entrepreneur Behind UK-Wide Chauffeur Directory Recognised At"
     ],
     "age": [
-      "Rochdale AFC: Saturday’s Matchday Guide - Rochdale AFC",
-      "Rochdale Times: Crowds flock to town’s Christmas countdown - Rochdale Times",
-      "Rochdale AFC: Saturday's Matchday Guide"
+      "Falinge Park High School: Year 8 ‘Design and Discover’ Curriculum",
+      "Rochdale Times: Inspiring next generation of engineers - Rochdale Times",
+      "Rochdaledaily: Rochdale primary schools launch engineering programme for pupils - roc"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
