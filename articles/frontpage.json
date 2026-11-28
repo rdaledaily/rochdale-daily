@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-28T10:43:07.040240Z",
+  "generated_at": "2026-11-28T10:51:57.738842Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 20,
@@ -85,12 +85,11 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPczRKelVZU3RDNXFRWWptdlgwREtKX0hCUDJTRDk0cWFicHNZeUhIZEIyUy0weVdJdFZzWkV0Mk8wMUJIelRaY2tSMDI5Y0VJdEp6YkctUi1JYWtXTUhWVmwyT24yeUNqWERIellJakxkS2RYYUh1UmZ0VW5sWEF3R2JnczRiSG5JUDVXN2hSaG5PNXllVEZ1eko0YmdiQm1ITWxkZXE4aGpXZ0RLY295Yzd5ejFsSDhp?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
-        "source_sha": {
-          "https://www.businessupnorth.co.uk/rochdale-entrepreneur-behind-uk-wide-chauffeur-directory-recognised-at-rochdale-business-awards/": "0dfa2f5272c188b8"
-        },
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 19
+        "reason": "https://www.businessupnorth.co.uk/rochdale-entrepreneur-behind-uk-wide-chauffeur-directory-recognised-at-rochdale-business-awards/: capture failed (HTTPError: 429 Client Error: Too Many Requests for url: https://www.businessupnorth.co.uk/r); https://news.google.com/rss/articles/CBMiuAFBVV95cUxPczRKelVZU3RDNXFRWWptdlgwREtKX0hCUDJTRDk0cWFicHNZeUhIZEIyUy0weVdJdFZzWkV0Mk8wMUJIelRaY2tSMDI5Y0VJdEp6YkctUi1JYWtXTUhWVmwyT24yeUNqWERIellJakxkS2RYYUh1UmZ0VW5sWEF3R2JnczRiSG5JUDVXN2hSaG5PNXllVEZ1eko0YmdiQm1ITWxkZXE4aGpXZ0RLY295Yzd5ejFsSDhp?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url",
+        "source_sha": {},
+        "source_changed_at": "2026-11-28T10:51:08.315451Z",
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 20
       },
       "ingested_at": "2026-11-27T22:57:07Z",
       "first_published_at": "2026-11-27T22:21:23Z",
@@ -134,7 +133,7 @@
       "image_url": "assets/img/cards/cardinal-langley-rc-high-school-wins-award-for-commitment-to-sport.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -193,20 +192,20 @@
       "ongoing_label": "",
       "update_count": 2,
       "img": "assets/img/cards/cardinal-langley-rc-high-school-wins-award-for-commitment-to-sport.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "cardinal-langley-rc-high-school-wins-award-for-commitment-to-sport.jpg",
       "image_match_score": 21716,
       "core_fact_check": {
-        "status": "unchecked",
+        "status": "passed",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiggFBVV95cUxONEJWWjh4LUF5RlF5Mmt5bzFuUjVydnNadk8zLURNUzVkUGs5c1J4cVdEYlpDVEFtVWNUOU56MlZoWjdUd2ZLeWZwcUJqR19XTFUxZTM3c1ZlMk5nX1p4UVg5YUI4QXpjV0M3TjdZSWZQQzBVenpoYW1XMTBhdFNEcldB?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "",
         "source_sha": {
-          "https://www.rochdaletimes.co.uk/school-honoured-for-its-commitment-to-sport/": "a5ed6bee720283a5"
+          "https://www.rochdaletimes.co.uk/school-honoured-for-its-commitment-to-sport/": "a5ed6bee720283a5",
+          "https://news.google.com/rss/articles/CBMiggFBVV95cUxONEJWWjh4LUF5RlF5Mmt5bzFuUjVydnNadk8zLURNUzVkUGs5c1J4cVdEYlpDVEFtVWNUOU56MlZoWjdUd2ZLeWZwcUJqR19XTFUxZTM3c1ZlMk5nX1p4UVg5YUI4QXpjV0M3TjdZSWZQQzBVenpoYW1XMTBhdFNEcldB?oc=5": "a5ed6bee720283a5"
         },
-        "source_changed_at": "2026-11-28T10:21:07.034298Z",
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 15
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 16
       },
       "ingested_at": "2026-11-28T01:33:39Z",
       "wards": [],
@@ -251,6 +250,7 @@
       ],
       "source_review_verified": false,
       "primary_source_verified": false,
+      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 1,
       "frontpage_priority": 999,
       "slot": "secondary-1"
@@ -272,7 +272,7 @@
       "published_at": "2026-11-28T09:14:55Z",
       "first_published_at": "2026-11-28T09:14:55Z",
       "last_updated_at": "2026-11-28T09:14:55Z",
-      "scraped_at": "2026-11-28T10:43:07Z",
+      "scraped_at": "2026-11-28T10:51:57Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -322,7 +322,7 @@
       "image_url": "assets/img/cards/willbutts-lane-stand-to-be-renamed-ian-henderson-stand-at-rochdale-afc.jpg",
       "image_credit": "Rochdale AFC / Used with permission",
       "image_credit_url": "",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -380,19 +380,19 @@
       "ongoing_label": "",
       "update_count": 2,
       "img": "assets/img/cards/willbutts-lane-stand-to-be-renamed-ian-henderson-stand-at-rochdale-afc.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "willbutts-lane-stand-to-be-renamed-ian-henderson-stand-at-rochdale-afc.jpg",
       "image_match_score": 20870,
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOak1KZkFhaW9sQkNXckh0SFY3MlBHc2hoVTZDTC1ockdZY0lqZ1UyV25QNnczbTBIbHlZUFhyUU9JS01YVW1wWUJwcHNoVDNDQlRxZUZ4cWhqb0FqN25RMnRFbEVpZlFhaU14YWlDVUpVNl9BbDdoQlowOWpXZVNFazhmcXdEVEdkbDJGeEJLeWxYdEVuQ0hlTU8yMV80UUFBVWpjUjFBTnAyWnc?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOak1KZkFhaW9sQkNXckh0SFY3MlBHc2hoVTZDTC1ockdZY0lqZ1UyV25QNnczbTBIbHlZUFhyUU9JS01YVW1wWUJwcHNoVDNDQlRxZUZ4cWhqb0FqN25RMnRFbEVpZlFhaU14YWlDVUpVNl9BbDdoQlowOWpXZVNFazhmcXdEVEdkbDJGeEJLeWxYdEVuQ0hlTU8yMV80UUFBVWpjUjFBTnAyWnc?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/willbu)",
         "source_sha": {
           "https://rochdaleafc.co.uk/the-ian-henderson-stand/": "c08dba5f9bfcddb7"
         },
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 17
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 18
       },
       "ingested_at": "2026-11-28T00:26:30Z",
       "wards": [
@@ -432,6 +432,7 @@
       "verification_reasons": [
         "Original URL is not an approved attributable source; editorial review required"
       ],
+      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 3,
       "frontpage_priority": 997,
       "slot": ""
@@ -523,13 +524,12 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQSVdSTWpTMW1wdmhxc29wak5MaFBJRU0yWmczVGhRMlgxcFFKU2lDTEhSYkZIQkw1OGh5bjBkR0xiZ0lBd2tUaEg2Y0sxVDZlU3dTT2JQYi1KYVBrVzFaUDUtWDlPTi1kUGRlejBuSUdqVnVxMFoxcFZUOWRZcHRQR0JWTlp4TVMxbHRMVXJwYkR6Z3FoRVBla29hNzlscWY2Ymc2ZEJRak5WdUpsMHk2S3V6STlrQjJW?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQSVdSTWpTMW1wdmhxc29wak5MaFBJRU0yWmczVGhRMlgxcFFKU2lDTEhSYkZIQkw1OGh5bjBkR0xiZ0lBd2tUaEg2Y0sxVDZlU3dTT2JQYi1KYVBrVzFaUDUtWDlPTi1kUGRlejBuSUdqVnVxMFoxcFZUOWRZcHRQR0JWTlp4TVMxbHRMVXJwYkR6Z3FoRVBla29hNzlscWY2Ymc2ZEJRak5WdUpsMHk2S3V6STlrQjJW?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/alan-t)",
         "source_sha": {
           "https://www.bbc.co.uk/news/articles/c6n902n41q2do": "ba5be028614ba05e"
         },
-        "source_changed_at": "2026-11-28T10:21:07.034298Z",
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 19
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 20
       },
       "ingested_at": "2026-11-27T23:21:41Z",
       "wards": [],
@@ -632,8 +632,8 @@
         "source_sha": {
           "https://www.rochdaletimes.co.uk/inspiring-next-generation-of-engineers/": "70b8446098c5ddf7"
         },
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 29
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 30
       },
       "ingested_at": "2026-11-27T15:10:46Z",
       "first_published_at": "2026-11-27T13:16:18Z",
@@ -822,7 +822,7 @@
       "published_at": "2026-11-27T10:58:00Z",
       "first_published_at": "2026-11-27T10:58:00Z",
       "last_updated_at": "2026-11-27T10:58:00Z",
-      "scraped_at": "2026-11-28T10:43:07Z",
+      "scraped_at": "2026-11-28T10:51:57Z",
       "source_name": "NHS England North West press office",
       "source_url": "https://111.nhs.uk",
       "source_names": [
@@ -1026,7 +1026,7 @@
       "published_at": "2026-11-27T10:08:01Z",
       "first_published_at": "2026-11-27T10:08:01Z",
       "last_updated_at": "2026-11-27T10:08:01Z",
-      "scraped_at": "2026-11-28T10:43:07Z",
+      "scraped_at": "2026-11-28T10:51:57Z",
       "source_name": "NHS England North West",
       "source_url": "https://www.northerncarealliance.nhs.uk/patient-information/patient-leaflets/dementia-welcome-oasis-unit",
       "source_names": [
@@ -1148,15 +1148,15 @@
       "image_match_title": "roadworks.jpg",
       "image_match_score": 15129,
       "core_fact_check": {
-        "status": "unchecked",
+        "status": "passed",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOaUk0R0dGTHhONVdfOVVGdFc5dHBOZXhTcEhnU0ZPNm9hbnczd0ptbnI1V1dqYjRDSWZlQjcyQ1NSV0F5eEM5TnhYb3JneXlPb3VLdGdYM1JLeGVsRFFpSzV3dl82d0FUZ0pUR2N4Sk9jckpTM3lCVW1SVng4b0xtZlZOSkRRT05yNU5PeUVzZ0tNQXF6dmM3N0c4WDBOaWdYeTlfQzlmMjZuNVk?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "",
         "source_sha": {
-          "https://www.rochdale.gov.uk/directory-record/2679/lodge-street-roadworks-in-middleton-from-26-november-2026": "1e55b6cd0f712faa"
+          "https://www.rochdale.gov.uk/directory-record/2679/lodge-street-roadworks-in-middleton-from-26-november-2026": "1e55b6cd0f712faa",
+          "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOaUk0R0dGTHhONVdfOVVGdFc5dHBOZXhTcEhnU0ZPNm9hbnczd0ptbnI1V1dqYjRDSWZlQjcyQ1NSV0F5eEM5TnhYb3JneXlPb3VLdGdYM1JLeGVsRFFpSzV3dl82d0FUZ0pUR2N4Sk9jckpTM3lCVW1SVng4b0xtZlZOSkRRT05yNU5PeUVzZ0tNQXF6dmM3N0c4WDBOaWdYeTlfQzlmMjZuNVk?oc=5": "1e55b6cd0f712faa"
         },
-        "source_changed_at": "2026-11-28T10:21:07.034298Z",
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 34
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 35
       },
       "ingested_at": "2026-11-27T11:45:44Z",
       "first_published_at": "2026-11-27T19:46:10Z",
@@ -1337,8 +1337,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2680/lower-lane-roadworks-in-rochdale-on-27-november-2026": "3511bec5babfc356"
         },
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 19
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 20
       },
       "ingested_at": "2026-11-27T23:21:41Z",
       "wards": [],
@@ -1379,7 +1379,7 @@
       "published_at": "2026-11-27T09:14:55Z",
       "first_published_at": "2026-11-27T09:14:55Z",
       "last_updated_at": "2026-11-27T09:14:55Z",
-      "scraped_at": "2026-11-28T10:43:07Z",
+      "scraped_at": "2026-11-28T10:51:57Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1428,7 +1428,7 @@
       "published_at": "2026-11-27T08:30:02Z",
       "first_published_at": "2026-11-27T08:30:02Z",
       "last_updated_at": "2026-11-27T08:30:02Z",
-      "scraped_at": "2026-11-28T10:43:07Z",
+      "scraped_at": "2026-11-28T10:51:57Z",
       "source_name": "First Bus Corporate press office",
       "source_url": "https://news.firstbus.co.uk/news/national-and-local-award-wins-recognise-first-bus-rochdales-social-impact",
       "source_names": [
@@ -1807,15 +1807,15 @@
       "image_alt": "Police file photo. Not a photograph of this event.",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "core_fact_check": {
-        "status": "unchecked",
+        "status": "passed",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeXNtdGkyRzJiNk9iaDBZNFhmeWFvclU0SUhnTWtRallGVFVQdWZwNFhjVFRUSGlSTlZjbnV4MG9jZ1JBZmFiWXptY1hxRTJlT0JVLUdmZWlCakV3NGRVa0ZnbE1zZXNsQ3dQMzRXeExIRHoyRnZTN2lOTXpKTmFNS1dmYngwc1ZMMUtfY1d4aUN0RHZGckp1Ri1YZUczVXhp?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "",
         "source_sha": {
-          "https://www.rochdaletimes.co.uk/six-arrests-over-sophisticated-6-million-cannabis-importation-plan/": "d3a4c10b07cfa1ea"
+          "https://www.rochdaletimes.co.uk/six-arrests-over-sophisticated-6-million-cannabis-importation-plan/": "d3a4c10b07cfa1ea",
+          "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeXNtdGkyRzJiNk9iaDBZNFhmeWFvclU0SUhnTWtRallGVFVQdWZwNFhjVFRUSGlSTlZjbnV4MG9jZ1JBZmFiWXptY1hxRTJlT0JVLUdmZWlCakV3NGRVa0ZnbE1zZXNsQ3dQMzRXeExIRHoyRnZTN2lOTXpKTmFNS1dmYngwc1ZMMUtfY1d4aUN0RHZGckp1Ri1YZUczVXhp?oc=5": "d3a4c10b07cfa1ea"
         },
-        "source_changed_at": "2026-11-28T10:21:07.034298Z",
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 33
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 34
       },
       "ingested_at": "2026-11-27T12:26:24Z",
       "wards": [],
@@ -2060,12 +2060,12 @@
       "core_fact_check": {
         "status": "unchecked",
         "issues": [],
-        "reason": "https://rochdaledaily.co.uk/articles/haider-ali-jailed-for-10-years-and-six-months-for-managing-drug-supply-in-rochda: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/haider); https://news.google.com/rss/articles/CBMiuAFBVV95cUxNWFFnaEJZb0lWT3dMX01RNkZRX1dSM1hSOThmdktKZl90aVFVRzZXdk1KaVlVVTk3Vi1FLUJrVEdlU3JUUURUektyZ3lxaVdnRzdJTVRmb2g4NEltWlE1eHdRQW45dnhQTnhWY1NhU2REU1BscnBpT00tS0NWYWRhTkhlNjk1NEItazhkQThLZU1BTE1iWXpxRFBOVVpXNVo4cl9vamJsMzdBQnNLaTUyb3g0eU1WT1Nk?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher",
+        "reason": "https://rochdaledaily.co.uk/articles/haider-ali-jailed-for-10-years-and-six-months-for-managing-drug-supply-in-rochda: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://rochdaledaily.co.uk/articles/haider); https://news.google.com/rss/articles/CBMiuAFBVV95cUxNWFFnaEJZb0lWT3dMX01RNkZRX1dSM1hSOThmdktKZl90aVFVRzZXdk1KaVlVVTk3Vi1FLUJrVEdlU3JUUURUektyZ3lxaVdnRzdJTVRmb2g4NEltWlE1eHdRQW45dnhQTnhWY1NhU2REU1BscnBpT00tS0NWYWRhTkhlNjk1NEItazhkQThLZU1BTE1iWXpxRFBOVVpXNVo4cl9vamJsMzdBQnNLaTUyb3g0eU1WT1Nk?oc=5: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://roc",
         "source_sha": {
           "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs/": "b69c34e3134003ce"
         },
-        "checked_at": "2026-11-28T10:21:07.034298Z",
-        "attempts": 18
+        "checked_at": "2026-11-28T10:51:08.315451Z",
+        "attempts": 19
       },
       "ingested_at": "2026-11-27T23:59:36Z",
       "wards": [],
@@ -2127,7 +2127,7 @@
       "image_url": "assets/img/cards/rochdale_hornets.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -2178,8 +2178,8 @@
       "searched_location_slug": "",
       "searched_location_name": "",
       "img": "assets/img/cards/rochdale_hornets.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale_hornets.jpg",
       "image_match_score": 15256,
       "core_fact_check": {
@@ -2206,7 +2206,7 @@
         "rochdale-hornets-partner-with-10x-athletic-for-2027-season",
         "rochdale-hornets-confirm-opponents-for-2027-1895-cup-group-phase"
       ],
-      "image_alt": "Rochdale Hornets unveil 2027 home and away kits",
+      "image_alt": "File image: Rochdale Hornets. Not a photograph of this event.",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "is_ongoing": false,
       "ongoing_label": "",
@@ -2214,6 +2214,10 @@
       "verification_reasons": [
         "Original URL is not an approved attributable source; editorial review required"
       ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "commons_validated_for": "rochdale hornets#c2",
+      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 19,
       "frontpage_priority": 981,
       "slot": ""
@@ -2237,7 +2241,7 @@
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
       "last_updated_at": "2026-11-28T10:03:59Z",
-      "scraped_at": "2026-11-28T10:43:08.179654Z",
+      "scraped_at": "2026-11-28T10:51:59.402001Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg/v1/fill/w_2000,h_2000,al_c,q_90/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2308,7 +2312,7 @@
       "event_location": "Queen's Park Café, Queen's Park Road, Heywood",
       "published_at": "2026-11-17T20:12:10Z",
       "first_published_at": "2026-11-17T20:12:10Z",
-      "scraped_at": "2026-11-28T10:43:07.040240Z",
+      "scraped_at": "2026-11-28T10:51:57.738842Z",
       "source_name": "Queen's Park Café",
       "source_url": "",
       "source_names": [
@@ -2337,9 +2341,9 @@
       "story_key": "events-v3-639e74eb549bf1102a5c",
       "title": "Littleborough Brass Bands Association Christmas Concert",
       "slug": "littleborough-brass-bands-association-christmas-concert",
-      "excerpt": "Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
-      "summary": "Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
-      "content_html": "<p>Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><strong>Date and time:</strong> Saturday 12 December 2026 at 19:00</p><p><strong>Venue:</strong> St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-brass-bands-association-christmas-concert\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
+      "summary": "🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK",
+      "content_html": "<p>🎄 Join Littleborough Brass Bands Association for a festive evening of Christmas favourites, featuring all three bands. Great music, seasonal cheer and a licensed bar! 🎶 St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><strong>Date and time:</strong> Saturday 12 December 2026 at 19:00</p><p><strong>Venue:</strong> St Andrews Church, Arm Rd, Littleborough OL15 8NJ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-brass-bands-association-christmas-concert\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -2348,8 +2352,8 @@
       ],
       "published_at": "2026-11-17T13:20:24Z",
       "first_published_at": "2026-11-17T13:20:24Z",
-      "last_updated_at": "2026-11-28T10:43:08.279481Z",
-      "scraped_at": "2026-11-28T10:43:08.279481Z",
+      "last_updated_at": "2026-11-28T10:51:59.522080Z",
+      "scraped_at": "2026-11-28T10:51:59.522080Z",
       "image_credit": "Kevin Waterhouse / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg/v1/fill/w_2048,h_2048,al_c,q_90/ad4e9b_6229a401fbed4c85940e8d8c908ba866~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2373,6 +2377,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
+      "content_updated_at": "2026-11-28T10:51:59.522080Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d4401fcff795afbf-town-photo.jpg",
       "img": "assets/img/cards/d4401fcff795afbf-town-photo.jpg",
@@ -2406,9 +2411,9 @@
       "story_key": "events-v3-efd2981eccbbdf62a7a0",
       "title": "Christmas At The Movies",
       "slug": "christmas-at-the-movies",
-      "excerpt": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "summary": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "content_html": "<p>Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "summary": "🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "content_html": "<p>🎄 Something special is coming to Rochdale Town Hall this Christmas! 🐑 Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! 🎬 Keep your eyes peeled for more details! 👀 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2417,8 +2422,8 @@
       ],
       "published_at": "2026-11-12T23:30:44Z",
       "first_published_at": "2026-11-12T23:30:44Z",
-      "last_updated_at": "2026-11-28T10:43:08.481261Z",
-      "scraped_at": "2026-11-28T10:43:08.481261Z",
+      "last_updated_at": "2026-11-28T10:51:59.748273Z",
+      "scraped_at": "2026-11-28T10:51:59.748273Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2442,7 +2447,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-28T10:43:08.481261Z",
+      "content_updated_at": "2026-11-28T10:51:59.748273Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -2489,7 +2494,7 @@
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
       "last_updated_at": "2026-11-17T10:36:28Z",
-      "scraped_at": "2026-11-28T10:43:08.599881Z",
+      "scraped_at": "2026-11-28T10:51:59.887373Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg/v1/fill/w_1254,h_1254,al_c,q_85/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2558,7 +2563,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:20Z",
-      "scraped_at": "2026-11-28T10:43:08.740362Z",
+      "scraped_at": "2026-11-28T10:51:59.999771Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png/v1/fill/w_1297,h_1212,al_c/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2629,7 +2634,7 @@
       "event_location": "Ian's Gate, rear of 193 Manchester Road, Heywood OL10 2PP",
       "published_at": "2026-11-18T12:48:55Z",
       "first_published_at": "2026-11-18T12:48:55Z",
-      "scraped_at": "2026-11-28T10:43:07.040240Z",
+      "scraped_at": "2026-11-28T10:51:57.738842Z",
       "source_name": "Mustard Seed Church, Heywood",
       "source_url": "https://forms.gle/DTGQ3s8szyQj2Wbt6",
       "source_names": [
@@ -2672,9 +2677,9 @@
       "story_key": "events-v3-f4787e6ee070aa696164",
       "title": "New Years Eve with the Jäger Maestro",
       "slug": "new-years-eve-with-the-j-ger-maestro",
-      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -2683,8 +2688,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-11-28T10:43:08.871103Z",
-      "scraped_at": "2026-11-28T10:43:08.871103Z",
+      "last_updated_at": "2026-11-28T10:52:00.117936Z",
+      "scraped_at": "2026-11-28T10:52:00.117936Z",
       "image_credit": "BatAndBall / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg/v1/fill/w_890,h_624,al_c,q_85/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2708,7 +2713,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-28T10:43:08.871103Z",
+      "content_updated_at": "2026-11-28T10:52:00.117936Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/f4174a8ef48844b3-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Littleborough_Cricket_Club_-_geograph.org.uk_-_2498063.jpg",
@@ -2743,9 +2748,9 @@
       "story_key": "events-v3-62d472aa8282ba29e884",
       "title": "Swift & Friends",
       "slug": "swift-friends",
-      "excerpt": "SWIFT & FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
-      "summary": "SWIFT & FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
-      "content_html": "<p>SWIFT &amp; FRIENDS The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life.</p><p>Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Friday 19 February 2027 at 18:00</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/swift-friends\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "✨ SWIFT & FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
+      "summary": "✨ SWIFT & FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
+      "content_html": "<p>✨ SWIFT &amp; FRIENDS ✨ 🎤 The ULTIMATE Swiftie experience is hitting the road! Get ready for a full‑out pop spectacle featuring the UK’s leading tribute artists, incredible dancers, and a LIVE band bringing the magic to life.</p><p>Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Friday 19 February 2027 at 18:00</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/swift-friends\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2754,8 +2759,8 @@
       ],
       "published_at": "2026-10-28T19:02:26Z",
       "first_published_at": "2026-10-28T19:02:26Z",
-      "last_updated_at": "2026-11-28T10:43:08.994499Z",
-      "scraped_at": "2026-11-28T10:43:08.994499Z",
+      "last_updated_at": "2026-11-28T10:52:00.228621Z",
+      "scraped_at": "2026-11-28T10:52:00.228621Z",
       "image_credit": "R lee / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png/v1/fill/w_1206,h_1280,al_c/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2779,7 +2784,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-28T10:43:08.994499Z",
+      "content_updated_at": "2026-11-28T10:52:00.228621Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/28b4048459df187b-town-photo.jpg",
       "img": "assets/img/cards/28b4048459df187b-town-photo.jpg",
@@ -2825,7 +2830,7 @@
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
       "last_updated_at": "2026-11-12T21:28:24Z",
-      "scraped_at": "2026-11-28T10:43:09.089616Z",
+      "scraped_at": "2026-11-28T10:52:00.335251Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2880,11 +2885,11 @@
     {
       "id": "b97b37d71a7172bf89fa",
       "story_key": "events-v3-6a89fc56b9a23648589b",
-      "title": "Wonders Of Our Universe: The Next Chapter",
+      "title": "Wonders Of Our Universe. The Next Chapter",
       "slug": "wonders-of-our-universe-the-next-chapter",
-      "excerpt": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "summary": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "content_html": "<p>Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music.</p><p>Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "summary": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "content_html": "<p>🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music.</p><p>Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2893,8 +2898,8 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-11-28T10:43:09.183212Z",
-      "scraped_at": "2026-11-28T10:43:09.183212Z",
+      "last_updated_at": "2026-11-28T10:52:00.446359Z",
+      "scraped_at": "2026-11-28T10:52:00.446359Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg/v1/fill/w_1080,h_1080,al_c,q_85/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2918,7 +2923,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-28T10:43:09.183212Z",
+      "content_updated_at": "2026-11-28T10:52:00.446359Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
       "img": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
@@ -2952,8 +2957,8 @@
       "story_key": "events-v3-fa83eba7c4fc8fa82545",
       "title": "The Black Dyke Band at Rochdale Town Hall 2027",
       "slug": "the-black-dyke-band-at-rochdale-town-hall-2027",
-      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
-      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
+      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
+      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
       "content_html": "<p>In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy.</p><p>Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Thursday 13 May 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/the-black-dyke-band-at-rochdale-town-hall-2027\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
@@ -2964,7 +2969,7 @@
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
       "last_updated_at": "2026-11-12T21:28:27Z",
-      "scraped_at": "2026-11-28T10:43:09.286051Z",
+      "scraped_at": "2026-11-28T10:52:00.561526Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -3127,7 +3132,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-11-28T10:44:49.738670Z"
+    "enforced_at": "2026-11-28T10:54:42.257301Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -3138,6 +3143,6 @@
     "fresh_hours": 36,
     "kept": 20,
     "removed": 0,
-    "enforced_at": "2026-11-28T10:44:49.996152Z"
+    "enforced_at": "2026-11-28T10:54:42.641117Z"
   }
 }
