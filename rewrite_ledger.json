@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T10:02:25.400055Z",
+  "updated_at": "2026-11-28T10:19:33.834438Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 196,
@@ -59,7 +59,7 @@
     },
     "https://barnetfc.com/match-preview-rochdale-v-barnet": {
       "first_attempt_at": "2026-11-27T22:53:15.474151Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://barnetfc.com/match-preview-rochdale-v-barnet",
         "https://news.google.com/rss/articles/CBMihAFBVV95cUxNMzVQWHZZMjBweDBnOWNSa0NYMVBFa19yWFNkd00tQkZPZTdIMUVfZ1RUeXItRzBYaEZqTkhyam9IU0lMbXdKUmlkbEFkYllXbjg5MnNiamdaRnQ2N3NZNktMMlZ4TExIR0REc3l2ODkzbXhwWFlWbDhCTElCS1ZlQlNqMks?oc=5"
@@ -68,7 +68,7 @@
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
-      "last_attempt_at": "2026-11-28T09:59:17.159471Z",
+      "last_attempt_at": "2026-11-28T10:16:29.404759Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 29 November are neither stated nor implied by the source. Use",
       "title": "MATCH PREVIEW | ROCHDALE V BARNET - Barnet FC",
@@ -1164,12 +1164,13 @@
       "claude_switch_epoch": "2026-11-24-claude-era-v2",
       "strip_rule_epoch": "2026-11-24-strip-not-reject-v1",
       "last_attempt_at": "2026-11-27T10:33:55.838448Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 27/11/2026 at 8:28am Live Failsworth Tram Stop - Lifts out of service Duration Fri 27 Nov, 8:27am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "ee7640f04b32bd14"
+      "text_fingerprint": "ee7640f04b32bd14",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-53a1516a530e74ac4e": {
       "first_attempt_at": "2026-11-21T13:29:18.266249Z",
